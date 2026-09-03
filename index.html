@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="om">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Olii Web Developer</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background-color: #eaf4ff;
+      color: #222;
+      line-height: 1.6;
+    }
+
+    header {
+      background-color: #1565c0;
+      color: white;
+      padding: 35px 20px;
+      text-align: center;
+    }
+
+    header h1 {
+      margin: 0 0 10px;
+      font-size: 32px;
+    }
+
+    header p {
+      margin: 0;
+      font-size: 18px;
+    }
+
+    nav {
+      background-color: #0d47a1;
+      padding: 15px;
+      text-align: center;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+
+    nav a {
+      color: white;
+      text-decoration: none;
+      margin: 0 12px;
+      font-size: 17px;
+      font-weight: bold;
+    }
+
+    nav a:hover {
+      color: #ffcc80;
+    }
+
+    section {
+      background-color: white;
+      max-width: 800px;
+      margin: 30px auto;
+      padding: 30px;
+      border-radius: 15px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.10);
+      text-align: center;
+    }
+
+    section h2 {
+      color: #1565c0;
+      margin-top: 0;
+      font-size: 27px;
+    }
+
+    section p {
+      font-size: 18px;
+    }
+
+    .hero {
+  padding: 50px 30px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 40px;
+  text-align: left;
+}
+
+.hero-content {
+  flex: 1;
+}
+
+.hero-image {
+  width: 200px;
+  height: 200px;
+  object-fit: cover;
+  border-radius: 50%;
+  border: 5px solid #1565c0;
+  flex-shrink: 0;
+}
+
+    .hero h2 {
+      font-size: 30px;
+      color: #0d47a1;
+    }
+
+    .hero p {
+      font-size: 19px;
+    }
+
+    .hero-image {
+      width: 180px;
+      height: 180px;
+      object-fit: cover;
+      border-radius: 50%;
+      margin-top: 15px;
+      border: 5px solid #1565c0;
+    }
+
+    .work {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 20px;
+      margin-top: 20px;
+    }
+
+    .work-card {
+      background-color: #eaf4ff;
+      padding: 20px;
+      border-radius: 12px;
+    }
+
+    .work-card h3 {
+      color: #1565c0;
+      margin-top: 0;
+    }
+
+    form {
+      max-width: 500px;
+      margin: auto;
+    }
+
+    input,
+    textarea {
+      width: 100%;
+      padding: 13px;
+      margin: 8px 0;
+      border: 1px solid #bbb;
+      border-radius: 8px;
+      font-size: 16px;
+    }
+
+    textarea {
+      resize: vertical;
+    }
+
+    button {
+      background-color: darkblue;
+      color: white;
+      padding: 12px 25px;
+      font-size: 16px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #1565c0;
+    }
+
+    footer {
+      background-color: #0d47a1;
+      color: white;
+      text-align: center;
+      padding: 20px;
+      margin-top: 40px;
+    }
+
+    @media (max-width: 600px) {
+      header h1 {
+        font-size: 26px;
+      }
+
+      nav a {
+        display: inline-block;
+        margin: 5px 7px;
+        font-size: 15px;
+      }
+
+      section {
+        margin: 20px 10px;
+        padding: 22px;
+      }
+  .hero {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .hero-image {
+    width: 180px;
+    height: 180px;
+  }
+    }
+    /* Animation */
+
+section {
+  animation: fadeIn 1s ease-in-out;
+}
+
+.hero h2 {
+  animation: slideDown 1s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+button {
+  transition: transform 0.2s ease;
+}
+
+button:hover {
+  transform: scale(1.05);
+}
+    /* Hojiiwwan - Card Animation */
+
+.work-card {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.work-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.18);
+}
+
+.work-card h3 {
+  transition: transform 0.3s ease;
+}
+
+.work-card:hover h3 {
+  transform: scale(1.05);
+}
+.about-content {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  text-align: left;
+}
+
+.about-card {
+  background-color: #eaf4ff;
+  padding: 20px;
+  border-radius: 12px;
+}
+
+.about-card h3 {
+  color: #1565c0;
+  margin-top: 0;
+}
+
+@media (max-width: 600px) {
+  .about-content {
+    grid-template-columns: 1fr;
+  }
+}
+.work-card {
+  text-align: center;
+  border: 1px solid #d6e8ff;
+}
+
+.work-card h3 {
+  font-size: 22px;
+}
+
+.work-card p {
+  font-size: 16px;
+}
+/* Contact - Fooyya'iinsa */
+
+#contact h2 {
+  font-size: 30px;
+  margin-bottom: 25px;
+}
+
+#contact form {
+  max-width: 550px;
+}
+
+#contact input:focus,
+#contact textarea:focus {
+  outline: none;
+  border-color: #1565c0;
+  box-shadow: 0 0 8px rgba(21, 101, 192, 0.20);
+}
+
+#contact button {
+  margin-top: 10px;
+  padding: 13px 30px;
+  font-weight: bold;
+}
+.hero-buttons {
+  margin-top: 25px;
+  display: flex;
+  gap: 15px;
+  flex-wrap: wrap;
+}
+
+.btn {
+  display: inline-block;
+  background-color: #1565c0;
+  color: white;
+  padding: 12px 22px;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: bold;
+  transition: 0.3s;
+}
+
+.btn:hover {
+  background-color: #0d47a1;
+  transform: translateY(-3px);
+}
+
+.btn-outline {
+  background-color: white;
+  color: #1565c0;
+  border: 2px solid #1565c0;
+}
+
+.btn-outline:hover {
+  background-color: #1565c0;
+  color: white;
+}
+  </style>
+</head>
+
+<body>
+
+  <!-- HEADER -->
+  <header>
+    <h1>Baga Nagaan Dhuftan!</h1>
+    <p>Gara Marsaariitii Dhuunfaa kootti</p>
+  </header>
+
+  <!-- NAVIGATION -->
+  <nav>
+    <a href="#home">Mana</a>
+    <a href="#about">Waa'ee Koo</a>
+    <a href="#works">Hojiiwwan</a>
+    <a href="#contact">Nu Quunnamaa</a>
+  </nav>
+
+<!-- HOME -->
+<section id="home" class="hero">
+
+  <div class="hero-content">
+    <h2>Baga Nagaan Dhuftan!</h2>
+
+    <p>
+      Baga gara website dhuunfaa kootti nagaan dhuftan.
+      As keessatti waa'ee koo, hojiiwwan koo fi
+      odeeffannoo ittiin na  quunnamtan argachuu dandeessu.
+    </p>
+
+    <p>
+      Teknooloojii fi web development barachaa jirra.
+    </p>
+<div class="hero-buttons">
+  <a href="#works" class="btn">Hojii Koo Ilaali</a>
+  <a href="#contact" class="btn btn-outline">Na Quunnami</a>
+</div>
+
+  <img src="oli.jpg" alt="Suuraa Koo" class="hero-image">
+
+</section>
+
+  <!-- ABOUT -->
+<section id="about">
+  <h2>Waa'ee Koo</h2>
+
+  <div class="about-content">
+
+    <div class="about-card">
+      <h3>👤 Waa'ee Koo</h3>
+      <p>
+        Ani web development barachaa fi shaakalaa jira.
+        Website bareedaa fi namaaf salphaa ta'e ijaaruu
+        nan jaalladha.
+      </p>
+    </div>
+
+    <div class="about-card">
+      <h3>💻 Beekumsa Koo</h3>
+      <p>
+        HTML fi CSS barachaa jira.
+        Fuuldurattis JavaScript fi teknooloojiiwwan
+        web adda addaa barachuu nan barbaada.
+      </p>
+    </div>
+
+    <div class="about-card">
+      <h3>🎯 Kaayyoo Koo</h3>
+      <p>
+        Beekumsa koo guddisuun website fi pirojektoota
+        qulqullina qaban hojjechuu fi hojiiwwan koo
+        online irratti agarsiisuu.
+      </p>
+    </div>
+
+    <div class="about-card">
+      <h3>📚 Barnoota Koo</h3>
+      <p>
+        Guyyaa guyyaan shaakala gochuun web development
+        irratti dandeettii koo guddisaa jira.
+      </p>
+    </div>
+
+  </div>
+</section>
+
+  <!-- WORKS -->
+  <section id="works">
+    <h2>Hojiiwwan Koo</h2>
+
+    <div class="work">
+
+      <div class="work-card">
+        <h3>Website</h3>
+        <p>
+          Website dhuunfaa ijaaruu fi design gochuu.
+        </p>
+      </div>
+
+      <div class="work-card">
+        <h3>Learning</h3>
+        <p>
+          HTML fi CSS barachuu fi shaakala gochuu.
+        </p>
+      </div>
+
+      <div class="work-card">
+        <h3>Pirojektoota</h3>
+        <p>
+          Pirojektoota haaraa gara fuulduraatti hojjechuu.
+        </p>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contact">
+    <h2>Nu Quunnamaa</h2>
+
+    <form>
+      <input
+        type="text"
+        placeholder="Maqaa kee"
+        required
+      >
+
+      <input
+        type="email"
+        placeholder="Email kee"
+        required
+      >
+
+      <textarea
+        placeholder="Ergaa kee barreessi"
+        rows="5"
+        required
+      ></textarea>
+
+      <button type="submit">
+        Ergaa Ergi
+      </button>
+    </form>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <p>&copy; 2026 Olii Web Developer. Mirgi hundi seeraan eegamaadha.</p>
+  </footer>
+
+</body>
+</html>
