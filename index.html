@@ -1,4 +1,3 @@
-```html
 <!DOCTYPE html>
 <html lang="om">
 <head>
@@ -251,37 +250,104 @@
     }
 
     /* =========================
-       WORK
+       PROJECTS
     ========================= */
 
-    .work {
+    .projects {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      gap: 22px;
+      gap: 25px;
     }
 
-    .work-card {
-      text-align: center;
-      padding: 35px 25px;
-      background: linear-gradient(145deg, #f5f9ff, #e8f2ff);
-      border-radius: 20px;
+    .project-card {
+      position: relative;
+      overflow: hidden;
+      background: linear-gradient(145deg, #f8fbff, #e8f2ff);
       border: 1px solid #d5e7ff;
-      transition: 0.3s;
+      border-radius: 22px;
+      padding: 30px;
+      transition: 0.35s ease;
     }
 
-    .work-card:hover {
-      transform: translateY(-8px);
-      box-shadow: 0 15px 30px rgba(13,71,161,0.13);
+    .project-card::before {
+      content: "";
+      position: absolute;
+      width: 120px;
+      height: 120px;
+      background: #bbdefb;
+      border-radius: 50%;
+      top: -55px;
+      right: -55px;
+      opacity: 0.45;
     }
 
-    .work-icon {
-      font-size: 42px;
+    .project-card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 18px 40px rgba(13,71,161,0.15);
+      border-color: #90caf9;
+    }
+
+    .project-icon {
+      font-size: 48px;
       margin-bottom: 15px;
     }
 
-    .work-card h3 {
-      color: #1565c0;
-      margin-bottom: 10px;
+    .project-content {
+      position: relative;
+      z-index: 2;
+    }
+
+    .project-number {
+      display: inline-block;
+      color: #1976d2;
+      font-size: 13px;
+      font-weight: bold;
+      margin-bottom: 8px;
+    }
+
+    .project-card h3 {
+      color: #0d47a1;
+      font-size: 21px;
+      margin-bottom: 12px;
+    }
+
+    .project-card p {
+      color: #64748b;
+      font-size: 15px;
+      margin-bottom: 20px;
+    }
+
+    .project-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 7px;
+      margin-bottom: 22px;
+    }
+
+    .project-tags span {
+      background: #dbeafe;
+      color: #0d47a1;
+      padding: 5px 10px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: bold;
+    }
+
+    .project-button {
+      display: inline-block;
+      text-decoration: none;
+      background: linear-gradient(135deg, #0d47a1, #1976d2);
+      color: white;
+      padding: 11px 17px;
+      border-radius: 10px;
+      font-size: 14px;
+      font-weight: bold;
+      transition: 0.3s;
+    }
+
+    .project-button:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 18px rgba(13,71,161,0.25);
     }
 
     /* =========================
@@ -488,7 +554,7 @@
       }
 
       .about-content,
-      .work,
+      .projects,
       .services {
         grid-template-columns: 1fr;
       }
@@ -520,16 +586,34 @@
 
   <!-- NAVIGATION -->
   <nav>
-    <a href="#home" id="nav-home">Mana</a>
-    <a href="#about" id="nav-about">Waa'ee Koo</a>
-    <a href="#works" id="nav-works">Hojiiwwan</a>
-    <a href="#services" id="nav-services">Tajaajila</a>
-    <a href="#contact" id="nav-contact">Nu Quunnamaa</a>
 
-    <button class="language-btn" onclick="changeLanguage()">
+    <a href="#home" id="nav-home">Mana</a>
+
+    <a href="#about" id="nav-about">
+      Waa'ee Koo
+    </a>
+
+    <a href="#works" id="nav-works">
+      Hojiiwwan
+    </a>
+
+    <a href="#services" id="nav-services">
+      Tajaajila
+    </a>
+
+    <a href="#contact" id="nav-contact">
+      Nu Quunnamaa
+    </a>
+
+    <button
+      class="language-btn"
+      onclick="changeLanguage()"
+    >
       🌐 <span id="language-text">English</span>
     </button>
+
   </nav>
+
 
   <!-- HERO -->
   <header class="hero" id="home">
@@ -551,17 +635,26 @@
 
       <div class="hero-buttons">
 
-        <a href="#works" class="btn btn-primary" id="works-button">
+        <a
+          href="#works"
+          class="btn btn-primary"
+          id="works-button"
+        >
           🚀 Hojii Koo Ilaali
         </a>
 
-        <a href="#contact" class="btn btn-secondary" id="contact-button">
+        <a
+          href="#contact"
+          class="btn btn-secondary"
+          id="contact-button"
+        >
           📩 Na Quunnami
         </a>
 
       </div>
 
     </div>
+
 
     <div class="profile-container">
 
@@ -576,147 +669,332 @@
 
   </header>
 
+
   <!-- ABOUT -->
   <section id="about">
 
     <div class="section-title">
-      <h2 id="about-title">Waa'ee Koo</h2>
+
+      <h2 id="about-title">
+        Waa'ee Koo
+      </h2>
+
       <p id="about-intro">
         Waa'ee koo, beekumsa koo fi kaayyoo koo gabaabinaan.
       </p>
+
     </div>
+
 
     <div class="about-content">
 
       <div class="about-card">
-        <h3 id="about-card-title">👤 Waa'ee Koo</h3>
+
+        <h3 id="about-card-title">
+          👤 Waa'ee Koo
+        </h3>
+
         <p id="about-card-text">
           Ani web development barachaa fi shaakalaa jira.
           Website bareedaa fi namaaf salphaa ta'e ijaaruu nan jaalladha.
         </p>
+
       </div>
 
+
       <div class="about-card">
-        <h3 id="skills-title">💻 Beekumsa Koo</h3>
+
+        <h3 id="skills-title">
+          💻 Beekumsa Koo
+        </h3>
+
         <p id="skills-text">
           HTML fi CSS barachaa jira. Fuuldurattis JavaScript fi
           teknooloojiiwwan web adda addaa barachuu nan barbaada.
         </p>
+
       </div>
 
+
       <div class="about-card">
-        <h3 id="goal-title">🎯 Kaayyoo Koo</h3>
+
+        <h3 id="goal-title">
+          🎯 Kaayyoo Koo
+        </h3>
+
         <p id="goal-text">
           Beekumsa koo guddisuun website fi pirojektoota qulqullina
           qaban hojjechuu fi hojiiwwan koo online irratti agarsiisuu.
         </p>
+
       </div>
 
+
       <div class="about-card">
-        <h3 id="education-title">📚 Barnoota Koo</h3>
+
+        <h3 id="education-title">
+          📚 Barnoota Koo
+        </h3>
+
         <p id="education-text">
           Guyyaa guyyaan shaakala gochuun web development irratti
           dandeettii koo guddisaa jira.
         </p>
+
       </div>
 
     </div>
+
   </section>
 
-  <!-- WORK -->
+
+  <!-- PROJECTS -->
   <section id="works">
 
     <div class="section-title">
-      <h2 id="works-title">Hojiiwwan Koo</h2>
+
+      <h2 id="works-title">
+        Pirojektoota Koo
+      </h2>
+
       <p id="works-intro">
-        Waan ani amma barachaa fi hojjechaa jiru.
+        Pirojektoota ani hojjechaa fi barachaa jiru.
       </p>
-    </div>
-
-    <div class="work">
-
-      <div class="work-card">
-        <div class="work-icon">🌐</div>
-        <h3 id="website-title">Website</h3>
-        <p id="website-text">
-          Website dhuunfaa ijaaruu fi design gochuu.
-        </p>
-      </div>
-
-      <div class="work-card">
-        <div class="work-icon">📖</div>
-        <h3 id="learning-title">Learning</h3>
-        <p id="learning-text">
-          HTML fi CSS barachuu fi shaakala gochuu.
-        </p>
-      </div>
-
-      <div class="work-card">
-        <div class="work-icon">🚀</div>
-        <h3 id="projects-title">Pirojektoota</h3>
-        <p id="projects-text">
-          Pirojektoota haaraa gara fuulduraatti hojjechuu.
-        </p>
-      </div>
 
     </div>
+
+
+    <div class="projects">
+
+
+      <!-- PROJECT 1 -->
+      <div class="project-card">
+
+        <div class="project-icon">
+          🌐
+        </div>
+
+        <div class="project-content">
+
+          <span class="project-number">
+            01
+          </span>
+
+          <h3 id="project1-title">
+            Website Dhuunfaa Koo
+          </h3>
+
+          <p id="project1-text">
+            Website dhuunfaa koo kan beekumsa, hojiiwwan fi
+            tajaajilawwan koo agarsiisu.
+          </p>
+
+          <div class="project-tags">
+
+            <span>HTML</span>
+            <span>CSS</span>
+            <span>JavaScript</span>
+
+          </div>
+
+          <a
+            href="https://oliwaqgari.github.io/oliiwebdeveloper.github.io/"
+            target="_blank"
+            class="project-button"
+            id="project1-button"
+          >
+            🔗 Pirojektii Ilaali
+          </a>
+
+        </div>
+
+      </div>
+
+
+      <!-- PROJECT 2 -->
+      <div class="project-card">
+
+        <div class="project-icon">
+          📱
+        </div>
+
+        <div class="project-content">
+
+          <span class="project-number">
+            02
+          </span>
+
+          <h3 id="project2-title">
+            Responsive Web Design
+          </h3>
+
+          <p id="project2-text">
+            Website mobile, tablet fi computer irratti
+            sirriitti hojjetu qopheessuu.
+          </p>
+
+          <div class="project-tags">
+
+            <span>HTML</span>
+            <span>CSS</span>
+            <span>Responsive</span>
+
+          </div>
+
+          <a
+            href="https://oliwaqgari.github.io/oliiwebdeveloper.github.io/"
+            target="_blank"
+            class="project-button"
+            id="project2-button"
+          >
+            🔗 Pirojektii Ilaali
+          </a>
+
+        </div>
+
+      </div>
+
+
+      <!-- PROJECT 3 -->
+      <div class="project-card">
+
+        <div class="project-icon">
+          📩
+        </div>
+
+        <div class="project-content">
+
+          <span class="project-number">
+            03
+          </span>
+
+          <h3 id="project3-title">
+            EmailJS Contact Form
+          </h3>
+
+          <p id="project3-text">
+            Formii quunnamtii website irraa ergaa gara
+            emailitti erguu danda'u.
+          </p>
+
+          <div class="project-tags">
+
+            <span>JavaScript</span>
+            <span>EmailJS</span>
+            <span>Form</span>
+
+          </div>
+
+          <a
+            href="#contact"
+            class="project-button"
+            id="project3-button"
+          >
+            📩 Quunnamtii Yaali
+          </a>
+
+        </div>
+
+      </div>
+
+
+    </div>
+
   </section>
+
 
   <!-- SERVICES -->
   <section id="services">
 
     <div class="section-title">
-      <h2 id="services-title">Tajaajila Koo</h2>
+
+      <h2 id="services-title">
+        Tajaajila Koo
+      </h2>
+
       <p id="services-intro">
         Tajaajilawwan web irratti kennuu danda'u.
       </p>
+
     </div>
+
 
     <div class="services">
 
+
       <div class="service-card">
-        <h3 id="service-web-title">💻 Website Development</h3>
+
+        <h3 id="service-web-title">
+          💻 Website Development
+        </h3>
+
         <p id="service-web-text">
           Website dhuunfaa, business, portfolio fi hojiiwwan
           adda addaa karaa ammayyaa fi mobile irratti sirriitti
           hojjetuun ijaara.
         </p>
+
       </div>
 
+
       <div class="service-card">
-        <h3 id="service-design-title">🎨 Website Design</h3>
+
+        <h3 id="service-design-title">
+          🎨 Website Design
+        </h3>
+
         <p id="service-design-text">
           Fuula website bareedaa, salphaa fi nama hawwatu qopheessa.
           Design fi muuxannoo fayyadamaa irratti xiyyeeffadha.
         </p>
+
       </div>
 
+
       <div class="service-card">
-        <h3 id="service-maintenance-title">🛠️ Website Maintenance</h3>
+
+        <h3 id="service-maintenance-title">
+          🛠️ Website Maintenance
+        </h3>
+
         <p id="service-maintenance-text">
           Website jiru haaromsuu, dogoggora sirreessuu,
           qabiyyee jijjiiruu fi rakkoo website furuuf gargaara.
         </p>
+
       </div>
 
+
       <div class="service-card">
-        <h3 id="service-ai-title">🤖 Technology & AI</h3>
+
+        <h3 id="service-ai-title">
+          🤖 Technology & AI
+        </h3>
+
         <p id="service-ai-text">
           Teknooloojiiwwan haaraa fi Artificial Intelligence
           fayyadamuun furmaata haaraa fi hojii gara fuulduraa
           kalaquuf hojjedha.
         </p>
+
       </div>
 
     </div>
+
   </section>
+
 
   <!-- CONTACT -->
   <section id="contact">
 
     <div class="section-title">
-      <h2 id="contact-title">Nu Quunnamaa</h2>
+
+      <h2 id="contact-title">
+        Nu Quunnamaa
+      </h2>
+
     </div>
+
 
     <div class="contact-box">
 
@@ -724,6 +1002,7 @@
         Gaaffii ykn hojii waliin hojjechuu barbaadde yoo qabaatte,
         ergaa naaf ergi.
       </p>
+
 
       <form id="contact-form">
 
@@ -750,7 +1029,10 @@
           required
         ></textarea>
 
-        <button type="submit" id="send-button">
+        <button
+          type="submit"
+          id="send-button"
+        >
           📩 Ergaa Ergi
         </button>
 
@@ -759,7 +1041,9 @@
       </form>
 
     </div>
+
   </section>
+
 
   <!-- FOOTER -->
   <footer>
@@ -794,13 +1078,19 @@
 
         event.preventDefault();
 
-        const button = document.getElementById("send-button");
-        const status = document.getElementById("form-status");
+        const button =
+          document.getElementById("send-button");
+
+        const status =
+          document.getElementById("form-status");
 
         button.disabled = true;
 
         button.textContent =
-          english ? "Sending..." : "Ergaa ergamaa jira...";
+          english
+            ? "Sending..."
+            : "Ergaa ergamaa jira...";
+
 
         emailjs.sendForm(
           "service_l9iavpf",
@@ -817,20 +1107,28 @@
 
           status.style.color = "#15803d";
 
+
           document
             .getElementById("contact-form")
             .reset();
 
+
           button.disabled = false;
 
           button.textContent =
-            english ? "📩 Send Message" : "📩 Ergaa Ergi";
+            english
+              ? "📩 Send Message"
+              : "📩 Ergaa Ergi";
 
         })
 
+
         .catch(function(error) {
 
-          console.log("EmailJS Error:", error);
+          console.log(
+            "EmailJS Error:",
+            error
+          );
 
           status.textContent =
             english
@@ -839,10 +1137,13 @@
 
           status.style.color = "#dc2626";
 
+
           button.disabled = false;
 
           button.textContent =
-            english ? "📩 Send Message" : "📩 Ergaa Ergi";
+            english
+              ? "📩 Send Message"
+              : "📩 Ergaa Ergi";
 
         });
 
@@ -858,17 +1159,34 @@
       english = !english;
 
 
+      /* =========================
+         ENGLISH
+      ========================= */
+
       if (english) {
 
-        document.getElementById("nav-home").textContent = "Home";
-        document.getElementById("nav-about").textContent = "About Me";
-        document.getElementById("nav-works").textContent = "My Work";
-        document.getElementById("nav-services").textContent = "Services";
-        document.getElementById("nav-contact").textContent = "Contact";
+        /* NAVIGATION */
+
+        document.getElementById("nav-home").textContent =
+          "Home";
+
+        document.getElementById("nav-about").textContent =
+          "About Me";
+
+        document.getElementById("nav-works").textContent =
+          "My Projects";
+
+        document.getElementById("nav-services").textContent =
+          "Services";
+
+        document.getElementById("nav-contact").textContent =
+          "Contact";
 
         document.getElementById("language-text").textContent =
           "Afaan Oromoo";
 
+
+        /* HERO */
 
         document.getElementById("hero-small").textContent =
           "👋 Welcome";
@@ -880,7 +1198,7 @@
           "I am learning web development and building beautiful, fast and mobile-friendly websites.";
 
         document.getElementById("works-button").textContent =
-          "🚀 View My Work";
+          "🚀 View My Projects";
 
         document.getElementById("contact-button").textContent =
           "📩 Contact Me";
@@ -888,6 +1206,8 @@
         document.getElementById("profile-image").alt =
           "My Photo";
 
+
+        /* ABOUT */
 
         document.getElementById("about-title").textContent =
           "About Me";
@@ -920,30 +1240,45 @@
           "I practice every day to improve my web development skills.";
 
 
+        /* PROJECTS */
+
         document.getElementById("works-title").textContent =
-          "My Work";
+          "My Projects";
 
         document.getElementById("works-intro").textContent =
-          "What I am currently learning and working on.";
+          "Projects I am building and learning from.";
 
-        document.getElementById("website-title").textContent =
-          "Website";
+        document.getElementById("project1-title").textContent =
+          "Personal Portfolio Website";
 
-        document.getElementById("website-text").textContent =
-          "Building and designing personal websites.";
+        document.getElementById("project1-text").textContent =
+          "My personal website showcasing my skills, projects and services.";
 
-        document.getElementById("learning-title").textContent =
-          "Learning";
+        document.getElementById("project1-button").textContent =
+          "🔗 View Project";
 
-        document.getElementById("learning-text").textContent =
-          "Learning and practicing HTML and CSS.";
 
-        document.getElementById("projects-title").textContent =
-          "Projects";
+        document.getElementById("project2-title").textContent =
+          "Responsive Web Design";
 
-        document.getElementById("projects-text").textContent =
-          "Building new projects in the future.";
+        document.getElementById("project2-text").textContent =
+          "Creating websites that work well on mobile, tablet and desktop.";
 
+        document.getElementById("project2-button").textContent =
+          "🔗 View Project";
+
+
+        document.getElementById("project3-title").textContent =
+          "EmailJS Contact Form";
+
+        document.getElementById("project3-text").textContent =
+          "A contact form that allows visitors to send messages directly to my email.";
+
+        document.getElementById("project3-button").textContent =
+          "📩 Try Contact";
+
+
+        /* SERVICES */
 
         document.getElementById("services-title").textContent =
           "My Services";
@@ -976,6 +1311,8 @@
           "I explore modern technologies and Artificial Intelligence to create new solutions.";
 
 
+        /* CONTACT */
+
         document.getElementById("contact-title").textContent =
           "Contact Me";
 
@@ -995,6 +1332,8 @@
           "📩 Send Message";
 
 
+        /* FOOTER */
+
         document.getElementById("footer-title").textContent =
           "Olii Web Developer";
 
@@ -1003,7 +1342,14 @@
 
       }
 
+
+      /* =========================
+         AFAAN OROMOO
+      ========================= */
+
       else {
+
+        /* NAVIGATION */
 
         document.getElementById("nav-home").textContent =
           "Mana";
@@ -1024,6 +1370,8 @@
           "English";
 
 
+        /* HERO */
+
         document.getElementById("hero-small").textContent =
           "👋 Baga Nagaan Dhuftan";
 
@@ -1042,6 +1390,8 @@
         document.getElementById("profile-image").alt =
           "Suuraa Koo";
 
+
+        /* ABOUT */
 
         document.getElementById("about-title").textContent =
           "Waa'ee Koo";
@@ -1074,30 +1424,45 @@
           "Guyyaa guyyaan shaakala gochuun web development irratti dandeettii koo guddisaa jira.";
 
 
+        /* PROJECTS */
+
         document.getElementById("works-title").textContent =
-          "Hojiiwwan Koo";
+          "Pirojektoota Koo";
 
         document.getElementById("works-intro").textContent =
-          "Waan ani amma barachaa fi hojjechaa jiru.";
+          "Pirojektoota ani hojjechaa fi barachaa jiru.";
 
-        document.getElementById("website-title").textContent =
-          "Website";
+        document.getElementById("project1-title").textContent =
+          "Website Dhuunfaa Koo";
 
-        document.getElementById("website-text").textContent =
-          "Website dhuunfaa ijaaruu fi design gochuu.";
+        document.getElementById("project1-text").textContent =
+          "Website dhuunfaa koo kan beekumsa, hojiiwwan fi tajaajilawwan koo agarsiisu.";
 
-        document.getElementById("learning-title").textContent =
-          "Learning";
+        document.getElementById("project1-button").textContent =
+          "🔗 Pirojektii Ilaali";
 
-        document.getElementById("learning-text").textContent =
-          "HTML fi CSS barachuu fi shaakala gochuu.";
 
-        document.getElementById("projects-title").textContent =
-          "Pirojektoota";
+        document.getElementById("project2-title").textContent =
+          "Responsive Web Design";
 
-        document.getElementById("projects-text").textContent =
-          "Pirojektoota haaraa gara fuulduraatti hojjechuu.";
+        document.getElementById("project2-text").textContent =
+          "Website mobile, tablet fi computer irratti sirriitti hojjetu qopheessuu.";
 
+        document.getElementById("project2-button").textContent =
+          "🔗 Pirojektii Ilaali";
+
+
+        document.getElementById("project3-title").textContent =
+          "EmailJS Contact Form";
+
+        document.getElementById("project3-text").textContent =
+          "Formii quunnamtii website irraa ergaa gara emailitti erguu danda'u.";
+
+        document.getElementById("project3-button").textContent =
+          "📩 Quunnamtii Yaali";
+
+
+        /* SERVICES */
 
         document.getElementById("services-title").textContent =
           "Tajaajila Koo";
@@ -1130,6 +1495,8 @@
           "Teknooloojiiwwan haaraa fi Artificial Intelligence fayyadamuun furmaata haaraa fi hojii gara fuulduraa kalaquuf hojjedha.";
 
 
+        /* CONTACT */
+
         document.getElementById("contact-title").textContent =
           "Nu Quunnamaa";
 
@@ -1149,6 +1516,8 @@
           "📩 Ergaa Ergi";
 
 
+        /* FOOTER */
+
         document.getElementById("footer-title").textContent =
           "Olii Web Developer";
 
@@ -1163,4 +1532,3 @@
 
 </body>
 </html>
-```
