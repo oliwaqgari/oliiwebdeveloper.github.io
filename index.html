@@ -1031,77 +1031,119 @@
 
     /* EMAILJS */
 
-    emailjs.init({
-      publicKey: "A5qi6C-xNssmcgEda"
-    });
+   /* EMAILJS */
 
-    const contactForm =
-      document.getElementById("contact-form");
+emailjs.init({
+  publicKey: "A5qi6C-xNssmcgEda"
+});
 
-    const sendButton =
-      document.getElementById("send-button");
+const contactForm =
+  document.getElementById("contact-form");
 
-    const formStatus =
-      document.getElementById("form-status");
+const sendButton =
+  document.getElementById("send-button");
+
+const formStatus =
+  document.getElementById("form-status");
 
 
-    contactForm.addEventListener(
-      "submit",
-      function(event) {
+contactForm.addEventListener(
+  "submit",
+  function(event) {
 
-        event.preventDefault();
+    event.preventDefault();
 
-        sendButton.disabled = true;
+    sendButton.disabled = true;
+
+    if (document.documentElement.lang === "en") {
+
+      sendButton.textContent =
+        "⏳ Sending...";
+
+    } else {
+
+      sendButton.textContent =
+        "⏳ Ergaa ergaa jira...";
+    }
+
+    formStatus.textContent = "";
+
+
+    emailjs.sendForm(
+      "service_l9iavpf",
+      "template_rl3r47",
+      this
+    )
+
+    .then(function() {
+
+      if (document.documentElement.lang === "en") {
+
+        formStatus.textContent =
+          "✅ Your message has been sent successfully. Thank you!";
+
+      } else {
+
+        formStatus.textContent =
+          "✅ Ergaan kee milkaa'inaan ergameera. Galatoomi!";
+      }
+
+      formStatus.style.color = "green";
+
+      contactForm.reset();
+
+      sendButton.disabled = false;
+
+      if (document.documentElement.lang === "en") {
 
         sendButton.textContent =
-          "⏳ Ergaa ergaa jira...";
+          "📩 Send Message";
 
-        formStatus.textContent = "";
+      } else {
 
-
-        emailjs.sendForm(
-          "service_l9iavpf",
-          "template_rl3r47",
-          this
-        )
-
-        .then(function() {
-
-          formStatus.textContent =
-            "✅ Ergaan kee milkaa'inaan ergameera. Galatoomi!";
-
-          formStatus.style.color = "green";
-
-          contactForm.reset();
-
-          sendButton.disabled = false;
-
-          sendButton.textContent =
-            "📩 Ergaa Ergi";
-
-        })
-
-        .catch(function(error) {
-
-          console.error(
-            "EmailJS Error:",
-            error
-          );
-
-          formStatus.textContent =
-            "❌ Ergaa erguun hin milkoofne. Mee irra deebi'ii yaali.";
-
-          formStatus.style.color = "red";
-
-          sendButton.disabled = false;
-
-          sendButton.textContent =
-            "📩 Ergaa Ergi";
-
-        });
-
+        sendButton.textContent =
+          "📩 Ergaa Ergi";
       }
-    );
+
+    })
+
+    .catch(function(error) {
+
+      console.error(
+        "EmailJS Error:",
+        error
+      );
+
+      if (document.documentElement.lang === "en") {
+
+        formStatus.textContent =
+          "❌ Failed to send the message. Please try again.";
+
+      } else {
+
+        formStatus.textContent =
+          "❌ Ergaa erguun hin milkoofne. Mee irra deebi'ii yaali.";
+      }
+
+      formStatus.style.color = "red";
+
+      sendButton.disabled = false;
+
+      if (document.documentElement.lang === "en") {
+
+        sendButton.textContent =
+          "📩 Send Message";
+
+      } else {
+
+        sendButton.textContent =
+          "📩 Ergaa Ergi";
+      }
+
+    });
+
+  }
+);
 
 
     /* LANGUAGE */
