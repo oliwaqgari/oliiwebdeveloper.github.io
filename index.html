@@ -127,6 +127,7 @@
       animation: imageFloat 4s ease-in-out infinite;
     }
 
+    /* BUTTONS */
     .btn {
       display: inline-block;
       padding: 13px 22px;
@@ -228,7 +229,9 @@
       text-align: center;
       border: 1px solid #e6eef8;
       box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
-      transition: transform 0.35s ease, box-shadow 0.35s ease;
+      transition:
+        transform 0.35s ease,
+        box-shadow 0.35s ease;
       position: relative;
       overflow: hidden;
     }
@@ -240,12 +243,36 @@
       left: 0;
       width: 100%;
       height: 5px;
-      background: linear-gradient(90deg, #082f6b, #42a5f5);
+      background: linear-gradient(
+        90deg,
+        #082f6b,
+        #42a5f5
+      );
     }
 
     .project-card:hover {
       transform: translateY(-10px);
       box-shadow: 0 18px 40px rgba(8, 47, 107, 0.18);
+    }
+
+    /* PROJECT IMAGE */
+    .project-image {
+      width: 100%;
+      height: 180px;
+      object-fit: contain;
+      display: block;
+      border-radius: 12px;
+      margin: 10px auto 18px;
+      background: #f4f8ff;
+      padding: 8px;
+      transition:
+        transform 0.4s ease,
+        box-shadow 0.4s ease;
+    }
+
+    .project-card:hover .project-image {
+      transform: scale(1.04);
+      box-shadow: 0 8px 20px rgba(8, 47, 107, 0.12);
     }
 
     .project-icon {
@@ -288,7 +315,9 @@
       border-radius: 8px;
       text-decoration: none;
       font-weight: bold;
-      transition: background 0.3s ease, transform 0.3s ease;
+      transition:
+        background 0.3s ease,
+        transform 0.3s ease;
     }
 
     .project-link:hover {
@@ -309,7 +338,9 @@
       border-radius: 15px;
       border: 1px solid #e2eaf5;
       text-align: center;
-      transition: transform 0.35s ease, box-shadow 0.35s ease;
+      transition:
+        transform 0.35s ease,
+        box-shadow 0.35s ease;
     }
 
     .service-card:hover {
@@ -353,7 +384,8 @@
     #contact-form input:focus,
     #contact-form textarea:focus {
       border-color: #1565c0;
-      box-shadow: 0 0 0 3px rgba(21, 101, 192, 0.1);
+      box-shadow:
+        0 0 0 3px rgba(21, 101, 192, 0.1);
     }
 
     #send-button {
@@ -433,6 +465,7 @@
 
     /* MOBILE */
     @media (max-width: 800px) {
+
       nav a {
         margin: 0 6px;
         font-size: 14px;
@@ -447,9 +480,14 @@
       .services-grid {
         grid-template-columns: 1fr;
       }
+
+      .project-image {
+        height: 200px;
+      }
     }
 
     @media (max-width: 450px) {
+
       nav {
         padding: 12px 5px;
       }
@@ -494,6 +532,10 @@
       section h2 {
         font-size: 28px;
       }
+
+      .project-image {
+        height: 180px;
+      }
     }
   </style>
 </head>
@@ -502,19 +544,28 @@
 
   <!-- NAVIGATION -->
   <nav>
+
     <a href="#home" id="nav-home">Mana</a>
+
     <a href="#about" id="nav-about">Waa'ee Koo</a>
+
     <a href="#works" id="nav-works">Hojiiwwan Koo</a>
+
     <a href="#services" id="nav-services">Tajaajila</a>
+
     <a href="#contact" id="nav-contact">Nu Quunnamaa</a>
 
-    <button class="language-btn" onclick="changeLanguage()">
+    <button
+      class="language-btn"
+      onclick="changeLanguage()">
       🌐 <span id="language-text">English</span>
     </button>
+
   </nav>
 
   <!-- HERO -->
   <header class="hero" id="home">
+
     <div class="hero-content">
 
       <img
@@ -522,24 +573,35 @@
         alt="Suuraa Olii Web Developer"
         class="hero-image">
 
-      <div class="small-title" id="hero-small">
+      <div
+        class="small-title"
+        id="hero-small">
         👋 Baga Nagaan Dhuftan
       </div>
 
       <h1 id="hero-title">
-        Ani <span>Oliyaad</span>, Ogeessa Ijaaraa Marsaariitii (Web Developer) dha.
+        Ani <span>Oliyaad</span>,
+        Ogeessa Ijaaraa Marsaariitii
+        (Web Developer) dha.
       </h1>
 
       <p id="hero-text">
-        Website bareedaa, saffisaa fi mobile irratti sirriitti hojjetu
-        ijaaruu fi teknooloojii haaraa barachuu irratti hojjechaa jira.
+        Website bareedaa, saffisaa fi mobile irratti
+        sirriitti hojjetu ijaaruu fi teknooloojii haaraa
+        barachuu irratti hojjechaa jira.
       </p>
 
-      <a href="#works" class="btn btn-primary" id="works-button">
+      <a
+        href="#works"
+        class="btn btn-primary"
+        id="works-button">
         🚀 Hojii Koo Ilaali
       </a>
 
-      <a href="#contact" class="btn btn-secondary" id="contact-button">
+      <a
+        href="#contact"
+        class="btn btn-secondary"
+        id="contact-button">
         📩 Na Quunnami
       </a>
 
@@ -557,48 +619,76 @@
   <!-- ABOUT -->
   <section id="about">
 
-    <h2 id="about-title">Waa'ee Koo</h2>
+    <h2 id="about-title">
+      Waa'ee Koo
+    </h2>
 
-    <p class="section-intro" id="about-intro">
+    <p
+      class="section-intro"
+      id="about-intro">
       Waa'ee koo, beekumsa koo fi kaayyoo koo gabaabinaan.
     </p>
 
     <div class="about-grid">
 
       <div class="about-card">
-        <h3 id="about-card-title">👤 Waa'ee Koo</h3>
+
+        <h3 id="about-card-title">
+          👤 Waa'ee Koo
+        </h3>
+
         <p id="about-card-text">
-          Ani Oliyaad, ogeessa ijaaraa marsaariitii (Web Developer)
-          fi nama teeknooloojii jaallatu dha. Marsaariitiiwwan bareedaa,
-          saffisaa fi fayyadamaa ta’an ijaaruu irratti hojjechaa jira.
+          Ani Oliyaad, ogeessa ijaaraa marsaariitii
+          (Web Developer) fi nama teeknooloojii jaallatu dha.
+          Marsaariitiiwwan bareedaa, saffisaa fi fayyadamaa
+          ta’an ijaaruu irratti hojjechaa jira.
         </p>
+
       </div>
 
       <div class="about-card">
-        <h3 id="skills-title">💻 Beekumsa Koo</h3>
+
+        <h3 id="skills-title">
+          💻 Beekumsa Koo
+        </h3>
+
         <p id="skills-text">
-          HTML fi CSS irratti beekumsa qaba; JavaScript irrattis
-          dandeettii koo cimsachaa jira. Teeknooloojiiwwan web adda addaa
-          fayyadamuun pirojektoota haaraa hojjechuu nan jaalladha.
+          HTML fi CSS irratti beekumsa qaba; JavaScript
+          irrattis dandeettii koo cimsachaa jira.
+          Teeknooloojiiwwan web adda addaa fayyadamuun
+          pirojektoota haaraa hojjechuu nan jaalladha.
         </p>
+
       </div>
 
       <div class="about-card">
-        <h3 id="goal-title">🎯 Kaayyoo Koo</h3>
+
+        <h3 id="goal-title">
+          🎯 Kaayyoo Koo
+        </h3>
+
         <p id="goal-text">
-          Kaayyoon koo dandeettii Web Development koo guddisuun
-          marsaariitiiwwan qulqullina qaban ijaaruu fi hojiiwwan koo
-          namootaaf karaa salphaa fi bareedaan agarsiisuu dha.
+          Kaayyoon koo dandeettii Web Development koo
+          guddisuun marsaariitiiwwan qulqullina qaban
+          ijaaruu fi hojiiwwan koo namootaaf karaa salphaa
+          fi bareedaan agarsiisuu dha.
         </p>
+
       </div>
 
       <div class="about-card">
-        <h3 id="education-title">📚 Barnoota Koo</h3>
+
+        <h3 id="education-title">
+          📚 Barnoota Koo
+        </h3>
+
         <p id="education-text">
-          Yeroo hunda waan haaraa barachuu fi dandeettii koo fooyyeessuu
-          irratti hojjechaa jira. Muuxannoo argadhu hundaan pirojektoota koo
+          Yeroo hunda waan haaraa barachuu fi dandeettii koo
+          fooyyeessuu irratti hojjechaa jira.
+          Muuxannoo argadhu hundaan pirojektoota koo
           fooyyeessuun gara ogeessaatti guddachaa jira.
         </p>
+
       </div>
 
     </div>
@@ -607,17 +697,25 @@
   <!-- PROJECTS -->
   <section id="works">
 
-    <h2 id="works-title">Hojiiwwan Koo</h2>
+    <h2 id="works-title">
+      Hojiiwwan Koo
+    </h2>
 
-    <p class="section-intro" id="works-intro">
+    <p
+      class="section-intro"
+      id="works-intro">
       Pirojektoota ani hojjedhe fi irratti hojjechaa jiru.
     </p>
 
     <div class="projects-grid">
 
+      <!-- PROJECT 1 -->
       <div class="project-card">
 
-        <img src="oli.jpg" alt="Website Dhuunfaa Koo" class="project-image">
+        <img
+          src="oli.jpg"
+          alt="Website Dhuunfaa Koo"
+          class="project-image">
 
         <h3 id="project1-title">
           Website Dhuunfaa Koo
@@ -629,9 +727,19 @@
         </p>
 
         <div class="tags">
-          <span class="tag">HTML</span>
-          <span class="tag">CSS</span>
-          <span class="tag">JavaScript</span>
+
+          <span class="tag">
+            HTML
+          </span>
+
+          <span class="tag">
+            CSS
+          </span>
+
+          <span class="tag">
+            JavaScript
+          </span>
+
         </div>
 
         <a
@@ -644,9 +752,12 @@
 
       </div>
 
+      <!-- PROJECT 2 -->
       <div class="project-card">
 
-        <div class="project-icon">📱</div>
+        <div class="project-icon">
+          📱
+        </div>
 
         <h3 id="project2-title">
           Responsive Web Design
@@ -658,9 +769,19 @@
         </p>
 
         <div class="tags">
-          <span class="tag">HTML</span>
-          <span class="tag">CSS</span>
-          <span class="tag">Responsive</span>
+
+          <span class="tag">
+            HTML
+          </span>
+
+          <span class="tag">
+            CSS
+          </span>
+
+          <span class="tag">
+            Responsive
+          </span>
+
         </div>
 
         <a
@@ -673,9 +794,12 @@
 
       </div>
 
+      <!-- PROJECT 3 -->
       <div class="project-card">
 
-        <div class="project-icon">📩</div>
+        <div class="project-icon">
+          📩
+        </div>
 
         <h3 id="project3-title">
           EmailJS Contact Form
@@ -687,9 +811,19 @@
         </p>
 
         <div class="tags">
-          <span class="tag">JavaScript</span>
-          <span class="tag">EmailJS</span>
-          <span class="tag">Form</span>
+
+          <span class="tag">
+            JavaScript
+          </span>
+
+          <span class="tag">
+            EmailJS
+          </span>
+
+          <span class="tag">
+            Form
+          </span>
+
         </div>
 
         <a
@@ -707,44 +841,81 @@
   <!-- SERVICES -->
   <section id="services">
 
-    <h2 id="services-title">Tajaajila Koo</h2>
+    <h2 id="services-title">
+      Tajaajila Koo
+    </h2>
 
-    <p class="section-intro" id="services-intro">
+    <p
+      class="section-intro"
+      id="services-intro">
       Tajaajilawwan ani kennuu fi irratti hojjechaa jiru.
     </p>
 
     <div class="services-grid">
 
       <div class="service-card">
-        <div class="service-icon">💻</div>
-        <h3 id="service1-title">Web Development</h3>
+
+        <div class="service-icon">
+          💻
+        </div>
+
+        <h3 id="service1-title">
+          Web Development
+        </h3>
+
         <p id="service1-text">
           Website saffisaa, qulqulluu fi responsive ijaaruu.
         </p>
+
       </div>
 
       <div class="service-card">
-        <div class="service-icon">🎨</div>
-        <h3 id="service2-title">Website Design</h3>
+
+        <div class="service-icon">
+          🎨
+        </div>
+
+        <h3 id="service2-title">
+          Website Design
+        </h3>
+
         <p id="service2-text">
           Design website bareedaa fi fayyadamaa ta'e qopheessuu.
         </p>
+
       </div>
 
       <div class="service-card">
-        <div class="service-icon">🔧</div>
-        <h3 id="service3-title">Website Maintenance</h3>
+
+        <div class="service-icon">
+          🔧
+        </div>
+
+        <h3 id="service3-title">
+          Website Maintenance
+        </h3>
+
         <p id="service3-text">
           Website haaromsuu, sirreessuu fi fooyyeessuu.
         </p>
+
       </div>
 
       <div class="service-card">
-        <div class="service-icon">🤖</div>
-        <h3 id="service4-title">Technology & AI</h3>
+
+        <div class="service-icon">
+          🤖
+        </div>
+
+        <h3 id="service4-title">
+          Technology & AI
+        </h3>
+
         <p id="service4-text">
-          Teknooloojiiwwan haaraa fi AI barachuu fi hojii keessatti fayyadamuu.
+          Teknooloojiiwwan haaraa fi AI barachuu fi
+          hojii keessatti fayyadamuu.
         </p>
+
       </div>
 
     </div>
@@ -753,11 +924,15 @@
   <!-- CONTACT -->
   <section id="contact">
 
-    <h2 id="contact-title">Nu Quunnamaa</h2>
+    <h2 id="contact-title">
+      Nu Quunnamaa
+    </h2>
 
-    <p class="section-intro" id="contact-intro">
-      Yoo waa'ee hojii koo ykn tajaajila koo na quunnamuu barbaadde,
-      ergaa kee asitti naaf ergi.
+    <p
+      class="section-intro"
+      id="contact-intro">
+      Yoo waa'ee hojii koo ykn tajaajila koo na quunnamuu
+      barbaadde, ergaa kee asitti naaf ergi.
     </p>
 
     <div class="contact-box">
@@ -806,368 +981,704 @@
     </h3>
 
     <p id="footer-text">
-      Website bareedaa fi teknooloojii ammayyaa ijaaruu irratti hojjechaa jira.
+      Website bareedaa fi teknooloojii ammayyaa
+      ijaaruu irratti hojjechaa jira.
     </p>
 
     <p>
-      © 2026 Olii Web Developer. All Rights Reserved.
+      © 2026 Olii Web Developer.
+      All Rights Reserved.
     </p>
 
   </footer>
 
   <script>
+
     /* EMAILJS */
+
     emailjs.init({
       publicKey: "A5qi6C-xNssmcgEda"
     });
 
-    const contactForm = document.getElementById("contact-form");
-    const sendButton = document.getElementById("send-button");
-    const formStatus = document.getElementById("form-status");
+    const contactForm =
+      document.getElementById("contact-form");
 
-    contactForm.addEventListener("submit", function(event) {
-      event.preventDefault();
+    const sendButton =
+      document.getElementById("send-button");
 
-      sendButton.disabled = true;
-      sendButton.textContent = "⏳ Ergaa ergaa jira...";
-      formStatus.textContent = "";
+    const formStatus =
+      document.getElementById("form-status");
 
-      emailjs.sendForm(
-        "service_l9iavpf",
-        "template_rl3r47",
-        this
-      )
-      .then(function() {
 
-        formStatus.textContent =
-          "✅ Ergaan kee milkaa'inaan ergameera. Galatoomi!";
+    contactForm.addEventListener(
+      "submit",
+      function(event) {
 
-        formStatus.style.color = "green";
+        event.preventDefault();
 
-        contactForm.reset();
+        sendButton.disabled = true;
 
-        sendButton.disabled = false;
-        sendButton.textContent = "📩 Ergaa Ergi";
+        sendButton.textContent =
+          "⏳ Ergaa ergaa jira...";
 
-      })
-      .catch(function(error) {
+        formStatus.textContent = "";
 
-        console.error("EmailJS Error:", error);
 
-        formStatus.textContent =
-          "❌ Ergaa erguun hin milkoofne. Mee irra deebi'ii yaali.";
+        emailjs.sendForm(
+          "service_l9iavpf",
+          "template_rl3r47",
+          this
+        )
 
-        formStatus.style.color = "red";
+        .then(function() {
 
-        sendButton.disabled = false;
-        sendButton.textContent = "📩 Ergaa Ergi";
+          formStatus.textContent =
+            "✅ Ergaan kee milkaa'inaan ergameera. Galatoomi!";
 
-      });
-    });
+          formStatus.style.color = "green";
+
+          contactForm.reset();
+
+          sendButton.disabled = false;
+
+          sendButton.textContent =
+            "📩 Ergaa Ergi";
+
+        })
+
+        .catch(function(error) {
+
+          console.error(
+            "EmailJS Error:",
+            error
+          );
+
+          formStatus.textContent =
+            "❌ Ergaa erguun hin milkoofne. Mee irra deebi'ii yaali.";
+
+          formStatus.style.color = "red";
+
+          sendButton.disabled = false;
+
+          sendButton.textContent =
+            "📩 Ergaa Ergi";
+
+        });
+
+      }
+    );
 
 
     /* LANGUAGE */
+
     let english = false;
+
 
     function changeLanguage() {
 
       english = !english;
 
+
       if (english) {
 
         document.documentElement.lang = "en";
 
-        document.getElementById("language-text").textContent = "Afaan Oromoo";
+        document.getElementById(
+          "language-text"
+        ).textContent = "Afaan Oromoo";
 
-        document.getElementById("nav-home").textContent = "Home";
-        document.getElementById("nav-about").textContent = "About Me";
-        document.getElementById("nav-works").textContent = "My Projects";
-        document.getElementById("nav-services").textContent = "Services";
-        document.getElementById("nav-contact").textContent = "Contact Me";
 
-        document.getElementById("hero-small").textContent =
-          "👋 Welcome";
+        document.getElementById(
+          "nav-home"
+        ).textContent = "Home";
 
-        document.getElementById("hero-title").innerHTML =
+        document.getElementById(
+          "nav-about"
+        ).textContent = "About Me";
+
+        document.getElementById(
+          "nav-works"
+        ).textContent = "My Projects";
+
+        document.getElementById(
+          "nav-services"
+        ).textContent = "Services";
+
+        document.getElementById(
+          "nav-contact"
+        ).textContent = "Contact Me";
+
+
+        document.getElementById(
+          "hero-small"
+        ).textContent = "👋 Welcome";
+
+
+        document.getElementById(
+          "hero-title"
+        ).innerHTML =
           'I am <span>Oliyaad</span>, a Web Developer.';
 
-        document.getElementById("hero-text").textContent =
+
+        document.getElementById(
+          "hero-text"
+        ).textContent =
           "I am working on building beautiful, fast and responsive websites while learning new technologies.";
 
-        document.getElementById("works-button").textContent =
+
+        document.getElementById(
+          "works-button"
+        ).textContent =
           "🚀 View My Projects";
 
-        document.getElementById("contact-button").textContent =
+
+        document.getElementById(
+          "contact-button"
+        ).textContent =
           "📩 Contact Me";
 
-        document.getElementById("github-button").textContent =
+
+        document.getElementById(
+          "github-button"
+        ).textContent =
           "💻 My GitHub";
 
-        document.getElementById("about-title").textContent =
+
+        document.getElementById(
+          "about-title"
+        ).textContent =
           "About Me";
 
-        document.getElementById("about-intro").textContent =
+
+        document.getElementById(
+          "about-intro"
+        ).textContent =
           "A brief introduction about me, my skills and my goals.";
 
-        document.getElementById("about-card-title").textContent =
+
+        document.getElementById(
+          "about-card-title"
+        ).textContent =
           "👤 About Me";
 
-        document.getElementById("about-card-text").textContent =
+
+        document.getElementById(
+          "about-card-text"
+        ).textContent =
           "I am Oliyaad, a Web Developer and a person who loves technology. I am working on building beautiful, fast and user-friendly websites.";
 
-        document.getElementById("skills-title").textContent =
+
+        document.getElementById(
+          "skills-title"
+        ).textContent =
           "💻 My Skills";
 
-        document.getElementById("skills-text").textContent =
+
+        document.getElementById(
+          "skills-text"
+        ).textContent =
           "I have knowledge of HTML and CSS, and I am improving my JavaScript skills. I enjoy using different web technologies to create new projects.";
 
-        document.getElementById("goal-title").textContent =
+
+        document.getElementById(
+          "goal-title"
+        ).textContent =
           "🎯 My Goal";
 
-        document.getElementById("goal-text").textContent =
+
+        document.getElementById(
+          "goal-text"
+        ).textContent =
           "My goal is to improve my Web Development skills, build high-quality websites and present my work to people in a simple and beautiful way.";
 
-        document.getElementById("education-title").textContent =
+
+        document.getElementById(
+          "education-title"
+        ).textContent =
           "📚 My Learning";
 
-        document.getElementById("education-text").textContent =
+
+        document.getElementById(
+          "education-text"
+        ).textContent =
           "I am always learning new things and improving my skills. With every experience, I improve my projects and grow toward becoming a professional developer.";
 
-        document.getElementById("works-title").textContent =
+
+        document.getElementById(
+          "works-title"
+        ).textContent =
           "My Projects";
 
-        document.getElementById("works-intro").textContent =
+
+        document.getElementById(
+          "works-intro"
+        ).textContent =
           "Projects I have created and projects I am currently working on.";
 
-        document.getElementById("project1-title").textContent =
+
+        document.getElementById(
+          "project1-title"
+        ).textContent =
           "My Personal Website";
 
-        document.getElementById("project1-text").textContent =
+
+        document.getElementById(
+          "project1-text"
+        ).textContent =
           "My personal website that showcases my skills, projects and services.";
 
-        document.getElementById("project1-button").textContent =
+
+        document.getElementById(
+          "project1-button"
+        ).textContent =
           "🔗 View Project";
 
-        document.getElementById("project2-title").textContent =
+
+        document.getElementById(
+          "project2-title"
+        ).textContent =
           "Responsive Web Design";
 
-        document.getElementById("project2-text").textContent =
+
+        document.getElementById(
+          "project2-text"
+        ).textContent =
           "Creating websites that work properly on mobile, tablet and computer.";
 
-        document.getElementById("project2-button").textContent =
+
+        document.getElementById(
+          "project2-button"
+        ).textContent =
           "🔗 View Project";
 
-        document.getElementById("project3-title").textContent =
+
+        document.getElementById(
+          "project3-title"
+        ).textContent =
           "EmailJS Contact Form";
 
-        document.getElementById("project3-text").textContent =
+
+        document.getElementById(
+          "project3-text"
+        ).textContent =
           "A contact form that can send messages from the website directly to email.";
 
-        document.getElementById("project3-button").textContent =
+
+        document.getElementById(
+          "project3-button"
+        ).textContent =
           "📩 View Form";
 
-        document.getElementById("services-title").textContent =
+
+        document.getElementById(
+          "services-title"
+        ).textContent =
           "My Services";
 
-        document.getElementById("services-intro").textContent =
+
+        document.getElementById(
+          "services-intro"
+        ).textContent =
           "Services I provide and areas I am working on.";
 
-        document.getElementById("service1-title").textContent =
+
+        document.getElementById(
+          "service1-title"
+        ).textContent =
           "Web Development";
 
-        document.getElementById("service1-text").textContent =
+
+        document.getElementById(
+          "service1-text"
+        ).textContent =
           "Building fast, clean and responsive websites.";
 
-        document.getElementById("service2-title").textContent =
+
+        document.getElementById(
+          "service2-title"
+        ).textContent =
           "Website Design";
 
-        document.getElementById("service2-text").textContent =
+
+        document.getElementById(
+          "service2-text"
+        ).textContent =
           "Creating beautiful and user-friendly website designs.";
 
-        document.getElementById("service3-title").textContent =
+
+        document.getElementById(
+          "service3-title"
+        ).textContent =
           "Website Maintenance";
 
-        document.getElementById("service3-text").textContent =
+
+        document.getElementById(
+          "service3-text"
+        ).textContent =
           "Updating, fixing and improving websites.";
 
-        document.getElementById("service4-title").textContent =
+
+        document.getElementById(
+          "service4-title"
+        ).textContent =
           "Technology & AI";
 
-        document.getElementById("service4-text").textContent =
+
+        document.getElementById(
+          "service4-text"
+        ).textContent =
           "Learning and using new technologies and AI in projects.";
 
-        document.getElementById("contact-title").textContent =
+
+        document.getElementById(
+          "contact-title"
+        ).textContent =
           "Contact Me";
 
-        document.getElementById("contact-intro").textContent =
+
+        document.getElementById(
+          "contact-intro"
+        ).textContent =
           "If you would like to contact me about my work or services, send me a message here.";
 
-        document.getElementById("name-input").placeholder =
+
+        document.getElementById(
+          "name-input"
+        ).placeholder =
           "Your name";
 
-        document.getElementById("email-input").placeholder =
+
+        document.getElementById(
+          "email-input"
+        ).placeholder =
           "Your email";
 
-        document.getElementById("message-input").placeholder =
+
+        document.getElementById(
+          "message-input"
+        ).placeholder =
           "Write your message";
 
-        document.getElementById("send-button").textContent =
+
+        document.getElementById(
+          "send-button"
+        ).textContent =
           "📩 Send Message";
 
-        document.getElementById("footer-title").textContent =
+
+        document.getElementById(
+          "footer-title"
+        ).textContent =
           "Olii Web Developer";
 
-        document.getElementById("footer-text").textContent =
+
+        document.getElementById(
+          "footer-text"
+        ).textContent =
           "Working on building beautiful websites and modern technology.";
 
       } else {
 
         document.documentElement.lang = "om";
 
-        document.getElementById("language-text").textContent = "English";
+        document.getElementById(
+          "language-text"
+        ).textContent = "English";
 
-        document.getElementById("nav-home").textContent = "Mana";
-        document.getElementById("nav-about").textContent = "Waa'ee Koo";
-        document.getElementById("nav-works").textContent = "Hojiiwwan Koo";
-        document.getElementById("nav-services").textContent = "Tajaajila";
-        document.getElementById("nav-contact").textContent = "Nu Quunnamaa";
 
-        document.getElementById("hero-small").textContent =
+        document.getElementById(
+          "nav-home"
+        ).textContent = "Mana";
+
+        document.getElementById(
+          "nav-about"
+        ).textContent = "Waa'ee Koo";
+
+        document.getElementById(
+          "nav-works"
+        ).textContent = "Hojiiwwan Koo";
+
+        document.getElementById(
+          "nav-services"
+        ).textContent = "Tajaajila";
+
+        document.getElementById(
+          "nav-contact"
+        ).textContent = "Nu Quunnamaa";
+
+
+        document.getElementById(
+          "hero-small"
+        ).textContent =
           "👋 Baga Nagaan Dhuftan";
 
-        document.getElementById("hero-title").innerHTML =
+
+        document.getElementById(
+          "hero-title"
+        ).innerHTML =
           'Ani <span>Oliyaad</span>, Ogeessa Ijaaraa Marsaariitii (Web Developer) dha.';
 
-        document.getElementById("hero-text").textContent =
+
+        document.getElementById(
+          "hero-text"
+        ).textContent =
           "Website bareedaa, saffisaa fi mobile irratti sirriitti hojjetu ijaaruu fi teknooloojii haaraa barachuu irratti hojjechaa jira.";
 
-        document.getElementById("works-button").textContent =
+
+        document.getElementById(
+          "works-button"
+        ).textContent =
           "🚀 Hojii Koo Ilaali";
 
-        document.getElementById("contact-button").textContent =
+
+        document.getElementById(
+          "contact-button"
+        ).textContent =
           "📩 Na Quunnami";
 
-        document.getElementById("github-button").textContent =
+
+        document.getElementById(
+          "github-button"
+        ).textContent =
           "💻 GitHub Koo";
 
-        document.getElementById("about-title").textContent =
+
+        document.getElementById(
+          "about-title"
+        ).textContent =
           "Waa'ee Koo";
 
-        document.getElementById("about-intro").textContent =
+
+        document.getElementById(
+          "about-intro"
+        ).textContent =
           "Waa'ee koo, beekumsa koo fi kaayyoo koo gabaabinaan.";
 
-        document.getElementById("about-card-title").textContent =
+
+        document.getElementById(
+          "about-card-title"
+        ).textContent =
           "👤 Waa'ee Koo";
 
-        document.getElementById("about-card-text").textContent =
+
+        document.getElementById(
+          "about-card-text"
+        ).textContent =
           "Ani Oliyaad, ogeessa ijaaraa marsaariitii (Web Developer) fi nama teeknooloojii jaallatu dha. Marsaariitiiwwan bareedaa, saffisaa fi fayyadamaa ta’an ijaaruu irratti hojjechaa jira.";
 
-        document.getElementById("skills-title").textContent =
+
+        document.getElementById(
+          "skills-title"
+        ).textContent =
           "💻 Beekumsa Koo";
 
-        document.getElementById("skills-text").textContent =
+
+        document.getElementById(
+          "skills-text"
+        ).textContent =
           "HTML fi CSS irratti beekumsa qaba; JavaScript irrattis dandeettii koo cimsachaa jira. Teeknooloojiiwwan web adda addaa fayyadamuun pirojektoota haaraa hojjechuu nan jaalladha.";
 
-        document.getElementById("goal-title").textContent =
+
+        document.getElementById(
+          "goal-title"
+        ).textContent =
           "🎯 Kaayyoo Koo";
 
-        document.getElementById("goal-text").textContent =
+
+        document.getElementById(
+          "goal-text"
+        ).textContent =
           "Kaayyoon koo dandeettii Web Development koo guddisuun marsaariitiiwwan qulqullina qaban ijaaruu fi hojiiwwan koo namootaaf karaa salphaa fi bareedaan agarsiisuu dha.";
 
-        document.getElementById("education-title").textContent =
+
+        document.getElementById(
+          "education-title"
+        ).textContent =
           "📚 Barnoota Koo";
 
-        document.getElementById("education-text").textContent =
+
+        document.getElementById(
+          "education-text"
+        ).textContent =
           "Yeroo hunda waan haaraa barachuu fi dandeettii koo fooyyeessuu irratti hojjechaa jira. Muuxannoo argadhu hundaan pirojektoota koo fooyyeessuun gara ogeessaatti guddachaa jira.";
 
-        document.getElementById("works-title").textContent =
+
+        document.getElementById(
+          "works-title"
+        ).textContent =
           "Hojiiwwan Koo";
 
-        document.getElementById("works-intro").textContent =
+
+        document.getElementById(
+          "works-intro"
+        ).textContent =
           "Pirojektoota ani hojjedhe fi irratti hojjechaa jiru.";
 
-        document.getElementById("project1-title").textContent =
+
+        document.getElementById(
+          "project1-title"
+        ).textContent =
           "Website Dhuunfaa Koo";
 
-        document.getElementById("project1-text").textContent =
+
+        document.getElementById(
+          "project1-text"
+        ).textContent =
           "Website dhuunfaa koo kan beekumsa, hojiiwwan fi tajaajilawwan koo agarsiisu.";
 
-        document.getElementById("project1-button").textContent =
+
+        document.getElementById(
+          "project1-button"
+        ).textContent =
           "🔗 Pirojektii Ilaali";
 
-        document.getElementById("project2-title").textContent =
+
+        document.getElementById(
+          "project2-title"
+        ).textContent =
           "Responsive Web Design";
 
-        document.getElementById("project2-text").textContent =
+
+        document.getElementById(
+          "project2-text"
+        ).textContent =
           "Website mobile, tablet fi computer irratti sirriitti hojjetu qopheessuu.";
 
-        document.getElementById("project2-button").textContent =
+
+        document.getElementById(
+          "project2-button"
+        ).textContent =
           "🔗 Pirojektii Ilaali";
 
-        document.getElementById("project3-title").textContent =
+
+        document.getElementById(
+          "project3-title"
+        ).textContent =
           "EmailJS Contact Form";
 
-        document.getElementById("project3-text").textContent =
+
+        document.getElementById(
+          "project3-text"
+        ).textContent =
           "Formii quunnamtii website irraa ergaa gara emailitti erguu danda'u.";
 
-        document.getElementById("project3-button").textContent =
+
+        document.getElementById(
+          "project3-button"
+        ).textContent =
           "📩 Formii Ilaali";
 
-        document.getElementById("services-title").textContent =
+
+        document.getElementById(
+          "services-title"
+        ).textContent =
           "Tajaajila Koo";
 
-        document.getElementById("services-intro").textContent =
+
+        document.getElementById(
+          "services-intro"
+        ).textContent =
           "Tajaajilawwan ani kennuu fi irratti hojjechaa jiru.";
 
-        document.getElementById("service1-title").textContent =
+
+        document.getElementById(
+          "service1-title"
+        ).textContent =
           "Web Development";
 
-        document.getElementById("service1-text").textContent =
+
+        document.getElementById(
+          "service1-text"
+        ).textContent =
           "Website saffisaa, qulqulluu fi responsive ijaaruu.";
 
-        document.getElementById("service2-title").textContent =
+
+        document.getElementById(
+          "service2-title"
+        ).textContent =
           "Website Design";
 
-        document.getElementById("service2-text").textContent =
+
+        document.getElementById(
+          "service2-text"
+        ).textContent =
           "Design website bareedaa fi fayyadamaa ta'e qopheessuu.";
 
-        document.getElementById("service3-title").textContent =
+
+        document.getElementById(
+          "service3-title"
+        ).textContent =
           "Website Maintenance";
 
-        document.getElementById("service3-text").textContent =
+
+        document.getElementById(
+          "service3-text"
+        ).textContent =
           "Website haaromsuu, sirreessuu fi fooyyeessuu.";
 
-        document.getElementById("service4-title").textContent =
+
+        document.getElementById(
+          "service4-title"
+        ).textContent =
           "Technology & AI";
 
-        document.getElementById("service4-text").textContent =
+
+        document.getElementById(
+          "service4-text"
+        ).textContent =
           "Teknooloojiiwwan haaraa fi AI barachuu fi hojii keessatti fayyadamuu.";
 
-        document.getElementById("contact-title").textContent =
+
+        document.getElementById(
+          "contact-title"
+        ).textContent =
           "Nu Quunnamaa";
 
-        document.getElementById("contact-intro").textContent =
+
+        document.getElementById(
+          "contact-intro"
+        ).textContent =
           "Yoo waa'ee hojii koo ykn tajaajila koo na quunnamuu barbaadde, ergaa kee asitti naaf ergi.";
 
-        document.getElementById("name-input").placeholder =
+
+        document.getElementById(
+          "name-input"
+        ).placeholder =
           "Maqaa kee";
 
-        document.getElementById("email-input").placeholder =
+
+        document.getElementById(
+          "email-input"
+        ).placeholder =
           "Email kee";
 
-        document.getElementById("message-input").placeholder =
+
+        document.getElementById(
+          "message-input"
+        ).placeholder =
           "Ergaa kee barreessi";
 
-        document.getElementById("send-button").textContent =
+
+        document.getElementById(
+          "send-button"
+        ).textContent =
           "📩 Ergaa Ergi";
 
-        document.getElementById("footer-title").textContent =
+
+        document.getElementById(
+          "footer-title"
+        ).textContent =
           "Olii Web Developer";
 
-        document.getElementById("footer-text").textContent =
+
+        document.getElementById(
+          "footer-text"
+        ).textContent =
           "Website bareedaa fi teknooloojii ammayyaa ijaaruu irratti hojjechaa jira.";
+
       }
     }
+
   </script>
 
 </body>
