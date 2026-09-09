@@ -1172,9 +1172,13 @@ contactForm.addEventListener(
       if (document.documentElement.lang === "en") {
 
         formStatus.textContent =
-          "✅ Your message has been sent successfully. Thank you!";
+  "✅ Your message has been sent successfully. Thank you!";
 
-      } else {
+setTimeout(function() {
+  formStatus.textContent = "";
+}, 5000);
+
+} else {
 
         formStatus.textContent =
           "✅ Ergaan kee milkaa'inaan ergameera. Galatoomi!";
