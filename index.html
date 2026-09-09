@@ -1160,34 +1160,37 @@ contactForm.addEventListener(
       this
     )
 
-    .then(function() {
+   .then(function() {
 
-      if (document.documentElement.lang === "en") {
-        formStatus.textContent =
-          "✅ Your message has been sent successfully. Thank you!";
-      } else {
-        formStatus.textContent =
-          "✅ Ergaan kee milkaa'inaan ergameera. Galatoomi!";
-      }
+  if (document.documentElement.lang === "en") {
 
-      formStatus.style.color = "green";
+    formStatus.textContent =
+      "✅ Your message has been sent successfully. Thank you!";
 
-      contactForm.reset();
+  } else {
 
-      sendButton.disabled = false;
+    formStatus.textContent =
+      "✅ Ergaan kee milkaa'inaan ergameera. Galatoomi!";
 
-      if (document.documentElement.lang === "en") {
-        sendButton.textContent = "📩 Send Message";
-      } else {
-        sendButton.textContent = "📩 Ergaa Ergi";
-      }
+  }
 
-      setTimeout(function() {
-        formStatus.textContent = "";
-      }, 5000);
+  formStatus.style.color = "green";
 
-    })
+  contactForm.reset();
 
+  sendButton.disabled = false;
+
+  if (document.documentElement.lang === "en") {
+    sendButton.textContent = "📩 Send Message";
+  } else {
+    sendButton.textContent = "📩 Ergaa Ergi";
+  }
+
+  setTimeout(function() {
+    formStatus.textContent = "";
+  }, 5000);
+
+})
     .catch(function(error) {
 
       console.error(
