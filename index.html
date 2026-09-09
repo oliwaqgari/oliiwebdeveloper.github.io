@@ -1138,7 +1138,6 @@ const sendButton =
 const formStatus =
   document.getElementById("form-status");
 
-
 contactForm.addEventListener(
   "submit",
   function(event) {
@@ -1148,18 +1147,12 @@ contactForm.addEventListener(
     sendButton.disabled = true;
 
     if (document.documentElement.lang === "en") {
-
-      sendButton.textContent =
-        "⏳ Sending...";
-
+      sendButton.textContent = "⏳ Sending...";
     } else {
-
-      sendButton.textContent =
-        "⏳ Ergaa ergaa jira...";
+      sendButton.textContent = "⏳ Ergaa ergaa jira...";
     }
 
     formStatus.textContent = "";
-
 
     emailjs.sendForm(
       "service_l9iavpf",
@@ -1167,45 +1160,33 @@ contactForm.addEventListener(
       this
     )
 
-    ```javascript
-.then(function() {
+    .then(function() {
 
-  if (document.documentElement.lang === "en") {
+      if (document.documentElement.lang === "en") {
+        formStatus.textContent =
+          "✅ Your message has been sent successfully. Thank you!";
+      } else {
+        formStatus.textContent =
+          "✅ Ergaan kee milkaa'inaan ergameera. Galatoomi!";
+      }
 
-    formStatus.textContent =
-      "✅ Your message has been sent successfully. Thank you!";
+      formStatus.style.color = "green";
 
-  } else {
+      contactForm.reset();
 
-    formStatus.textContent =
-      "✅ Ergaan kee milkaa'inaan ergameera. Galatoomi!";
+      sendButton.disabled = false;
 
-  }
+      if (document.documentElement.lang === "en") {
+        sendButton.textContent = "📩 Send Message";
+      } else {
+        sendButton.textContent = "📩 Ergaa Ergi";
+      }
 
-  formStatus.style.color = "green";
+      setTimeout(function() {
+        formStatus.textContent = "";
+      }, 5000);
 
-  contactForm.reset();
-
-  sendButton.disabled = false;
-
-  if (document.documentElement.lang === "en") {
-    sendButton.textContent = "📩 Send Message";
-  } else {
-    sendButton.textContent = "📩 Ergaa Ergi";
-  }
-
-  // Ergaa milkaa'inaa sekondii 5 booda balleessa
-  setTimeout(function() {
-    formStatus.textContent = "";
-  }, 5000);
-
-})
-```
-
-**Hubachiisa:** `setTimeout` kun bakka sirrii keessa jira. Amma ergaan kee erga ergamee **sekondii 5 booda ofumaan ni bada.** ✅
-
-Ergasii **Save → Commit changes → website bani → ergaa tokko ergiitii qoradhu.**
-
+    })
 
     .catch(function(error) {
 
@@ -1215,12 +1196,9 @@ Ergasii **Save → Commit changes → website bani → ergaa tokko ergiitii qora
       );
 
       if (document.documentElement.lang === "en") {
-
         formStatus.textContent =
           "❌ Failed to send the message. Please try again.";
-
       } else {
-
         formStatus.textContent =
           "❌ Ergaa erguun hin milkoofne. Mee irra deebi'ii yaali.";
       }
@@ -1230,12 +1208,9 @@ Ergasii **Save → Commit changes → website bani → ergaa tokko ergiitii qora
       sendButton.disabled = false;
 
       if (document.documentElement.lang === "en") {
-
         sendButton.textContent =
           "📩 Send Message";
-
       } else {
-
         sendButton.textContent =
           "📩 Ergaa Ergi";
       }
@@ -1244,7 +1219,6 @@ Ergasii **Save → Commit changes → website bani → ergaa tokko ergiitii qora
 
   }
 );
-
 
     /* LANGUAGE */
 
