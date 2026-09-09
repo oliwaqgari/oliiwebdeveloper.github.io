@@ -215,116 +215,150 @@
       margin-top: 0;
     }
 
-    /* PROJECTS */
-    .projects-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 22px;
-    }
+    /* =========================
+   PROJECTS IMPROVED DESIGN
+========================= */
 
-    .project-card {
-      background: white;
-      padding: 28px;
-      border-radius: 18px;
-      text-align: center;
-      border: 1px solid #e6eef8;
-      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
-      transition:
-        transform 0.35s ease,
-        box-shadow 0.35s ease;
-      position: relative;
-      overflow: hidden;
-    }
+.projects-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
 
-    .project-card::before {
-      content: "";
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 5px;
-      background: linear-gradient(
-        90deg,
-        #082f6b,
-        #42a5f5
-      );
-    }
+.project-card {
+  background: white;
+  border-radius: 18px;
+  overflow: hidden;
+  border: 1px solid #e2eaf5;
+  box-shadow: 0 8px 25px rgba(8, 47, 107, 0.08);
+  transition:
+    transform 0.35s ease,
+    box-shadow 0.35s ease;
+}
 
-    .project-card:hover {
-      transform: translateY(-10px);
-      box-shadow: 0 18px 40px rgba(8, 47, 107, 0.18);
-    }
+.project-card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 18px 40px rgba(8, 47, 107, 0.16);
+}
 
-    /* PROJECT IMAGE */
-    .project-image {
-      width: 100%;
-      height: 180px;
-      object-fit: contain;
-      display: block;
-      border-radius: 12px;
-      margin: 10px auto 18px;
-      background: #f4f8ff;
-      padding: 8px;
-      transition:
-        transform 0.4s ease,
-        box-shadow 0.4s ease;
-    }
+.project-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 18px 20px 10px;
+}
 
-    .project-card:hover .project-image {
-      transform: scale(1.04);
-      box-shadow: 0 8px 20px rgba(8, 47, 107, 0.12);
-    }
+.project-number {
+  color: #1565c0;
+  font-size: 14px;
+  font-weight: bold;
+  background: #eaf4ff;
+  padding: 6px 10px;
+  border-radius: 20px;
+}
 
-    .project-icon {
-      font-size: 45px;
-      margin: 10px 0 15px;
-    }
+.project-icon {
+  font-size: 32px;
+}
 
-    .project-card h3 {
-      color: #082f6b;
-      font-size: 22px;
-      margin-bottom: 12px;
-    }
+.project-image {
+  width: 100%;
+  height: 220px;
+  object-fit: cover;
+  display: block;
+}
 
-    .project-card p {
-      color: #526176;
-      font-size: 16px;
-      margin-bottom: 18px;
-    }
+.project-visual {
+  height: 220px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient(
+    135deg,
+    #eaf4ff,
+    #d5e9ff
+  );
+}
 
-    .tags {
-      margin: 15px 0;
-    }
+.project-visual-3 {
+  background: linear-gradient(
+    135deg,
+    #eef7ff,
+    #dceeff
+  );
+}
 
-    .tag {
-      display: inline-block;
-      background: #eaf4ff;
-      color: #1565c0;
-      padding: 5px 10px;
-      margin: 3px;
-      border-radius: 15px;
-      font-size: 13px;
-      font-weight: bold;
-    }
+.visual-code,
+.visual-email {
+  width: 100px;
+  height: 100px;
+  border-radius: 25px;
+  background: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 10px 25px rgba(8, 47, 107, 0.12);
+}
 
-    .project-link {
-      display: inline-block;
-      background: #082f6b;
-      color: white;
-      padding: 10px 18px;
-      border-radius: 8px;
-      text-decoration: none;
-      font-weight: bold;
-      transition:
-        background 0.3s ease,
-        transform 0.3s ease;
-    }
+.visual-code span {
+  font-size: 45px;
+  color: #1565c0;
+  font-weight: bold;
+}
 
-    .project-link:hover {
-      background: #1565c0;
-      transform: scale(1.04);
-    }
+.visual-email span {
+  font-size: 50px;
+  color: #1565c0;
+}
 
+.project-content {
+  padding: 22px;
+  text-align: left;
+}
+
+.project-content h3 {
+  color: #1565c0;
+  font-size: 22px;
+  margin: 0 0 12px;
+}
+
+.project-content p {
+  color: #555;
+  line-height: 1.7;
+  margin-bottom: 18px;
+}
+
+.project-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 20px;
+}
+
+.project-tags span {
+  background: #eaf4ff;
+  color: #1565c0;
+  padding: 6px 10px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+.project-link {
+  display: inline-block;
+  text-decoration: none;
+  background: #1565c0;
+  color: white;
+  padding: 10px 16px;
+  border-radius: 8px;
+  font-weight: bold;
+  transition: 0.3s ease;
+}
+
+.project-link:hover {
+  background: #0d47a1;
+  transform: translateX(4px);
+}
     /* SERVICES */
     .services-grid {
       display: grid;
@@ -694,149 +728,151 @@
     </div>
   </section>
 
-  <!-- PROJECTS -->
-  <section id="works">
+ <!-- PROJECTS -->
+<section id="works">
 
-    <h2 id="works-title">
-      Hojiiwwan Koo
-    </h2>
+  <h2 id="projects-title">Hojiiwwan Koo</h2>
 
-    <p
-      class="section-intro"
-      id="works-intro">
-      Pirojektoota ani hojjedhe fi irratti hojjechaa jiru.
-    </p>
+  <p class="section-intro" id="projects-intro">
+    Pirojektoota ani hojjedhe fi irratti hojjechaa jiru.
+  </p>
 
-    <div class="projects-grid">
+  <div class="projects-grid">
 
-      <!-- PROJECT 1 -->
-      <div class="project-card">
+    <!-- PROJECT 1 -->
+    <div class="project-card">
 
-        <img
-          src="oli.jpg"
-          alt="Website Dhuunfaa Koo"
-          class="project-image">
+      <div class="project-top">
+        <span class="project-number">01</span>
+        <span class="project-icon">🌐</span>
+      </div>
+
+      <img
+        src="oli.jpg"
+        alt="Website Dhuunfaa Koo"
+        class="project-image"
+      >
+
+      <div class="project-content">
 
         <h3 id="project1-title">
           Website Dhuunfaa Koo
         </h3>
 
         <p id="project1-text">
-          Website dhuunfaa koo kan beekumsa, hojiiwwan fi
-          tajaajilawwan koo agarsiisu.
+          Website dhuunfaa koo kan hojii koo, dandeettii koo
+          fi tajaajilawwan ani kennu agarsiisu.
         </p>
 
-        <div class="tags">
-
-          <span class="tag">
-            HTML
-          </span>
-
-          <span class="tag">
-            CSS
-          </span>
-
-          <span class="tag">
-            JavaScript
-          </span>
-
+        <div class="project-tags">
+          <span>HTML</span>
+          <span>CSS</span>
+          <span>JavaScript</span>
         </div>
 
         <a
-          href="https://oliwaqgari.github.io/oliiwebdeveloper.github.io/"
-          target="_blank"
+          href="#contact"
           class="project-link"
-          id="project1-button">
-          🔗 Pirojektii Ilaali
+          id="project1-button"
+        >
+          Ilaali / Na Quunnami →
         </a>
 
       </div>
 
-      <!-- PROJECT 2 -->
-      <div class="project-card">
+    </div>
 
-        <div class="project-icon">
-          📱
+
+    <!-- PROJECT 2 -->
+    <div class="project-card">
+
+      <div class="project-top">
+        <span class="project-number">02</span>
+        <span class="project-icon">📱</span>
+      </div>
+
+      <div class="project-visual project-visual-2">
+        <div class="visual-code">
+          <span>&lt;/&gt;</span>
         </div>
+      </div>
+
+      <div class="project-content">
 
         <h3 id="project2-title">
           Responsive Web Design
         </h3>
 
         <p id="project2-text">
-          Website mobile, tablet fi computer irratti
-          sirriitti hojjetu qopheessuu.
+          Website kamiyyuu computer, tablet fi mobile irratti
+          sirriitti hojjetu design fi ijaaruu.
         </p>
 
-        <div class="tags">
-
-          <span class="tag">
-            HTML
-          </span>
-
-          <span class="tag">
-            CSS
-          </span>
-
-          <span class="tag">
-            Responsive
-          </span>
-
-        </div>
-
-        <a
-          href="https://oliwaqgari.github.io/oliiwebdeveloper.github.io/"
-          target="_blank"
-          class="project-link"
-          id="project2-button">
-          🔗 Pirojektii Ilaali
-        </a>
-
-      </div>
-
-      <!-- PROJECT 3 -->
-      <div class="project-card">
-
-        <div class="project-icon">
-          📩
-        </div>
-
-        <h3 id="project3-title">
-          EmailJS Contact Form
-        </h3>
-
-        <p id="project3-text">
-          Formii quunnamtii website irraa ergaa gara
-          emailitti erguu danda'u.
-        </p>
-
-        <div class="tags">
-
-          <span class="tag">
-            JavaScript
-          </span>
-
-          <span class="tag">
-            EmailJS
-          </span>
-
-          <span class="tag">
-            Form
-          </span>
-
+        <div class="project-tags">
+          <span>Responsive</span>
+          <span>CSS</span>
+          <span>UI Design</span>
         </div>
 
         <a
           href="#contact"
           class="project-link"
-          id="project3-button">
-          📩 Formii Ilaali
+          id="project2-button"
+        >
+          Ilaali / Na Quunnami →
         </a>
 
       </div>
 
     </div>
-  </section>
+
+
+    <!-- PROJECT 3 -->
+    <div class="project-card">
+
+      <div class="project-top">
+        <span class="project-number">03</span>
+        <span class="project-icon">📩</span>
+      </div>
+
+      <div class="project-visual project-visual-3">
+        <div class="visual-email">
+          <span>✉</span>
+        </div>
+      </div>
+
+      <div class="project-content">
+
+        <h3 id="project3-title">
+          Contact Form & EmailJS
+        </h3>
+
+        <p id="project3-text">
+          Formii quunnamtii website keessatti fayyadamuun
+          ergaa maamiltootaa email irratti fudhachuu.
+        </p>
+
+        <div class="project-tags">
+          <span>JavaScript</span>
+          <span>EmailJS</span>
+          <span>Form</span>
+        </div>
+
+        <a
+          href="#contact"
+          class="project-link"
+          id="project3-button"
+        >
+          Ilaali / Na Quunnami →
+        </a>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
 
  <!-- SERVICES -->
 <section id="services">
