@@ -1167,41 +1167,45 @@ contactForm.addEventListener(
       this
     )
 
-    .then(function() {
+    ```javascript
+.then(function() {
 
-      if (document.documentElement.lang === "en") {
+  if (document.documentElement.lang === "en") {
 
-        formStatus.textContent =
-  "✅ Your message has been sent successfully. Thank you!";
+    formStatus.textContent =
+      "✅ Your message has been sent successfully. Thank you!";
 
-setTimeout(function() {
-  formStatus.textContent = "";
-}, 5000);
+  } else {
 
-} else {
+    formStatus.textContent =
+      "✅ Ergaan kee milkaa'inaan ergameera. Galatoomi!";
 
-        formStatus.textContent =
-          "✅ Ergaan kee milkaa'inaan ergameera. Galatoomi!";
-      }
+  }
 
-      formStatus.style.color = "green";
+  formStatus.style.color = "green";
 
-      contactForm.reset();
+  contactForm.reset();
 
-      sendButton.disabled = false;
+  sendButton.disabled = false;
 
-      if (document.documentElement.lang === "en") {
+  if (document.documentElement.lang === "en") {
+    sendButton.textContent = "📩 Send Message";
+  } else {
+    sendButton.textContent = "📩 Ergaa Ergi";
+  }
 
-        sendButton.textContent =
-          "📩 Send Message";
+  // Ergaa milkaa'inaa sekondii 5 booda balleessa
+  setTimeout(function() {
+    formStatus.textContent = "";
+  }, 5000);
 
-      } else {
+})
+```
 
-        sendButton.textContent =
-          "📩 Ergaa Ergi";
-      }
+**Hubachiisa:** `setTimeout` kun bakka sirrii keessa jira. Amma ergaan kee erga ergamee **sekondii 5 booda ofumaan ni bada.** ✅
 
-    })
+Ergasii **Save → Commit changes → website bani → ergaa tokko ergiitii qoradhu.**
+
 
     .catch(function(error) {
 
