@@ -359,65 +359,171 @@
   background: #0d47a1;
   transform: translateX(4px);
 }
-    /* SERVICES */
-    .services-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 22px;
-    }
+   /* SERVICES */
+.services-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 25px;
+  margin-top: 30px;
+}
 
-    .service-card {
-      background: #f4f8ff;
-      padding: 25px;
-      border-radius: 15px;
-      border: 1px solid #e2eaf5;
-      text-align: center;
-      transition:
-        transform 0.35s ease,
-        box-shadow 0.35s ease;
-    }
+.service-card {
+  position: relative;
+  background: #ffffff;
+  padding: 30px 25px;
+  border-radius: 20px;
+  border: 1px solid #e2eaf5;
+  text-align: center;
+  overflow: hidden;
 
-    .service-card:hover {
-      transform: translateY(-8px);
-      box-shadow: 0 15px 30px rgba(8, 47, 107, 0.12);
-    }
+  transition:
+    transform 0.35s ease,
+    box-shadow 0.35s ease,
+    border-color 0.35s ease;
+}
 
-    .service-icon {
-      font-size: 40px;
-      margin-bottom: 10px;
-    }
+/* Blue line on top */
+.service-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 4px;
+  background: linear-gradient(
+    90deg,
+    #082f6b,
+    #1565c0,
+    #42a5f5
+  );
+}
 
-   .service-card h3 {
+/* Hover effect */
+.service-card:hover {
+  transform: translateY(-10px);
+  border-color: #90caf9;
+  box-shadow: 0 18px 35px rgba(8, 47, 107, 0.15);
+}
+
+/* Service icon */
+.service-icon {
+  width: 75px;
+  height: 75px;
+  margin: 5px auto 15px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: #eaf3ff;
+  border-radius: 50%;
+
+  font-size: 38px;
+
+  transition:
+    transform 0.35s ease,
+    background 0.35s ease;
+}
+
+.service-card:hover .service-icon {
+  transform: scale(1.1) rotate(5deg);
+  background: #d8ebff;
+}
+
+/* Service title */
+.service-card h3 {
   color: #1565c0;
   font-size: 22px;
   margin: 10px 0 12px;
 }
 
+/* Service description */
 .service-card p {
   color: #5c6b7f;
+  font-size: 15px;
   line-height: 1.7;
-  margin-bottom: 20px;
+  margin-bottom: 22px;
 }
 
+/* Service button */
 .service-button {
   display: inline-block;
   text-decoration: none;
-  background: #1565c0;
-  color: white;
-  padding: 11px 18px;
-  border-radius: 8px;
+
+  background: linear-gradient(
+    135deg,
+    #1565c0,
+    #0d47a1
+  );
+
+  color: #ffffff;
+
+  padding: 11px 20px;
+  border-radius: 10px;
+
   font-weight: bold;
+  font-size: 14px;
+
+  box-shadow: 0 5px 12px rgba(21, 101, 192, 0.2);
+
   transition:
-    background 0.3s ease,
     transform 0.3s ease,
-    box-shadow 0.3s ease;
+    box-shadow 0.3s ease,
+    background 0.3s ease;
 }
 
+/* Button hover */
 .service-button:hover {
-  background: #0d47a1;
   transform: translateY(-3px);
-  box-shadow: 0 8px 18px rgba(8, 47, 107, 0.18);
+  background: linear-gradient(
+    135deg,
+    #0d47a1,
+    #082f6b
+  );
+
+  box-shadow: 0 8px 20px rgba(8, 47, 107, 0.25);
 }
+
+/* Responsive - Tablet */
+@media (max-width: 800px) {
+  .services-grid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
+  .service-card {
+    padding: 28px 22px;
+  }
+}
+
+/* Responsive - Mobile */
+@media (max-width: 450px) {
+  .services-grid {
+    gap: 18px;
+  }
+
+  .service-card {
+    padding: 25px 18px;
+    border-radius: 17px;
+  }
+
+  .service-icon {
+    width: 65px;
+    height: 65px;
+    font-size: 32px;
+  }
+
+  .service-card h3 {
+    font-size: 20px;
+  }
+
+  .service-card p {
+    font-size: 14px;
+  }
+
+  .service-button {
+    padding: 10px 17px;
+  }
 
    /* =========================
    CONTACT
@@ -667,6 +773,8 @@ footer p:last-child {
     <a href="#works" id="nav-works">Hojiiwwan Koo</a>
 
     <a href="#services" id="nav-services">Tajaajila</a>
+    
+    <a href="#pricing" id="nav-pricing">Gatii</a>
 
     <a href="#contact" id="nav-contact">Nu Quunnamaa</a>
 
@@ -1069,6 +1177,151 @@ footer p:last-child {
         id="service4-button"
       >
         📩 Na Quunnami
+      </a>
+
+    </div>
+
+  </div>
+
+</section>
+  <!-- PRICING -->
+<section id="pricing">
+
+  <h2 id="pricing-title">
+    💰 Gatii Tajaajilaa
+  </h2>
+
+  <p class="section-intro" id="pricing-intro">
+    Tajaajila website koo fi gatiiwwan isaanii.
+  </p>
+
+  <div class="pricing-grid">
+
+    <!-- BASIC -->
+    <div class="pricing-card">
+
+      <div class="pricing-icon">
+        🟢
+      </div>
+
+      <h3 id="basic-title">
+        Basic
+      </h3>
+
+      <div class="price">
+        <span id="basic-price">
+          2,500 BIRR
+        </span>
+        <small id="basic-from">
+          irraa eegalee
+        </small>
+      </div>
+
+      <p id="basic-text">
+        Website salphaa fi qulqulluu namoota dhuunfaa
+        ykn hojii xixiqqaaf mijatu.
+      </p>
+
+      <ul>
+        <li id="basic-feature1">✓ Fuula website salphaa</li>
+        <li id="basic-feature2">✓ Mobile irratti hojjechuu</li>
+        <li id="basic-feature3">✓ Design qulqulluu</li>
+        <li id="basic-feature4">✓ Contact Form</li>
+      </ul>
+
+      <a
+        href="#contact"
+        class="pricing-button"
+        id="basic-button">
+        📩 Tajaajila Kana Ajadi
+      </a>
+
+    </div>
+
+
+    <!-- STANDARD -->
+    <div class="pricing-card featured">
+
+      <div class="popular-badge" id="standard-badge">
+        ⭐ Filatamaa
+      </div>
+
+      <div class="pricing-icon">
+        🔵
+      </div>
+
+      <h3 id="standard-title">
+        Standard
+      </h3>
+
+      <div class="price">
+        <span id="standard-price">
+          5,000 BIRR
+        </span>
+        <small id="standard-from">
+          irraa eegalee
+        </small>
+      </div>
+
+      <p id="standard-text">
+        Website professional, bareedaa fi mobile,
+        tablet fi computer irratti sirriitti hojjetu.
+      </p>
+
+      <ul>
+        <li id="standard-feature1">✓ Fuulota website hedduu</li>
+        <li id="standard-feature2">✓ Responsive Design</li>
+        <li id="standard-feature3">✓ Contact Form</li>
+        <li id="standard-feature4">✓ Social Media Links</li>
+      </ul>
+
+      <a
+        href="#contact"
+        class="pricing-button"
+        id="standard-button">
+        📩 Tajaajila Kana Ajadi
+      </a>
+
+    </div>
+
+
+    <!-- PREMIUM -->
+    <div class="pricing-card">
+
+      <div class="pricing-icon">
+        🟣
+      </div>
+
+      <h3 id="premium-title">
+        Premium
+      </h3>
+
+      <div class="price">
+        <span id="premium-price">
+          8,500 BIRR
+        </span>
+        <small id="premium-from">
+          irraa eegalee
+        </small>
+      </div>
+
+      <p id="premium-text">
+        Website guutuu, professional fi features
+        dabalataa qabu.
+      </p>
+
+      <ul>
+        <li id="premium-feature1">✓ Website guutuu</li>
+        <li id="premium-feature2">✓ Advanced Design</li>
+        <li id="premium-feature3">✓ EmailJS Contact Form</li>
+        <li id="premium-feature4">✓ Technology & AI Features</li>
+      </ul>
+
+      <a
+        href="#contact"
+        class="pricing-button"
+        id="premium-button">
+        📩 Tajaajila Kana Ajadi
       </a>
 
     </div>
