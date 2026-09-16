@@ -1554,12 +1554,12 @@ footer p:last-child {
       </div>
 
      <a
-  href="http://checkout.chapa.co/checkout/web/payment/PL-yVqSNUgJCWwe"
-  target="_blank"
+ <button
+  type="button"
   class="book-button"
   id="book-button">
   📖 Kitaaba Ajaji
-</a>
+</button>
 
     </div>
 
@@ -1740,7 +1740,116 @@ contactForm.addEventListener(
 
   }
 );
+/* BOOK PAYMENT */
 
+const bookButton = document.getElementById("book-button");
+
+bookButton.addEventListener("click", async function () {
+
+  const firstName = prompt(
+    document.documentElement.lang === "en"
+      ? "Enter your first name:"
+      : "Maqaa kee galchi:"
+  );
+
+  if (!firstName) {
+    return;
+  }
+
+  const lastName = prompt(
+    document.documentElement.lang === "en"
+      ? "Enter your last name:"
+      : "Abbaa maqaa kee galchi:"
+  );
+
+  if (!lastName) {
+    return;
+  }
+
+  const email = prompt(
+    document.documentElement.lang === "en"
+      ? "Enter your email:"
+      : "Email kee galchi:"
+  );
+
+  if (!email) {
+    return;
+  }
+
+  bookButton.disabled = true;
+
+  const originalText = bookButton.textContent;
+
+  bookButton.textContent =
+    document.documentElement.lang === "en"
+      ? "⏳ Preparing payment..."
+      : "⏳ Kaffaltii qopheessaa jira...";
+
+  try {
+
+    const response = await fetch(
+      "https://olii-book-payment.oliwaqgari.workers.dev/create-payment",
+      {
+        method: "POST",
+
+        headers: {
+          "Content-Type": "application/json"
+        },
+
+        body: JSON.stringify({
+          first_name: firstName,
+          last_name: lastName,
+          email: email
+        })
+      }
+    );
+
+    const result = await response.json();
+
+    if (!response.ok || !result.success) {
+
+      console.error("Payment error:", result);
+
+      alert(
+        document.documentElement.lang === "en"
+          ? "❌ Payment could not be initialized. Please try again."
+          : "❌ Kaffaltiin jalqabsiifamuu hin dandeenye. Mee irra deebi'ii yaali."
+      );
+
+      return;
+    }
+
+    if (!result.checkout_url) {
+
+      alert(
+        document.documentElement.lang === "en"
+          ? "❌ Chapa checkout link was not received."
+          : "❌ Linkiin kaffaltii Chapa hin argamne."
+      );
+
+      return;
+    }
+
+    window.location.href = result.checkout_url;
+
+  } catch (error) {
+
+    console.error("Worker payment error:", error);
+
+    alert(
+      document.documentElement.lang === "en"
+        ? "❌ Connection error. Please try again."
+        : "❌ Rakkoon connection uumame. Mee irra deebi'ii yaali."
+    );
+
+  } finally {
+
+    bookButton.disabled = false;
+    bookButton.textContent = originalText;
+
+  }
+
+});
     /* LANGUAGE */
 
     let english = false;
