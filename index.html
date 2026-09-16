@@ -2591,18 +2591,19 @@ document.getElementById(
     }
 /* PAYMENT SUCCESS */
 
-document.addEventListener("DOMContentLoaded", function () {
+window.addEventListener("load", function () {
 
-  const paymentParams = new URLSearchParams(window.location.search);
+  const params = new URLSearchParams(window.location.search);
 
-  const paymentStatus = paymentParams.get("payment");
-  const txRef = paymentParams.get("tx_ref");
+  if (params.get("payment") === "success") {
 
-  const successMessage =
-    document.getElementById("payment-success-message");
+    const successMessage =
+      document.getElementById("payment-success-message");
 
-  if (paymentStatus === "success" && txRef && successMessage) {
-    successMessage.style.display = "block";
+    if (successMessage) {
+      successMessage.style.display = "block";
+    }
+
   }
 
 });
