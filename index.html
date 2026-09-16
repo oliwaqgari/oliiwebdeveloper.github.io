@@ -51,7 +51,20 @@
       color: #ffcc80;
       transform: translateY(-2px);
     }
+/* PAYMENT SUCCESS */
 
+const paymentParams = new URLSearchParams(window.location.search);
+const paymentStatus = paymentParams.get("payment");
+const txRef = paymentParams.get("tx_ref");
+
+if (paymentStatus === "success" && txRef) {
+  alert(
+    document.documentElement.lang === "en"
+      ? "🎉 Payment successful! Your book order has been received."
+      : "🎉 Kaffaltiin milkaa'eera! Ajajni kitaaba keessanii nu gaheera."
+  );
+}
+    
     .language-btn {
       border: none;
       background: white;
