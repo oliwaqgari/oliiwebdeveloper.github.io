@@ -1746,23 +1746,13 @@ const bookButton = document.getElementById("book-button");
 
 bookButton.addEventListener("click", async function () {
 
-  const firstName = prompt(
+  const customerName = prompt(
     document.documentElement.lang === "en"
-      ? "Enter your first name:"
-      : "Maqaa kee galchi:"
+      ? "Enter your full name:"
+      : "Maqaa guutuu kee galchi:"
   );
 
-  if (!firstName) {
-    return;
-  }
-
-  const lastName = prompt(
-    document.documentElement.lang === "en"
-      ? "Enter your last name:"
-      : "Abbaa maqaa kee galchi:"
-  );
-
-  if (!lastName) {
+  if (!customerName) {
     return;
   }
 
@@ -1797,8 +1787,8 @@ bookButton.addEventListener("click", async function () {
         },
 
         body: JSON.stringify({
-          first_name: firstName,
-          last_name: lastName,
+          first_name: customerName,
+          last_name: "",
           email: email
         })
       }
@@ -1806,9 +1796,9 @@ bookButton.addEventListener("click", async function () {
 
     const result = await response.json();
 
-    if (!response.ok || !result.success) {
+    console.log("Chapa result:", result);
 
-      console.error("Payment error:", result);
+    if (!response.ok || !result.success) {
 
       alert(
         document.documentElement.lang === "en"
