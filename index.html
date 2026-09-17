@@ -2591,17 +2591,60 @@ document.getElementById(
     }
 /* PAYMENT SUCCESS */
 
-window.addEventListener("load", function () {
+window.addEventListener("load", async function () {
 
   const params = new URLSearchParams(window.location.search);
 
-  if (params.get("payment") === "success") {
+  const payment = params.get("payment");
+  const tx_ref = params.get("tx_ref");
 
-    const successMessage =
-      document.getElementById("payment-success-message");
+  if (payment === "success" && tx_ref) {
 
-    if (successMessage) {
-      successMessage.style.display = "block";
+    try {
+
+      const response = await fetch(
+        "https://olii-book-payment.oliwaqgari.workers.dev/verify-payment?tx_ref=" +
+        encodeURIComponent(tx_ref)
+      );
+
+      const result = await response.json();
+
+      if (result.success && result.paid === true) {
+
+        const successMessage =
+          document.getElementById("payment-success-message");
+
+        if (successMessage) {
+          successMessage.style.display = "block";
+        }
+
+        const bookButton =
+          document.getElementById("book-button");
+
+        if (bookButton) {
+          bookButton.textContent = "📥 PDF Kitaabaa Buufadhu";
+
+          bookButton.onclick = function () {
+            window.location.href = "Iyyaafi Iyyata.pdf";
+          };
+        }
+
+      } else {
+
+        alert(
+          "❌ Kaffaltiin kee mirkanaa'uu hin dandeenye."
+        );
+
+      }
+
+    } catch (error) {
+
+      console.error("Payment verification error:", error);
+
+      alert(
+        "❌ Rakkoon mirkaneessa kaffaltii uumame."
+      );
+
     }
 
   }
