@@ -1795,6 +1795,16 @@ bookButton.addEventListener("click", async function () {
     return;
   }
 
+  const phoneNumber = prompt(
+    document.documentElement.lang === "en"
+      ? "Enter your phone number:"
+      : "Lakkoofsa bilbilaa kee galchi:"
+  );
+
+  if (!phoneNumber) {
+    return;
+  }
+
   bookButton.disabled = true;
 
   const originalText = bookButton.textContent;
@@ -1818,7 +1828,8 @@ bookButton.addEventListener("click", async function () {
         body: JSON.stringify({
           first_name: customerName,
           last_name: "",
-          email: email
+          email: email,
+          phone_number: phoneNumber
         })
       }
     );
