@@ -2647,7 +2647,8 @@ window.addEventListener("load", async function () {
         bookButton.onclick = function () {
 
           window.location.href =
-            "Iyyaafi Iyyata.pdf";
+            "https://olii-book-payment.oliwaqgari.workers.dev/download-pdf?tx_ref=" +
+            encodeURIComponent(tx_ref);
 
         };
       }
@@ -2655,7 +2656,9 @@ window.addEventListener("load", async function () {
     } else {
 
       alert(
-        "❌ Kaffaltiin kee sirriitti mirkanaa'uu hin dandeenye."
+        document.documentElement.lang === "en"
+          ? "❌ Your payment could not be verified."
+          : "❌ Kaffaltiin kee sirriitti mirkanaa'uu hin dandeenye."
       );
 
     }
@@ -2668,7 +2671,9 @@ window.addEventListener("load", async function () {
     );
 
     alert(
-      "❌ Rakkoon mirkaneessa kaffaltii uumame."
+      document.documentElement.lang === "en"
+        ? "❌ An error occurred while verifying the payment."
+        : "❌ Rakkoon mirkaneessa kaffaltii uumame."
     );
 
   }
