@@ -2609,8 +2609,18 @@ window.addEventListener("load", async function () {
 
   const params = new URLSearchParams(window.location.search);
 
-  const payment = params.get("payment");
-  const tx_ref = params.get("tx_ref");
+ const payment = params.get("payment");
+
+let tx_ref = params.get("tx_ref");
+
+if (!tx_ref) {
+  const rawUrl = window.location.href;
+  const match = rawUrl.match(/[?&]tx_ref=([^&]+)/);
+
+  if (match) {
+    tx_ref = decodeURIComponent(match[1]);
+  }
+}
 
   if (payment !== "success" || !tx_ref) {
     return;
