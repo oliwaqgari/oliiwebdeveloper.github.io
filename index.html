@@ -1769,11 +1769,78 @@ contactForm.addEventListener(
 
   }
 );
+    
 /* BOOK PAYMENT */
 
 const bookButton = document.getElementById("book-button");
 
+
+// ==========================================
+// 1. Check payment success when page opens
+// ==========================================
+
+const urlParams = new URLSearchParams(window.location.search);
+const paymentStatus = urlParams.get("payment");
+
+
+// If Chapa returns payment=success
+if (paymentStatus === "success") {
+
+  // Save successful payment in browser
+  localStorage.setItem("bookPaymentSuccess", "true");
+
+  // Optional: remove payment parameter from URL
+  window.history.replaceState(
+    {},
+    document.title,
+    window.location.pathname
+  );
+
+  alert(
+    document.documentElement.lang === "en"
+      ? "🎉 Payment successful! Your book order has been received."
+      : "🎉 Kaffaltiin milkaa'eera! Ajajni kitaaba keessanii nu gaheera."
+  );
+}
+
+
+// ==========================================
+// 2. Book button
+// ==========================================
+
 bookButton.addEventListener("click", async function () {
+
+  // ----------------------------------------
+  // Check if payment was already completed
+  // ----------------------------------------
+
+  const alreadyPaid =
+    localStorage.getItem("bookPaymentSuccess") === "true";
+
+
+  if (alreadyPaid) {
+
+    // Payment already completed
+    // Do NOT send customer to Chapa again.
+
+    alert(
+      document.documentElement.lang === "en"
+        ? "✅ Your payment has already been completed."
+        : "✅ Kaffaltiin kee duraan raawwatameera."
+    );
+
+    // If you have a PDF download URL,
+    // replace the URL below with your real PDF link.
+    window.location.href =
+      "https://YOUR-PDF-DOWNLOAD-LINK-HERE";
+
+    return;
+  }
+
+
+  // ----------------------------------------
+  // New customer/payment
+  // ----------------------------------------
 
   const customerName = prompt(
     document.documentElement.lang === "en"
@@ -1785,6 +1852,7 @@ bookButton.addEventListener("click", async function () {
     return;
   }
 
+
   const email = prompt(
     document.documentElement.lang === "en"
       ? "Enter your email:"
@@ -1794,6 +1862,7 @@ bookButton.addEventListener("click", async function () {
   if (!email) {
     return;
   }
+
 
   const phoneNumber = prompt(
     document.documentElement.lang === "en"
@@ -1805,6 +1874,7 @@ bookButton.addEventListener("click", async function () {
     return;
   }
 
+
   bookButton.disabled = true;
 
   const originalText = bookButton.textContent;
@@ -1813,6 +1883,7 @@ bookButton.addEventListener("click", async function () {
     document.documentElement.lang === "en"
       ? "⏳ Preparing payment..."
       : "⏳ Kaffaltii qopheessaa jira...";
+
 
   try {
 
@@ -1834,9 +1905,11 @@ bookButton.addEventListener("click", async function () {
       }
     );
 
+
     const result = await response.json();
 
     console.log("Chapa result:", result);
+
 
     if (!response.ok || !result.success) {
 
@@ -1849,6 +1922,7 @@ bookButton.addEventListener("click", async function () {
       return;
     }
 
+
     if (!result.checkout_url) {
 
       alert(
@@ -1860,17 +1934,22 @@ bookButton.addEventListener("click", async function () {
       return;
     }
 
+
+    // Send customer to Chapa
     window.location.href = result.checkout_url;
+
 
   } catch (error) {
 
     console.error("Worker payment error:", error);
+
 
     alert(
       document.documentElement.lang === "en"
         ? "❌ Connection error. Please try again."
         : "❌ Rakkoon connection uumame. Mee irra deebi'ii yaali."
     );
+
 
   } finally {
 
