@@ -1792,7 +1792,9 @@ function showPaidBook(tx_ref) {
   };
 }
 
-
+if (!bookButton) {
+  console.error("Book button not found!");
+} else {
 bookButton.addEventListener(
   "click",
   async function () {
