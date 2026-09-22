@@ -1014,19 +1014,43 @@ footer p:last-child {
   text-align: center;
   box-shadow: 0 5px 15px rgba(0,0,0,0.08);
 }
-    .manual-payment {
+  .other-payment {
   margin: 20px 0;
-  padding: 18px;
+}
+
+.other-payment-button {
+  width: 100%;
+  padding: 14px;
+  border: none;
+  border-radius: 10px;
+  background: #f4f8ff;
+  color: #082f6b;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  border: 1px solid #d6e4f5;
+}
+
+.other-payment-button:hover {
+  background: #e8f1ff;
+}
+
+#payment-arrow {
+  margin-left: 8px;
+}
+
+.other-payment-details {
+  display: none;
+  margin-top: 12px;
+  padding: 15px;
   background: #f4f8ff;
   border-radius: 12px;
   border: 1px solid #d6e4f5;
   text-align: left;
 }
 
-.manual-payment h4 {
-  margin-bottom: 15px;
-  color: #082f6b;
-  font-size: 18px;
+.other-payment-details.show {
+  display: block;
 }
 
 .payment-method {
@@ -1617,15 +1641,38 @@ footer p:last-child {
         <strong>350 BIRR</strong>
         <span>$2.15</span>
       </div
-              <div class="manual-payment">
-        <h4>💳 Karaa Kaffaltii Biroo</h4>
+              
+<div class="other-payment">
 
-        <div class="payment-method">
-          <strong>🏦 CBE Birr</strong>
-          <p>Lakkoofsa: <span>1000394655353</span></p>
-          <p>Maqaa: <span>Oliyaad Waaqgaarii</span></p>
-        </div>
+  <button
+    type="button"
+    class="other-payment-button"
+    onclick="toggleOtherPayment()">
+    💳 Karaa Kaffaltii Biroo
+    <span id="payment-arrow">▼</span>
+  </button>
 
+  <div id="other-payment-details" class="other-payment-details">
+
+    <div class="payment-method">
+      <strong>🏦 CBE Birr</strong>
+      <p>Lakkoofsa: <span>1000394655353</span></p>
+      <p>Maqaa: <span>Oliyaad Waaqgaarii</span></p>
+    </div>
+
+    <div class="payment-method">
+      <strong>📱 Telebirr</strong>
+      <p>Lakkoofsa: <span>0979025185</span></p>
+      <p>Maqaa: <span>Oliyaad Waaqgaarii</span></p>
+    </div>
+
+    <p class="payment-note">
+      📸 Kaffaltii erga raawwattanii booda receipt keessan nuuf ergaa.
+    </p>
+
+  </div>
+
+</div>
         <div class="payment-method">
           <strong>📱 Telebirr</strong>
           <p>Lakkoofsa: <span>0979025185</span></p>
@@ -3058,7 +3105,18 @@ document.getElementById(
 
       }
     }
+function toggleOtherPayment() {
+  const details = document.getElementById("other-payment-details");
+  const arrow = document.getElementById("payment-arrow");
 
+  details.classList.toggle("show");
+
+  if (details.classList.contains("show")) {
+    arrow.textContent = "▲";
+  } else {
+    arrow.textContent = "▼";
+  }
+}
   </script>
 
 </body>
