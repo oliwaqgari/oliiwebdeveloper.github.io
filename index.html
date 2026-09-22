@@ -1776,6 +1776,7 @@ contactForm.addEventListener(
   }
 );
 /* =========================
+   /* =========================
    BOOK PAYMENT
 ========================= */
 
@@ -1888,6 +1889,11 @@ async function verifyBookPayment(tx_ref) {
         tx_ref
       );
 
+      localStorage.setItem(
+        "bookPaymentSuccess",
+        "true"
+      );
+
       showPaidBook(tx_ref);
 
       return true;
@@ -1908,7 +1914,8 @@ async function verifyBookPayment(tx_ref) {
 
 
 /* =========================
-   START BOOK PAYMENT
+   BOOK ORDER
+   ONLY ONE CLICK HANDLER
 ========================= */
 
 if (!bookButton) {
@@ -1923,9 +1930,8 @@ if (!bookButton) {
     "click",
     async function () {
 
-      /* 
-         IMPORTANT:
-         Yeroo tokko qofa payment jalqabi.
+      /*
+        Prevent duplicate payment requests.
       */
 
       if (paymentProcessing) {
@@ -1934,7 +1940,6 @@ if (!bookButton) {
 
       paymentProcessing = true;
 
-      /* Button cufi */
       bookButton.disabled = true;
 
       bookButton.textContent =
@@ -1944,7 +1949,7 @@ if (!bookButton) {
 
 
       /* =========================
-         NAME
+         ASK NAME ONCE
       ========================= */
 
       const name =
@@ -1954,7 +1959,7 @@ if (!bookButton) {
             : "Maqaa guutuu kee galchi:"
         );
 
-      if (!name) {
+      if (!name || !name.trim()) {
 
         paymentProcessing = false;
 
@@ -1970,7 +1975,7 @@ if (!bookButton) {
 
 
       /* =========================
-         EMAIL
+         ASK EMAIL ONCE
       ========================= */
 
       const email =
@@ -1980,7 +1985,7 @@ if (!bookButton) {
             : "Email kee galchi:"
         );
 
-      if (!email) {
+      if (!email || !email.trim()) {
 
         paymentProcessing = false;
 
@@ -1996,7 +2001,7 @@ if (!bookButton) {
 
 
       /* =========================
-         PHONE
+         ASK PHONE ONCE
       ========================= */
 
       const phone =
@@ -2006,7 +2011,7 @@ if (!bookButton) {
             : "Lakkoofsa bilbilaa kee galchi:"
         );
 
-      if (!phone) {
+      if (!phone || !phone.trim()) {
 
         paymentProcessing = false;
 
@@ -2022,7 +2027,7 @@ if (!bookButton) {
 
 
       /* =========================
-         SEND TO WORKER
+         CREATE PAYMENT
       ========================= */
 
       try {
@@ -2040,9 +2045,13 @@ if (!bookButton) {
               },
 
               body: JSON.stringify({
-                name: name,
-                email: email,
-                phone: phone
+
+                name: name.trim(),
+
+                email: email.trim(),
+
+                phone: phone.trim()
+
               })
             }
           );
@@ -2067,22 +2076,18 @@ if (!bookButton) {
           result.checkout_url
         ) {
 
-          /*
-            Chapaatti yeroo tokko qofa darba.
-          */
-
           window.location.replace(
             result.checkout_url
           );
 
           return;
 
-        } else {
-
-          throw new Error(
-            "Checkout URL not found"
-          );
         }
+
+
+        throw new Error(
+          "Checkout URL not found"
+        );
 
 
       } catch (error) {
@@ -2116,14 +2121,14 @@ if (!bookButton) {
 
 
 /* =========================
-   CHECK PAYMENT AFTER PAGE LOAD
+   CHECK PAYMENT AFTER LOAD
+   ONLY ONE LOAD HANDLER
 ========================= */
 
 window.addEventListener(
   "load",
   async function () {
 
-    /* PDF jalqaba irratti cufaa */
     resetDownloadButton();
 
 
@@ -2141,7 +2146,10 @@ window.addEventListener(
       params.get("tx_ref");
 
 
-    /* Yoo tx_ref URL keessatti jiraate */
+    /* =========================
+       FIND TX_REF
+    ========================= */
+
     if (!tx_ref) {
 
       const rawUrl =
@@ -2163,7 +2171,7 @@ window.addEventListener(
 
 
     /* =========================
-       NEW PAYMENT
+       NEW SUCCESSFUL PAYMENT
     ========================= */
 
     if (
@@ -2177,11 +2185,10 @@ window.addEventListener(
 
       if (verified) {
 
-        localStorage.setItem(
-          "bookPaymentSuccess",
-          "true"
-        );
-
+        /*
+          Payment successfully verified.
+          Download button is now enabled.
+        */
 
         window.history.replaceState(
           {},
@@ -2209,7 +2216,6 @@ window.addEventListener(
         );
       }
 
-
       return;
     }
 
@@ -2230,578 +2236,30 @@ window.addEventListener(
         await verifyBookPayment(
           savedTxRef
         );
-
-
-      if (!verified) {
-
-        localStorage.removeItem(
-          "bookPaymentSuccess"
-        );
-
-        localStorage.removeItem(
-          "bookPaymentTxRef"
-        );
-
-        resetDownloadButton();
-      }
-    }
-
-  }
-);
-if (!bookButton) {
-
-  console.error(
-    "Book button not found!"
-  );
-
-} else {
-
-  bookButton.addEventListener(
-    "click",
-    async function () {
-
-      const name =
-        prompt(
-          document.documentElement.lang === "en"
-            ? "Enter your full name:"
-            : "Maqaa guutuu kee galchi:"
-        );
-
-      if (!name) return;
-
-
-      const email =
-        prompt(
-          document.documentElement.lang === "en"
-            ? "Enter your email:"
-            : "Email kee galchi:"
-        );
-
-      if (!email) return;
-
-
-      const phone =
-        prompt(
-          document.documentElement.lang === "en"
-            ? "Enter your phone number:"
-            : "Lakkoofsa bilbilaa kee galchi:"
-        );
-
-      if (!phone) return;
-
-
-      bookButton.disabled = true;
-
-      bookButton.textContent =
-        document.documentElement.lang === "en"
-          ? "⏳ Processing..."
-          : "⏳ Qopheessaa jira...";
-
-
-      try {
-
-        const response =
-          await fetch(
-            PAYMENT_WORKER +
-            "/create-payment",
-            {
-              method: "POST",
-
-              headers: {
-                "Content-Type":
-                  "application/json"
-              },
-
-              body: JSON.stringify({
-                name: name,
-                email: email,
-                phone: phone
-              })
-            }
-          );
-
-
-        const result =
-          await response.json();
-
-
-        console.log(
-          "Payment response:",
-          result
-        );
-
-
-        if (
-          result &&
-          result.checkout_url
-        ) {
-
-          window.location.href =
-            result.checkout_url;
-
-        } else {
-
-          alert(
-            document.documentElement.lang === "en"
-              ? "❌ Payment could not be started."
-              : "❌ Kaffaltiin jalqabsiifamuu hin dandeenye."
-          );
-
-          bookButton.disabled = false;
-
-          bookButton.textContent =
-            document.documentElement.lang === "en"
-              ? "📖 Order the Book"
-              : "📖 Kitaaba Ajaji";
-        }
-
-      } catch (error) {
-
-        console.error(
-          "Payment error:",
-          error
-        );
-
-
-        alert(
-          document.documentElement.lang === "en"
-            ? "❌ An error occurred. Please try again."
-            : "❌ Rakkoon uumameera. Mee irra deebi'ii yaali."
-        );
-
-
-        bookButton.disabled = false;
-
-        bookButton.textContent =
-          document.documentElement.lang === "en"
-            ? "📖 Order the Book"
-            : "📖 Kitaaba Ajaji";
-      }
-
-    }
-  );
-}
-
-
-/* =========================
-   CHECK PAYMENT AFTER PAGE LOAD
-========================= */
-
-window.addEventListener(
-  "load",
-  async function () {
-
-    /* Jalqaba PDF button cufi */
-    resetDownloadButton();
-
-
-    const params =
-      new URLSearchParams(
-        window.location.search
-      );
-
-
-    const payment =
-      params.get("payment");
-
-
-    let tx_ref =
-      params.get("tx_ref");
-
-
-    /* Yoo tx_ref URL keessatti jiraate */
-    if (!tx_ref) {
-
-      const rawUrl =
-        window.location.href;
-
-      const match =
-        rawUrl.match(
-          /(?:[?&]|&amp;)tx_ref=([^&]+)/
-        );
-
-      if (match) {
-
-        tx_ref =
-          decodeURIComponent(
-            match[1]
-          );
-      }
-    }
-
-
-    /* =========================
-       NEW PAYMENT
-    ========================= */
-
-    if (
-      payment === "success" &&
-      tx_ref
-    ) {
-
-      const verified =
-        await verifyBookPayment(tx_ref);
 
 
       if (verified) {
-
-        localStorage.setItem(
-          "bookPaymentSuccess",
-          "true"
-        );
-
-
-        /*
-          URL keessaa payment fi tx_ref haqi.
-          Garuu verification erga xumuramee booda qofa.
-        */
-
-        window.history.replaceState(
-          {},
-          document.title,
-          window.location.pathname
-        );
-
-      } else {
-
-        /*
-          Kaffaltiin hin mirkanoofne.
-          PDF button cufaa tura.
-        */
-
-        localStorage.removeItem(
-          "bookPaymentSuccess"
-        );
-
-        localStorage.removeItem(
-          "bookPaymentTxRef"
-        );
-
-        resetDownloadButton();
-
-
-        alert(
-          document.documentElement.lang === "en"
-            ? "❌ Your payment could not be verified."
-            : "❌ Kaffaltiin kee sirriitti mirkanaa'uu hin dandeenye."
-        );
-      }
-
-
-      return;
-    }
-
-
-    /* =========================
-       PREVIOUS PAYMENT
-    ========================= */
-
-    const savedTxRef =
-      localStorage.getItem(
-        "bookPaymentTxRef"
-      );
-
-
-    /*
-      IMPORTANT:
-      LocalStorage keessatti tx_ref jiraachuu
-      qofa hin amannu.
-
-      Chapa irraa deebinee verify goona.
-    */
-
-    if (savedTxRef) {
-
-      const verified =
-        await verifyBookPayment(
-          savedTxRef
-        );
-
-
-      if (!verified) {
-
-        localStorage.removeItem(
-          "bookPaymentSuccess"
-        );
-
-        localStorage.removeItem(
-          "bookPaymentTxRef"
-        );
-
-        resetDownloadButton();
-      }
-    }
-
-  }
-);
-if (!bookButton) {
-
-  console.error("Book button not found!");
-
-} else {
-
-  bookButton.addEventListener(
-    "click",
-    async function () {
-
-      const name =
-        prompt(
-          document.documentElement.lang === "en"
-            ? "Enter your full name:"
-            : "Maqaa guutuu kee galchi:"
-        );
-
-      if (!name) return;
-
-      const email =
-        prompt(
-          document.documentElement.lang === "en"
-            ? "Enter your email:"
-            : "Email kee galchi:"
-        );
-
-      if (!email) return;
-
-      const phone =
-        prompt(
-          document.documentElement.lang === "en"
-            ? "Enter your phone number:"
-            : "Lakkoofsa bilbilaa kee galchi:"
-        );
-
-      if (!phone) return;
-
-      bookButton.disabled = true;
-
-      bookButton.textContent =
-        document.documentElement.lang === "en"
-          ? "⏳ Processing..."
-          : "⏳ Qopheessaa jira...";
-
-      try {
-
-        const response =
-          await fetch(
-            PAYMENT_WORKER +
-            "/create-payment",
-            {
-              method: "POST",
-
-              headers: {
-                "Content-Type":
-                  "application/json"
-              },
-
-              body: JSON.stringify({
-                name: name,
-                email: email,
-                phone: phone
-              })
-            }
-          );
-
-        const result =
-          await response.json();
-
-        console.log(
-          "Payment response:",
-          result
-        );
-
-        if (
-          result &&
-          result.checkout_url
-        ) {
-
-          window.location.href =
-            result.checkout_url;
-
-        } else {
-
-          alert(
-            document.documentElement.lang === "en"
-              ? "❌ Payment could not be started."
-              : "❌ Kaffaltiin jalqabsiifamuu hin dandeenye."
-          );
-
-          bookButton.disabled = false;
-
-          bookButton.textContent =
-            document.documentElement.lang === "en"
-              ? "📖 Order the Book"
-              : "📖 Kitaaba Ajaji";
-        }
-
-      } catch (error) {
-
-        console.error(
-          "Payment error:",
-          error
-        );
-
-        alert(
-          document.documentElement.lang === "en"
-            ? "❌ An error occurred. Please try again."
-            : "❌ Rakkoon uumameera. Mee irra deebi'ii yaali."
-        );
-
-        bookButton.disabled = false;
-
-        bookButton.textContent =
-          document.documentElement.lang === "en"
-            ? "📖 Order the Book"
-            : "📖 Kitaaba Ajaji";
-      }
-
-    }
-  );
-
-  // PAYMENT SUCCESS
-  // ==========================================
-
-  window.addEventListener(
-    "load",
-    async function () {
-
-      const params =
-        new URLSearchParams(
-          window.location.search
-        );
-
-      const payment =
-        params.get("payment");
-
-      let tx_ref =
-        params.get("tx_ref");
-
-      // ========================================
-      // FIND tx_ref
-      // ========================================
-
-      if (!tx_ref) {
-
-        const rawUrl =
-          window.location.href;
-
-        const match =
-          rawUrl.match(
-            /(?:[?&]|&amp;)tx_ref=([^&]+)/
-          );
-
-        if (match) {
-
-          tx_ref =
-            decodeURIComponent(
-              match[1]
-            );
-
-        }
-
-      }
-
-      // ========================================
-      // NEW SUCCESSFUL PAYMENT
-      // ========================================
-
-      if (
-        payment === "success" &&
-        tx_ref
-      ) {
-
-        try {
-
-          const response =
-            await fetch(
-              PAYMENT_WORKER +
-              "/verify-payment?tx_ref=" +
-              encodeURIComponent(
-                tx_ref
-              )
-            );
-
-          const result =
-            await response.json();
-
-          console.log(
-            "Payment verification:",
-            result
-          );
-
-          if (
-            result.success &&
-            result.paid === true
-          ) {
-
-            localStorage.setItem(
-              "bookPaymentSuccess",
-              "true"
-            );
-
-            localStorage.setItem(
-              "bookPaymentTxRef",
-              tx_ref
-            );
-
-            showPaidBook(
-              tx_ref
-            );
-
-            window.history.replaceState(
-              {},
-              document.title,
-              window.location.pathname
-            );
-
-          } else {
-
-            alert(
-              document.documentElement.lang === "en"
-                ? "❌ Your payment could not be verified."
-                : "❌ Kaffaltiin kee sirriitti mirkanaa'uu hin dandeenye."
-            );
-
-          }
-
-        } catch (error) {
-
-          console.error(
-            "Payment verification error:",
-            error
-          );
-
-          alert(
-            document.documentElement.lang === "en"
-              ? "❌ An error occurred while verifying the payment."
-              : "❌ Rakkoon mirkaneessa kaffaltii uumame."
-          );
-
-        }
-
-        return;
-      }
-
-      // ========================================
-      // PREVIOUSLY PAID
-      // ========================================
-
-      const savedTxRef =
-        localStorage.getItem(
-          "bookPaymentTxRef"
-        );
-
-      if (savedTxRef) {
 
         showPaidBook(
           savedTxRef
         );
 
+      } else {
+
+        localStorage.removeItem(
+          "bookPaymentSuccess"
+        );
+
+        localStorage.removeItem(
+          "bookPaymentTxRef"
+        );
+
+        resetDownloadButton();
       }
-
     }
-  );
 
-}
-
+  }
+);
     /* LANGUAGE */
 
     let english = false;
