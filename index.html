@@ -968,6 +968,17 @@ footer p:last-child {
   background: #082f6b;
   transform: translateY(-2px);
 }
+    .book-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+  background: #9e9e9e;
+}
+
+.book-button:disabled:hover {
+  background: #9e9e9e;
+  transform: none;
+}
 
 @media (max-width: 800px) {
 
@@ -1574,6 +1585,14 @@ footer p:last-child {
   id="book-button">
   📖 Kitaaba Ajaji
 </button>
+
+<button
+  type="button"
+  class="book-button"
+  id="book-download-button"
+  disabled>
+  📥 PDF Kitaabaa Buufadhu
+</button>
     </div>
 <div id="payment-success-message" class="payment-success-message">
   🎉 Kaffaltiin milkaa'eera!<br>
@@ -1766,134 +1785,151 @@ const PAYMENT_WORKER =
 
 function showPaidBook(tx_ref) {
 
-  if (!bookButton || !tx_ref) return;
+  if (!tx_ref) return;
 
   const successMessage =
     document.getElementById(
       "payment-success-message"
     );
 
+  const downloadButton =
+    document.getElementById(
+      "book-download-button"
+    );
+
   if (successMessage) {
     successMessage.style.display = "block";
   }
 
-  bookButton.textContent =
-    document.documentElement.lang === "en"
-      ? "📥 Download PDF"
-      : "📥 PDF Kitaabaa Buufadhu";
+  if (downloadButton) {
 
-  bookButton.onclick = function () {
+    downloadButton.disabled = false;
 
-    window.location.href =
-      PAYMENT_WORKER +
-      "/download-pdf?tx_ref=" +
-      encodeURIComponent(tx_ref);
+    downloadButton.textContent =
+      document.documentElement.lang === "en"
+        ? "📥 Download PDF"
+        : "📥 PDF Kitaabaa Buufadhu";
 
-  };
-}
-
-if (!bookButton) {
-  console.error("Book button not found!");
-} else {
-bookButton.addEventListener(
-  "click",
-  async function () {
-
-    const savedTxRef =
-      localStorage.getItem(
-        "bookPaymentTxRef"
-      );
-
-    if (savedTxRef) {
+    downloadButton.onclick = function () {
 
       window.location.href =
         PAYMENT_WORKER +
         "/download-pdf?tx_ref=" +
-        encodeURIComponent(
-          savedTxRef
+        encodeURIComponent(tx_ref);
+
+    };
+  }
+}
+
+if (!bookButton) {
+
+  console.error("Book button not found!");
+
+} else {
+
+  bookButton.addEventListener(
+    "click",
+    async function () {
+
+      const name =
+        prompt(
+          document.documentElement.lang === "en"
+            ? "Enter your full name:"
+            : "Maqaa guutuu kee galchi:"
         );
 
-      return;
-    }
+      if (!name) return;
 
-    const name =
-      prompt(
-        document.documentElement.lang === "en"
-          ? "Enter your full name:"
-          : "Maqaa guutuu kee galchi:"
-      );
-
-    if (!name) return;
-
-    const email =
-      prompt(
-        document.documentElement.lang === "en"
-          ? "Enter your email:"
-          : "Email kee galchi:"
-      );
-
-    if (!email) return;
-
-    const phone =
-      prompt(
-        document.documentElement.lang === "en"
-          ? "Enter your phone number:"
-          : "Lakkoofsa bilbilaa kee galchi:"
-      );
-
-    if (!phone) return;
-
-    bookButton.disabled = true;
-
-    bookButton.textContent =
-      document.documentElement.lang === "en"
-        ? "⏳ Processing..."
-        : "⏳ Qopheessaa jira...";
-
-    try {
-
-      const response =
-        await fetch(
-          PAYMENT_WORKER +
-          "/create-payment",
-          {
-            method: "POST",
-
-            headers: {
-              "Content-Type":
-                "application/json"
-            },
-
-            body: JSON.stringify({
-              name: name,
-              email: email,
-              phone: phone
-            })
-          }
+      const email =
+        prompt(
+          document.documentElement.lang === "en"
+            ? "Enter your email:"
+            : "Email kee galchi:"
         );
 
-      const result =
-        await response.json();
+      if (!email) return;
 
-      console.log(
-        "Payment response:",
-        result
-      );
+      const phone =
+        prompt(
+          document.documentElement.lang === "en"
+            ? "Enter your phone number:"
+            : "Lakkoofsa bilbilaa kee galchi:"
+        );
 
-      if (
-        result &&
-        result.checkout_url
-      ) {
+      if (!phone) return;
 
-        window.location.href =
-          result.checkout_url;
+      bookButton.disabled = true;
 
-      } else {
+      bookButton.textContent =
+        document.documentElement.lang === "en"
+          ? "⏳ Processing..."
+          : "⏳ Qopheessaa jira...";
+
+      try {
+
+        const response =
+          await fetch(
+            PAYMENT_WORKER +
+            "/create-payment",
+            {
+              method: "POST",
+
+              headers: {
+                "Content-Type":
+                  "application/json"
+              },
+
+              body: JSON.stringify({
+                name: name,
+                email: email,
+                phone: phone
+              })
+            }
+          );
+
+        const result =
+          await response.json();
+
+        console.log(
+          "Payment response:",
+          result
+        );
+
+        if (
+          result &&
+          result.checkout_url
+        ) {
+
+          window.location.href =
+            result.checkout_url;
+
+        } else {
+
+          alert(
+            document.documentElement.lang === "en"
+              ? "❌ Payment could not be started."
+              : "❌ Kaffaltiin jalqabsiifamuu hin dandeenye."
+          );
+
+          bookButton.disabled = false;
+
+          bookButton.textContent =
+            document.documentElement.lang === "en"
+              ? "📖 Order the Book"
+              : "📖 Kitaaba Ajaji";
+        }
+
+      } catch (error) {
+
+        console.error(
+          "Payment error:",
+          error
+        );
 
         alert(
           document.documentElement.lang === "en"
-            ? "❌ Payment could not be started."
-            : "❌ Kaffaltiin jalqabsiifamuu hin dandeenye."
+            ? "❌ An error occurred. Please try again."
+            : "❌ Rakkoon uumameera. Mee irra deebi'ii yaali."
         );
 
         bookButton.disabled = false;
@@ -1904,29 +1940,154 @@ bookButton.addEventListener(
             : "📖 Kitaaba Ajaji";
       }
 
-    } catch (error) {
-
-      console.error(
-        "Payment error:",
-        error
-      );
-
-      alert(
-        document.documentElement.lang === "en"
-          ? "❌ An error occurred. Please try again."
-          : "❌ Rakkoon uumameera. Mee irra deebi'ii yaali."
-      );
-
-      bookButton.disabled = false;
-
-      bookButton.textContent =
-        document.documentElement.lang === "en"
-          ? "📖 Order the Book"
-          : "📖 Kitaaba Ajaji";
     }
+  );
 
-  }
-);
+  // PAYMENT SUCCESS
+  // ==========================================
+
+  window.addEventListener(
+    "load",
+    async function () {
+
+      const params =
+        new URLSearchParams(
+          window.location.search
+        );
+
+      const payment =
+        params.get("payment");
+
+      let tx_ref =
+        params.get("tx_ref");
+
+      // ========================================
+      // FIND tx_ref
+      // ========================================
+
+      if (!tx_ref) {
+
+        const rawUrl =
+          window.location.href;
+
+        const match =
+          rawUrl.match(
+            /(?:[?&]|&amp;)tx_ref=([^&]+)/
+          );
+
+        if (match) {
+
+          tx_ref =
+            decodeURIComponent(
+              match[1]
+            );
+
+        }
+
+      }
+
+      // ========================================
+      // NEW SUCCESSFUL PAYMENT
+      // ========================================
+
+      if (
+        payment === "success" &&
+        tx_ref
+      ) {
+
+        try {
+
+          const response =
+            await fetch(
+              PAYMENT_WORKER +
+              "/verify-payment?tx_ref=" +
+              encodeURIComponent(
+                tx_ref
+              )
+            );
+
+          const result =
+            await response.json();
+
+          console.log(
+            "Payment verification:",
+            result
+          );
+
+          if (
+            result.success &&
+            result.paid === true
+          ) {
+
+            localStorage.setItem(
+              "bookPaymentSuccess",
+              "true"
+            );
+
+            localStorage.setItem(
+              "bookPaymentTxRef",
+              tx_ref
+            );
+
+            showPaidBook(
+              tx_ref
+            );
+
+            window.history.replaceState(
+              {},
+              document.title,
+              window.location.pathname
+            );
+
+          } else {
+
+            alert(
+              document.documentElement.lang === "en"
+                ? "❌ Your payment could not be verified."
+                : "❌ Kaffaltiin kee sirriitti mirkanaa'uu hin dandeenye."
+            );
+
+          }
+
+        } catch (error) {
+
+          console.error(
+            "Payment verification error:",
+            error
+          );
+
+          alert(
+            document.documentElement.lang === "en"
+              ? "❌ An error occurred while verifying the payment."
+              : "❌ Rakkoon mirkaneessa kaffaltii uumame."
+          );
+
+        }
+
+        return;
+      }
+
+      // ========================================
+      // PREVIOUSLY PAID
+      // ========================================
+
+      const savedTxRef =
+        localStorage.getItem(
+          "bookPaymentTxRef"
+        );
+
+      if (savedTxRef) {
+
+        showPaidBook(
+          savedTxRef
+        );
+
+      }
+
+    }
+  );
+
+}
     // PAYMENT SUCCESS
 // ==========================================
 
@@ -2338,7 +2499,10 @@ document.getElementById("book-quote").textContent =
 
 document.getElementById("book-button").textContent =
   "📖 Order the Book";
-        
+        document.getElementById(
+  "book-download-button"
+).textContent =
+  "📥 Download PDF";
         document.getElementById(
           "services-intro"
         ).textContent =
@@ -2702,7 +2866,10 @@ document.getElementById("book-quote").textContent =
 
 document.getElementById("book-button").textContent =
   "📖 Kitaaba Ajaji";
-        
+        document.getElementById(
+  "book-download-button"
+).textContent =
+  "📥 PDF Kitaabaa Buufadhu";
         document.getElementById(
           "service1-title"
         ).textContent =
