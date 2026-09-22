@@ -1770,21 +1770,17 @@ contactForm.addEventListener(
   }
 );
     
+<script>
 /* BOOK PAYMENT */
 
 const bookButton = document.getElementById("book-button");
 
-
-// ==========================================
-// 1. Check payment success from URL
-// ==========================================
-
-const urlParams = new URLSearchParams(window.location.search);
-const paymentStatus = urlParams.get("payment");
+const PAYMENT_WORKER =
+  "https://olii-book-payment.oliwaqgari.workers.dev";
 
 
 // ==========================================
-// 2. Book button
+// BOOK BUTTON
 // ==========================================
 
 bookButton.addEventListener("click", async function () {
@@ -1792,9 +1788,6 @@ bookButton.addEventListener("click", async function () {
   // ----------------------------------------
   // Check previous successful payment
   // ----------------------------------------
-
-  const alreadyPaid =
-    localStorage.getItem("bookPaymentSuccess") === "true";
 
   const savedTxRef =
     localStorage.getItem("bookPaymentTxRef");
@@ -1804,7 +1797,7 @@ bookButton.addEventListener("click", async function () {
   // If payment was already completed
   // ----------------------------------------
 
-  if (alreadyPaid && savedTxRef) {
+  if (savedTxRef) {
 
     const confirmDownload = confirm(
       document.documentElement.lang === "en"
@@ -1817,16 +1810,17 @@ bookButton.addEventListener("click", async function () {
     }
 
     window.location.href =
-      "https://olii-book-payment.oliwaqgari.workers.dev/download-pdf?tx_ref=" +
+      PAYMENT_WORKER +
+      "/download-pdf?tx_ref=" +
       encodeURIComponent(savedTxRef);
 
     return;
   }
 
 
-  // ----------------------------------------
-  // New payment
-  // ----------------------------------------
+  // ========================================
+  // NEW PAYMENT
+  // ========================================
 
   const customerName = prompt(
     document.documentElement.lang === "en"
@@ -1865,7 +1859,6 @@ bookButton.addEventListener("click", async function () {
 
   const originalText = bookButton.textContent;
 
-
   bookButton.textContent =
     document.documentElement.lang === "en"
       ? "⏳ Preparing payment..."
@@ -1875,7 +1868,7 @@ bookButton.addEventListener("click", async function () {
   try {
 
     const response = await fetch(
-      "https://olii-book-payment.oliwaqgari.workers.dev/create-payment",
+      PAYMENT_WORKER + "/create-payment",
       {
         method: "POST",
 
@@ -1922,13 +1915,16 @@ bookButton.addEventListener("click", async function () {
     }
 
 
-    // Send customer to Chapa
+    // Go to Chapa
     window.location.href = result.checkout_url;
 
 
   } catch (error) {
 
-    console.error("Worker payment error:", error);
+    console.error(
+      "Worker payment error:",
+      error
+    );
 
 
     alert(
@@ -1948,8 +1944,212 @@ bookButton.addEventListener("click", async function () {
 });
 
 
+// ==========================================
+// PAYMENT SUCCESS
+// ==========================================
 
-/* ==========================================
+window.addEventListener("load", async function () {
+
+  const params =
+    new URLSearchParams(window.location.search);
+
+  const payment =
+    params.get("payment");
+
+  let tx_ref =
+    params.get("tx_ref");
+
+
+  // ----------------------------------------
+  // Find tx_ref from URL
+  // ----------------------------------------
+
+  if (!tx_ref) {
+
+    const rawUrl =
+      window.location.href;
+
+    const match =
+      rawUrl.match(/[?&]tx_ref=([^&]+)/);
+
+    if (match) {
+      tx_ref =
+        decodeURIComponent(match[1]);
+    }
+  }
+
+
+  // ----------------------------------------
+  // If Chapa did not return success
+  // ----------------------------------------
+
+  if (payment !== "success" || !tx_ref) {
+
+    // Check saved payment instead
+    const savedTxRef =
+      localStorage.getItem("bookPaymentTxRef");
+
+    if (savedTxRef) {
+
+      const successMessage =
+        document.getElementById(
+          "payment-success-message"
+        );
+
+      if (successMessage) {
+        successMessage.style.display = "block";
+      }
+
+      bookButton.textContent =
+        "📥 PDF Kitaabaa Buufadhu";
+
+      bookButton.onclick = function () {
+
+        window.location.href =
+          PAYMENT_WORKER +
+          "/download-pdf?tx_ref=" +
+          encodeURIComponent(savedTxRef);
+
+      };
+
+    }
+
+    return;
+  }
+
+
+  // ========================================
+  // VERIFY PAYMENT
+  // ========================================
+
+  try {
+
+    const response = await fetch(
+      PAYMENT_WORKER +
+      "/verify-payment?tx_ref=" +
+      encodeURIComponent(tx_ref)
+    );
+
+
+    const result =
+      await response.json();
+
+
+    console.log(
+      "Payment verification:",
+      result
+    );
+
+
+    // --------------------------------------
+    // PAYMENT VERIFIED
+    // --------------------------------------
+
+    if (
+      result.success &&
+      result.paid === true
+    ) {
+
+      // IMPORTANT:
+      // Save BOTH payment status AND tx_ref
+
+      localStorage.setItem(
+        "bookPaymentSuccess",
+        "true"
+      );
+
+      localStorage.setItem(
+        "bookPaymentTxRef",
+        tx_ref
+      );
+
+
+      // ------------------------------------
+      // Show success message
+      // ------------------------------------
+
+      const successMessage =
+        document.getElementById(
+          "payment-success-message"
+        );
+
+
+      if (successMessage) {
+
+        successMessage.style.display =
+          "block";
+
+      }
+
+
+      // ------------------------------------
+      // Change button
+      // ------------------------------------
+
+      const bookButton =
+        document.getElementById(
+          "book-button"
+        );
+
+
+      if (bookButton) {
+
+        bookButton.textContent =
+          "📥 PDF Kitaabaa Buufadhu";
+
+
+        bookButton.onclick =
+          function () {
+
+            window.location.href =
+              PAYMENT_WORKER +
+              "/download-pdf?tx_ref=" +
+              encodeURIComponent(tx_ref);
+
+          };
+
+      }
+
+
+      // ------------------------------------
+      // Remove payment parameters
+      // ------------------------------------
+
+      window.history.replaceState(
+        {},
+        document.title,
+        window.location.pathname
+      );
+
+
+    } else {
+
+      alert(
+        document.documentElement.lang === "en"
+          ? "❌ Your payment could not be verified."
+          : "❌ Kaffaltiin kee sirriitti mirkanaa'uu hin dandeenye."
+      );
+
+    }
+
+
+  } catch (error) {
+
+    console.error(
+      "Payment verification error:",
+      error
+    );
+
+
+    alert(
+      document.documentElement.lang === "en"
+        ? "❌ An error occurred while verifying the payment."
+        : "❌ Rakkoon mirkaneessa kaffaltii uumame."
+    );
+
+  }
+
+});
    PAYMENT SUCCESS
    ========================================== */
 
