@@ -1941,39 +1941,35 @@ window.addEventListener(
 
 
     const payment =
-      params.get("payment");
+  params.get("payment");
 
+let tx_ref =
+  params.get("tx_ref");
 
-    let tx_ref =
-      params.get("tx_ref");
+// ========================================
+// FIND tx_ref
+// ========================================
 
+if (!tx_ref) {
 
-    // ========================================
-    // FIND tx_ref
-    // ========================================
+  const rawUrl =
+    window.location.href;
 
-    if (!tx_ref) {
+  const match =
+    rawUrl.match(
+      /(?:[?&]|&amp;)tx_ref=([^&]+)/
+    );
 
-      const rawUrl =
-        window.location.href;
+  if (match) {
 
-      const match =
-        rawUrl.match(
-          /[?&]tx_ref=([^&]+)/
-        );
+    tx_ref =
+      decodeURIComponent(
+        match[1]
+      );
 
-      if (match) {
+  }
 
-        tx_ref =
-          decodeURIComponent(
-            match[1]
-          );
-
-      }
-
-    }
-
-
+}
     // ========================================
     // NEW SUCCESSFUL PAYMENT
     // ========================================
