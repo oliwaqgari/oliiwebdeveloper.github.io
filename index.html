@@ -1791,6 +1791,8 @@ const successMessage =
 const PAYMENT_WORKER =
   "https://olii-book-payment.oliwaqgari.workers.dev";
 
+let paymentProcessing = false;
+
 
 /* =========================
    RESET DOWNLOAD BUTTON
@@ -1921,6 +1923,30 @@ if (!bookButton) {
     "click",
     async function () {
 
+      /* 
+         IMPORTANT:
+         Yeroo tokko qofa payment jalqabi.
+      */
+
+      if (paymentProcessing) {
+        return;
+      }
+
+      paymentProcessing = true;
+
+      /* Button cufi */
+      bookButton.disabled = true;
+
+      bookButton.textContent =
+        document.documentElement.lang === "en"
+          ? "⏳ Processing..."
+          : "⏳ Qopheessaa jira...";
+
+
+      /* =========================
+         NAME
+      ========================= */
+
       const name =
         prompt(
           document.documentElement.lang === "en"
@@ -1928,8 +1954,24 @@ if (!bookButton) {
             : "Maqaa guutuu kee galchi:"
         );
 
-      if (!name) return;
+      if (!name) {
 
+        paymentProcessing = false;
+
+        bookButton.disabled = false;
+
+        bookButton.textContent =
+          document.documentElement.lang === "en"
+            ? "📖 Order the Book"
+            : "📖 Kitaaba Ajaji";
+
+        return;
+      }
+
+
+      /* =========================
+         EMAIL
+      ========================= */
 
       const email =
         prompt(
@@ -1938,8 +1980,24 @@ if (!bookButton) {
             : "Email kee galchi:"
         );
 
-      if (!email) return;
+      if (!email) {
 
+        paymentProcessing = false;
+
+        bookButton.disabled = false;
+
+        bookButton.textContent =
+          document.documentElement.lang === "en"
+            ? "📖 Order the Book"
+            : "📖 Kitaaba Ajaji";
+
+        return;
+      }
+
+
+      /* =========================
+         PHONE
+      ========================= */
 
       const phone =
         prompt(
@@ -1948,16 +2006,24 @@ if (!bookButton) {
             : "Lakkoofsa bilbilaa kee galchi:"
         );
 
-      if (!phone) return;
+      if (!phone) {
+
+        paymentProcessing = false;
+
+        bookButton.disabled = false;
+
+        bookButton.textContent =
+          document.documentElement.lang === "en"
+            ? "📖 Order the Book"
+            : "📖 Kitaaba Ajaji";
+
+        return;
+      }
 
 
-      bookButton.disabled = true;
-
-      bookButton.textContent =
-        document.documentElement.lang === "en"
-          ? "⏳ Processing..."
-          : "⏳ Qopheessaa jira...";
-
+      /* =========================
+         SEND TO WORKER
+      ========================= */
 
       try {
 
@@ -1992,29 +2058,32 @@ if (!bookButton) {
         );
 
 
+        /* =========================
+           GO TO CHAPA
+        ========================= */
+
         if (
           result &&
           result.checkout_url
         ) {
 
-          window.location.href =
-            result.checkout_url;
+          /*
+            Chapaatti yeroo tokko qofa darba.
+          */
+
+          window.location.replace(
+            result.checkout_url
+          );
+
+          return;
 
         } else {
 
-          alert(
-            document.documentElement.lang === "en"
-              ? "❌ Payment could not be started."
-              : "❌ Kaffaltiin jalqabsiifamuu hin dandeenye."
+          throw new Error(
+            "Checkout URL not found"
           );
-
-          bookButton.disabled = false;
-
-          bookButton.textContent =
-            document.documentElement.lang === "en"
-              ? "📖 Order the Book"
-              : "📖 Kitaaba Ajaji";
         }
+
 
       } catch (error) {
 
@@ -2030,6 +2099,8 @@ if (!bookButton) {
             : "❌ Rakkoon uumameera. Mee irra deebi'ii yaali."
         );
 
+
+        paymentProcessing = false;
 
         bookButton.disabled = false;
 
@@ -2052,7 +2123,7 @@ window.addEventListener(
   "load",
   async function () {
 
-    /* Jalqaba PDF button cufi */
+    /* PDF jalqaba irratti cufaa */
     resetDownloadButton();
 
 
@@ -2112,11 +2183,6 @@ window.addEventListener(
         );
 
 
-        /*
-          URL keessaa payment fi tx_ref haqi.
-          Garuu verification erga xumuramee booda qofa.
-        */
-
         window.history.replaceState(
           {},
           document.title,
@@ -2124,11 +2190,6 @@ window.addEventListener(
         );
 
       } else {
-
-        /*
-          Kaffaltiin hin mirkanoofne.
-          PDF button cufaa tura.
-        */
 
         localStorage.removeItem(
           "bookPaymentSuccess"
@@ -2163,14 +2224,6 @@ window.addEventListener(
       );
 
 
-    /*
-      IMPORTANT:
-      LocalStorage keessatti tx_ref jiraachuu
-      qofa hin amannu.
-
-      Chapa irraa deebinee verify goona.
-    */
-
     if (savedTxRef) {
 
       const verified =
@@ -2195,7 +2248,6 @@ window.addEventListener(
 
   }
 );
-
 if (!bookButton) {
 
   console.error(
