@@ -1727,12 +1727,12 @@ footer p:last-child {
         </p>
       </div>
 
-    <button
-  type="button"
-  class="book-button"
-  id="book-button">
-  📖 Kitaaba Ajaji
-</button>
+     <button
+    type="button"
+    class="book-button"
+    id="book-button">
+    📖 Kitaaba Ajaji
+  </button>
 
 <button
   type="button"
@@ -1747,7 +1747,10 @@ footer p:last-child {
   Ajajni kitaaba keessanii nu gaheera.
 </div>
   </div>
-<div id="book-order-form" class="book-order-form">
+<div
+  id="book-order-form"
+  class="book-order-form"
+  style="display: none;">
 
   <h3>📖 Kitaaba Ajaji</h3>
 
@@ -1792,12 +1795,12 @@ footer p:last-child {
     🏦 Bank
   </label>
 
-  <button
-    type="button"
-    class="book-button"
-    id="book-button">
-    📖 Kitaaba Ajaji
-  </button>
+ <button
+  type="button"
+  class="book-button"
+  id="show-book-form">
+  📖 Kitaaba Ajaji
+</button>
 
 </div>
 </section>
@@ -3167,6 +3170,31 @@ function toggleOtherPayment() {
   } else {
     arrow.textContent = "▼";
   }
+}
+    const showBookFormButton =
+  document.getElementById("show-book-form");
+
+const bookOrderForm =
+  document.getElementById("book-order-form");
+
+if (showBookFormButton && bookOrderForm) {
+
+  showBookFormButton.addEventListener(
+    "click",
+    function () {
+
+      bookOrderForm.style.display = "block";
+
+      showBookFormButton.style.display = "none";
+
+      bookOrderForm.scrollIntoView({
+        behavior: "smooth",
+        block: "center"
+      });
+
+    }
+  );
+
 }
   </script>
 
