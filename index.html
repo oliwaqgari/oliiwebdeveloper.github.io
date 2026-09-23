@@ -1077,6 +1077,54 @@ footer p:last-child {
   font-size: 14px;
   color: #555;
 }
+    .book-order-form {
+  margin-top: 20px;
+  padding: 20px;
+  background: #ffffff;
+  border-radius: 15px;
+  box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+  text-align: left;
+}
+
+.book-order-form h3 {
+  margin-bottom: 10px;
+  text-align: center;
+}
+
+.book-price {
+  text-align: center;
+  font-size: 18px;
+  margin-bottom: 18px;
+}
+
+.book-price strong {
+  color: #1565c0;
+}
+
+.book-order-form input[type="text"],
+.book-order-form input[type="email"],
+.book-order-form input[type="tel"] {
+  width: 100%;
+  padding: 13px;
+  margin-bottom: 12px;
+  border: 1px solid #d6e4f5;
+  border-radius: 9px;
+  box-sizing: border-box;
+}
+
+.payment-option {
+  display: block;
+  padding: 12px;
+  margin: 8px 0;
+  background: #f4f8ff;
+  border: 1px solid #d6e4f5;
+  border-radius: 9px;
+  cursor: pointer;
+}
+
+.payment-option input {
+  margin-right: 8px;
+}
   </style>
 </head>
 
@@ -1699,7 +1747,59 @@ footer p:last-child {
   Ajajni kitaaba keessanii nu gaheera.
 </div>
   </div>
+<div id="book-order-form" class="book-order-form">
 
+  <h3>📖 Kitaaba Ajaji</h3>
+
+  <p class="book-price">
+    Gatii Kitaabaa: <strong>350 ETB</strong>
+  </p>
+
+  <input
+    type="text"
+    id="book-name"
+    placeholder="Maqaa guutuu kee"
+    required>
+
+  <input
+    type="email"
+    id="book-email"
+    placeholder="Email kee"
+    required>
+
+  <input
+    type="tel"
+    id="book-phone"
+    placeholder="Lakkoofsa bilbilaa kee"
+    required>
+
+  <h4>💳 Payment Method</h4>
+
+  <label class="payment-option">
+    <input
+      type="radio"
+      name="payment-method"
+      value="chapa"
+      checked>
+    🟣 Chapa
+  </label>
+
+  <label class="payment-option">
+    <input
+      type="radio"
+      name="payment-method"
+      value="bank">
+    🏦 Bank
+  </label>
+
+  <button
+    type="button"
+    class="book-button"
+    id="book-button">
+    📖 Kitaaba Ajaji
+  </button>
+
+</div>
 </section>
   <!-- CONTACT -->
   <section id="contact">
@@ -2048,83 +2148,39 @@ if (!bookButton) {
           : "⏳ Qopheessaa jira...";
 
 
-      /* =========================
-         ASK NAME ONCE
-      ========================= */
+   const name =
+  document.getElementById("book-name").value;
 
-      const name =
-        prompt(
-          document.documentElement.lang === "en"
-            ? "Enter your full name:"
-            : "Maqaa guutuu kee galchi:"
-        );
+const email =
+  document.getElementById("book-email").value;
 
-      if (!name || !name.trim()) {
+const phone =
+  document.getElementById("book-phone").value;
 
-        paymentProcessing = false;
+const paymentMethod =
+  document.querySelector(
+    'input[name="payment-method"]:checked'
+  )?.value;
 
-        bookButton.disabled = false;
+if (!name.trim() || !email.trim() || !phone.trim()) {
+  alert("Maqaa, email fi lakkoofsa bilbilaa guuti.");
 
-        bookButton.textContent =
-          document.documentElement.lang === "en"
-            ? "📖 Order the Book"
-            : "📖 Kitaaba Ajaji";
+  paymentProcessing = false;
 
-        return;
-      }
+  bookButton.disabled = false;
 
+  return;
+}
 
-      /* =========================
-         ASK EMAIL ONCE
-      ========================= */
+if (!paymentMethod) {
+  alert("Mee Payment Method tokko filadhu.");
 
-      const email =
-        prompt(
-          document.documentElement.lang === "en"
-            ? "Enter your email:"
-            : "Email kee galchi:"
-        );
+  paymentProcessing = false;
 
-      if (!email || !email.trim()) {
+  bookButton.disabled = false;
 
-        paymentProcessing = false;
-
-        bookButton.disabled = false;
-
-        bookButton.textContent =
-          document.documentElement.lang === "en"
-            ? "📖 Order the Book"
-            : "📖 Kitaaba Ajaji";
-
-        return;
-      }
-
-
-      /* =========================
-         ASK PHONE ONCE
-      ========================= */
-
-      const phone =
-        prompt(
-          document.documentElement.lang === "en"
-            ? "Enter your phone number:"
-            : "Lakkoofsa bilbilaa kee galchi:"
-        );
-
-      if (!phone || !phone.trim()) {
-
-        paymentProcessing = false;
-
-        bookButton.disabled = false;
-
-        bookButton.textContent =
-          document.documentElement.lang === "en"
-            ? "📖 Order the Book"
-            : "📖 Kitaaba Ajaji";
-
-        return;
-      }
-
+  return;
+}
 
       /* =========================
          CREATE PAYMENT
