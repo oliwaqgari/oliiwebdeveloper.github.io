@@ -1672,9 +1672,9 @@ footer p:last-child {
 
     <div class="book-content">
 
-      <h3 id="book-name">
-        IYYAAFI IYYATA
-      </h3>
+      <h3 id="book-title-name">
+  IYYAAFI IYYATA
+</h3>
 
       <p id="book-description">
         Kitaaba yaada, qorannoo fi dhimmoota hawaasummaa
@@ -1727,35 +1727,24 @@ footer p:last-child {
         </p>
       </div>
 
-     <button
-    type="button"
-    class="book-button"
-    id="book-button">
-    📖 Kitaaba Ajaji
-  </button>
-
+    <!-- BUTTON JALQABAA -->
 <button
   type="button"
   class="book-button"
-  id="book-download-button"
-  disabled>
-  📥 PDF Kitaabaa Buufadhu
+  id="show-book-form">
+  📖 Kitaaba Ajaji
 </button>
-    </div>
-<div id="payment-success-message" class="payment-success-message">
-  🎉 Kaffaltiin milkaa'eera!<br>
-  Ajajni kitaaba keessanii nu gaheera.
-</div>
-  </div>
+
+<!-- ORDER FORM -->
 <div
   id="book-order-form"
   class="book-order-form"
-  style="display: none;">
+  style="display:none;">
 
   <h3>📖 Kitaaba Ajaji</h3>
 
   <p class="book-price">
-    Gatii Kitaabaa: <strong>350 ETB</strong>
+    Gatii Kitaabaa: <strong>350 BIRR</strong>
   </p>
 
   <input
@@ -1795,12 +1784,30 @@ footer p:last-child {
     🏦 Bank
   </label>
 
- <button
+  <button
+    type="button"
+    class="book-button"
+    id="book-button">
+    💳 Kaffaltii Itti Fufi
+  </button>
+
+</div>
+
+<!-- DOWNLOAD -->
+<button
   type="button"
   class="book-button"
-  id="show-book-form">
-  📖 Kitaaba Ajaji
+  id="book-download-button"
+  disabled>
+  📥 PDF Kitaabaa Buufadhu
 </button>
+
+<div
+  id="payment-success-message"
+  class="payment-success-message">
+
+  🎉 Kaffaltiin milkaa'eera!<br>
+  Ajajni kitaaba keessanii nu gaheera.
 
 </div>
 </section>
@@ -1982,7 +1989,31 @@ contactForm.addEventListener(
    /* =========================
    BOOK PAYMENT
 ========================= */
+const showBookFormButton =
+  document.getElementById("show-book-form");
 
+const bookOrderForm =
+  document.getElementById("book-order-form");
+
+if (showBookFormButton && bookOrderForm) {
+
+  showBookFormButton.addEventListener(
+    "click",
+    function () {
+
+      bookOrderForm.style.display = "block";
+
+      showBookFormButton.style.display = "none";
+
+      bookOrderForm.scrollIntoView({
+        behavior: "smooth",
+        block: "center"
+      });
+
+    }
+  );
+
+}
 const bookButton =
   document.getElementById("book-button");
 
@@ -2203,15 +2234,17 @@ if (!paymentMethod) {
                   "application/json"
               },
 
-              body: JSON.stringify({
+             body: JSON.stringify({
 
-                name: name.trim(),
+  name: name.trim(),
 
-                email: email.trim(),
+  email: email.trim(),
 
-                phone: phone.trim()
+  phone: phone.trim(),
 
-              })
+  payment_method: paymentMethod
+
+})
             }
           );
 
