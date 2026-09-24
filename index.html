@@ -2067,9 +2067,13 @@ function showPaidBook(tx_ref) {
 
   if (!tx_ref || !downloadButton) return;
 
-  if (successMessage) {
-    successMessage.style.display = "block";
-  }
+ if (successMessage) {
+  successMessage.style.setProperty(
+    "display",
+    "block",
+    "important"
+  );
+}
 
   downloadButton.disabled = false;
 
