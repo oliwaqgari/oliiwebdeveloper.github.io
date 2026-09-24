@@ -1759,11 +1759,17 @@ footer p:last-child {
     placeholder="Email kee"
     required>
 
-  <input
-    type="tel"
-    id="book-phone"
-    placeholder="Lakkoofsa bilbilaa kee"
-    required>
+  <label
+  for="book-phone"
+  id="book-phone-label">
+  📱 Lakkoofsa bilbilaa kee
+</label>
+
+<input
+  type="tel"
+  id="book-phone"
+  placeholder="Lakkoofsa bilbilaa kee"
+  required>
 
   <h4>💳 Payment Method</h4>
 
@@ -2051,7 +2057,60 @@ const PAYMENT_WORKER =
 
 let paymentProcessing = false;
 
+const paymentMethodInputs =
+  document.querySelectorAll(
+    'input[name="payment-method"]'
+  );
 
+const bookPhoneInput =
+  document.getElementById("book-phone");
+
+paymentMethodInputs.forEach(function (input) {
+
+  input.addEventListener("change", function () {
+
+    if (!bookPhoneInput) return;
+
+   if (
+  input.value === "telebirr" ||
+  input.value === "cbebirr"
+) {
+
+  bookPhoneInput.placeholder =
+    input.value === "telebirr"
+      ? "📱 Lakkoofsa Telebirr keessanii galchaa"
+      : "🏦 Lakkoofsa bilbilaa CBE keessanii galchaa";
+
+  const phoneLabel =
+    document.getElementById("book-phone-label");
+
+  if (phoneLabel) {
+    phoneLabel.textContent =
+      input.value === "telebirr"
+        ? "📱 Lakkoofsa Telebirr keessanii galchaa"
+        : "🏦 Lakkoofsa bilbilaa CBE keessanii galchaa";
+  }
+
+  bookPhoneInput.focus();
+
+} else {
+
+  bookPhoneInput.placeholder =
+    "Lakkoofsa bilbilaa kee";
+
+  const phoneLabel =
+    document.getElementById("book-phone-label");
+
+  if (phoneLabel) {
+    phoneLabel.textContent =
+      "📱 Lakkoofsa bilbilaa kee";
+  }
+
+}
+
+  });
+
+});
 /* =========================
    RESET DOWNLOAD BUTTON
 ========================= */
