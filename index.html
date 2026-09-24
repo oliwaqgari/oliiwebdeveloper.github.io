@@ -1986,9 +1986,9 @@ contactForm.addEventListener(
   }
 );
 /* =========================
-   /* =========================
    BOOK PAYMENT
 ========================= */
+
 const showBookFormButton =
   document.getElementById("show-book-form");
 
@@ -2014,6 +2014,8 @@ if (showBookFormButton && bookOrderForm) {
   );
 
 }
+
+
 const bookButton =
   document.getElementById("book-button");
 
@@ -2022,7 +2024,11 @@ const downloadButton =
 
 const successMessage =
   document.getElementById("payment-success-message");
-    successMessage.style.display = "none";
+
+if (successMessage) {
+  successMessage.style.display = "none";
+}
+
 
 const PAYMENT_WORKER =
   "https://olii-book-payment.oliwaqgari.workers.dev";
@@ -2059,30 +2065,74 @@ function resetDownloadButton() {
 
 function showPaidBook(tx_ref) {
 
-  if (!tx_ref) return;
+  if (!tx_ref || !downloadButton) return;
 
   if (successMessage) {
     successMessage.style.display = "block";
   }
 
-  if (downloadButton) {
+  downloadButton.disabled = false;
 
-    downloadButton.disabled = false;
+  downloadButton.textContent =
+    document.documentElement.lang === "en"
+      ? "📥 Download PDF"
+      : "📥 PDF Kitaabaa Buufadhu";
+
+
+  /* =========================
+     ONLY ONE DOWNLOAD
+  ========================= */
+
+  downloadButton.onclick = function () {
+
+    /* Prevent second click */
+    if (downloadButton.disabled) {
+      return;
+    }
+
+    /* Disable immediately */
+    downloadButton.disabled = true;
 
     downloadButton.textContent =
       document.documentElement.lang === "en"
-        ? "📥 Download PDF"
-        : "📥 PDF Kitaabaa Buufadhu";
+        ? "✅ Download Started"
+        : "✅ Buufachuun jalqabame";
 
-    downloadButton.onclick = function () {
+    /*
+      Payment/download already used.
+      Remove saved payment information.
+    */
 
-      window.location.href =
-        PAYMENT_WORKER +
-        "/download-pdf?tx_ref=" +
-        encodeURIComponent(tx_ref);
+    localStorage.removeItem(
+      "bookPaymentTxRef"
+    );
 
-    };
-  }
+    localStorage.removeItem(
+      "bookPaymentSuccess"
+    );
+
+
+    /*
+      Start PDF download
+    */
+
+    window.location.href =
+      PAYMENT_WORKER +
+      "/download-pdf?tx_ref=" +
+      encodeURIComponent(tx_ref);
+
+
+    /*
+      Make sure button stays disabled.
+    */
+
+    setTimeout(function () {
+
+      downloadButton.disabled = true;
+
+    }, 1000);
+
+  };
 }
 
 
@@ -2113,21 +2163,17 @@ async function verifyBookPayment(tx_ref) {
       result
     );
 
+
     if (
       result &&
       result.success === true &&
       result.paid === true
     ) {
 
-      localStorage.setItem(
-        "bookPaymentTxRef",
-        tx_ref
-      );
-
-      localStorage.setItem(
-        "bookPaymentSuccess",
-        "true"
-      );
+      /*
+        Do NOT save the payment permanently.
+        It is valid only for this download.
+      */
 
       showPaidBook(tx_ref);
 
@@ -2165,10 +2211,6 @@ if (!bookButton) {
     "click",
     async function () {
 
-      /*
-        Prevent duplicate payment requests.
-      */
-
       if (paymentProcessing) {
         return;
       }
@@ -2183,39 +2225,62 @@ if (!bookButton) {
           : "⏳ Qopheessaa jira...";
 
 
-   const name =
-  document.getElementById("book-name").value;
+      const name =
+        document.getElementById("book-name").value;
 
-const email =
-  document.getElementById("book-email").value;
+      const email =
+        document.getElementById("book-email").value;
 
-const phone =
-  document.getElementById("book-phone").value;
+      const phone =
+        document.getElementById("book-phone").value;
 
-const paymentMethod =
-  document.querySelector(
-    'input[name="payment-method"]:checked'
-  )?.value;
+      const paymentMethod =
+        document.querySelector(
+          'input[name="payment-method"]:checked'
+        )?.value;
 
-if (!name.trim() || !email.trim() || !phone.trim()) {
-  alert("Maqaa, email fi lakkoofsa bilbilaa guuti.");
 
-  paymentProcessing = false;
+      if (
+        !name.trim() ||
+        !email.trim() ||
+        !phone.trim()
+      ) {
 
-  bookButton.disabled = false;
+        alert(
+          "Maqaa, email fi lakkoofsa bilbilaa guuti."
+        );
 
-  return;
-}
+        paymentProcessing = false;
 
-if (!paymentMethod) {
-  alert("Mee Payment Method tokko filadhu.");
+        bookButton.disabled = false;
 
-  paymentProcessing = false;
+        bookButton.textContent =
+          document.documentElement.lang === "en"
+            ? "📖 Order the Book"
+            : "📖 Kitaaba Ajaji";
 
-  bookButton.disabled = false;
+        return;
+      }
 
-  return;
-}
+
+      if (!paymentMethod) {
+
+        alert(
+          "Mee Payment Method tokko filadhu."
+        );
+
+        paymentProcessing = false;
+
+        bookButton.disabled = false;
+
+        bookButton.textContent =
+          document.documentElement.lang === "en"
+            ? "📖 Order the Book"
+            : "📖 Kitaaba Ajaji";
+
+        return;
+      }
+
 
       /* =========================
          CREATE PAYMENT
@@ -2235,17 +2300,18 @@ if (!paymentMethod) {
                   "application/json"
               },
 
-             body: JSON.stringify({
+              body: JSON.stringify({
 
-  name: name.trim(),
+                name: name.trim(),
 
-  email: email.trim(),
+                email: email.trim(),
 
-  phone: phone.trim(),
+                phone: phone.trim(),
 
-  payment_method: paymentMethod
+                payment_method:
+                  paymentMethod
 
-})
+              })
             }
           );
 
@@ -2274,7 +2340,6 @@ if (!paymentMethod) {
           );
 
           return;
-
         }
 
 
@@ -2315,14 +2380,18 @@ if (!paymentMethod) {
 
 /* =========================
    CHECK PAYMENT AFTER LOAD
-   ONLY ONE LOAD HANDLER
 ========================= */
 
 window.addEventListener(
   "load",
   async function () {
 
+    /*
+      ALWAYS start with download disabled.
+    */
+
     resetDownloadButton();
+
 
     const params =
       new URLSearchParams(
@@ -2374,6 +2443,7 @@ window.addEventListener(
         tx_ref
       );
 
+
       const verified =
         await verifyBookPayment(tx_ref);
 
@@ -2381,26 +2451,19 @@ window.addEventListener(
       if (verified) {
 
         /*
-          Payment successfully verified.
-          Save tx_ref and enable PDF download.
+          Payment verified.
+          PDF download is now available
+          for ONE download only.
         */
 
-        localStorage.setItem(
-          "bookPaymentTxRef",
-          tx_ref
+        console.log(
+          "Payment verified. One download allowed."
         );
-
-        localStorage.setItem(
-          "bookPaymentSuccess",
-          "true"
-        );
-
-        showPaidBook(tx_ref);
 
 
         /*
           Remove payment parameters
-          from the browser URL.
+          from browser URL.
         */
 
         window.history.replaceState(
@@ -2410,14 +2473,6 @@ window.addEventListener(
         );
 
       } else {
-
-        localStorage.removeItem(
-          "bookPaymentSuccess"
-        );
-
-        localStorage.removeItem(
-          "bookPaymentTxRef"
-        );
 
         resetDownloadButton();
 
@@ -2434,60 +2489,23 @@ window.addEventListener(
 
 
     /* =========================
-       PREVIOUS PAYMENT
-    ========================= */
+       NO PREVIOUS PAYMENT
+       ========================= */
 
-    const savedTxRef =
-      localStorage.getItem(
-        "bookPaymentTxRef"
-      );
+    /*
+      IMPORTANT:
+      We intentionally DO NOT read
+      bookPaymentTxRef from localStorage.
 
+      Therefore an old payment cannot
+      reactivate the PDF button.
+    */
 
-    if (savedTxRef) {
-
-      console.log(
-        "Checking previous payment:",
-        savedTxRef
-      );
-
-      const verified =
-        await verifyBookPayment(
-          savedTxRef
-        );
-
-
-      if (verified) {
-
-        /*
-          Previous payment is still valid.
-          Enable PDF download again.
-        */
-
-        showPaidBook(
-          savedTxRef
-        );
-
-      } else {
-
-        /*
-          Payment is not valid.
-          Remove old payment information.
-        */
-
-        localStorage.removeItem(
-          "bookPaymentSuccess"
-        );
-
-        localStorage.removeItem(
-          "bookPaymentTxRef"
-        );
-
-        resetDownloadButton();
-      }
-    }
+    resetDownloadButton();
 
   }
 );
+  
     /* LANGUAGE */
 
     let english = false;
