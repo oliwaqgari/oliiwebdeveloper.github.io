@@ -2324,16 +2324,13 @@ window.addEventListener(
 
     resetDownloadButton();
 
-
     const params =
       new URLSearchParams(
         window.location.search
       );
 
-
     const payment =
       params.get("payment");
-
 
     let tx_ref =
       params.get("tx_ref");
@@ -2372,6 +2369,11 @@ window.addEventListener(
       tx_ref
     ) {
 
+      console.log(
+        "New payment found:",
+        tx_ref
+      );
+
       const verified =
         await verifyBookPayment(tx_ref);
 
@@ -2380,7 +2382,25 @@ window.addEventListener(
 
         /*
           Payment successfully verified.
-          Download button is now enabled.
+          Save tx_ref and enable PDF download.
+        */
+
+        localStorage.setItem(
+          "bookPaymentTxRef",
+          tx_ref
+        );
+
+        localStorage.setItem(
+          "bookPaymentSuccess",
+          "true"
+        );
+
+        showPaidBook(tx_ref);
+
+
+        /*
+          Remove payment parameters
+          from the browser URL.
         */
 
         window.history.replaceState(
@@ -2425,6 +2445,11 @@ window.addEventListener(
 
     if (savedTxRef) {
 
+      console.log(
+        "Checking previous payment:",
+        savedTxRef
+      );
+
       const verified =
         await verifyBookPayment(
           savedTxRef
@@ -2433,11 +2458,21 @@ window.addEventListener(
 
       if (verified) {
 
+        /*
+          Previous payment is still valid.
+          Enable PDF download again.
+        */
+
         showPaidBook(
           savedTxRef
         );
 
       } else {
+
+        /*
+          Payment is not valid.
+          Remove old payment information.
+        */
 
         localStorage.removeItem(
           "bookPaymentSuccess"
