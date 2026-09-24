@@ -2346,206 +2346,129 @@ if (!bookButton) {
         );
 
 
+               /* =========================
+           PAYMENT METHOD HANDLING
+        ========================= */
+
+        console.log(
+          "Payment response:",
+          result
+        );
+
+
         /* =========================
-           /* =========================
-   PAYMENT METHOD HANDLING
-========================= */
+           TELEBIRR / CBE BIRR
+        ========================= */
 
-console.log(
-  "Payment response:",
-  result
-);
+        if (
+          paymentMethod === "telebirr" ||
+          paymentMethod === "cbebirr"
+        ) {
 
+          if (
+            !result ||
+            result.success !== true ||
+            !result.tx_ref
+          ) {
 
-/* =========================
-   TELEBIRR / CBE BIRR
-========================= */
+            throw new Error(
+              result?.message ||
+              "Telebirr/CBE Birr payment jalqabsiisuun hin milkoofne."
+            );
 
-if (
-  paymentMethod === "telebirr" ||
-  paymentMethod === "cbebirr"
-) {
+          }
 
-  if (
-    !result ||
-    result.success !== true ||
-    !result.tx_ref
-  ) {
+          alert(
+            paymentMethod === "telebirr"
+              ? "📱 Telebirr payment jalqabameera. Mee bilbila keessan ilaalaa."
+              : "🏦 CBE Birr payment jalqabameera. Mee bilbila keessan ilaalaa."
+          );
 
-    throw new Error(
-      result?.message ||
-      "Telebirr/CBE Birr payment jalqabsiisuun hin milkoofne."
-    );
+          paymentProcessing = false;
 
-  }
+          bookButton.disabled = false;
 
-  alert(
-    paymentMethod === "telebirr"
-      ? "📱 Telebirr payment jalqabameera. Mee bilbila keessan ilaalaa."
-      : "🏦 CBE Birr payment jalqabameera. Mee bilbila keessan ilaalaa."
-  );
+          bookButton.textContent =
+            document.documentElement.lang === "en"
+              ? "📖 Order the Book"
+              : "📖 Kitaaba Ajaji";
 
-  return;
-}
+          return;
+        }
 
 
-/* =========================
-   BANK
-========================= */
+        /* =========================
+           BANK
+        ========================= */
 
-if (paymentMethod === "bank") {
+        if (
+          paymentMethod === "bank"
+        ) {
 
-  if (
-    !result ||
-    result.success !== true ||
-    !result.bank_ref
-  ) {
+          if (
+            !result ||
+            result.success !== true ||
+            !result.bank_ref
+          ) {
 
-    throw new Error(
-      result?.message ||
-      "Bank payment jalqabsiisuun hin milkoofne."
-    );
+            throw new Error(
+              result?.message ||
+              "Bank payment jalqabsiisuun hin milkoofne."
+            );
 
-  }
+          }
 
-  alert(
-    "🏦 Bank payment jalqabameera. Mee receipt keessan ergaa."
-  );
+          alert(
+            "🏦 Bank payment jalqabameera. Mee receipt keessan ergaa."
+          );
 
-  return;
-}
+          paymentProcessing = false;
 
+          bookButton.disabled = false;
 
-/* =========================
-   CHAPA
-========================= */
+          bookButton.textContent =
+            document.documentElement.lang === "en"
+              ? "📖 Order the Book"
+              : "📖 Kitaaba Ajaji";
 
-if (
-  paymentMethod === "chapa"
-) {
-
- /* =========================
-   PAYMENT METHOD HANDLING
-========================= */
-
-console.log(
-  "Payment response:",
-  result
-);
+          return;
+        }
 
 
-/* =========================
-   TELEBIRR / CBE BIRR
-========================= */
+        /* =========================
+           CHAPA
+        ========================= */
 
-if (
-  paymentMethod === "telebirr" ||
-  paymentMethod === "cbebirr"
-) {
+        if (
+          paymentMethod === "chapa"
+        ) {
 
-  if (
-    !result ||
-    result.success !== true ||
-    !result.tx_ref
-  ) {
+          if (
+            !result ||
+            !result.checkout_url
+          ) {
 
-    throw new Error(
-      result?.message ||
-      "Telebirr/CBE Birr payment jalqabsiisuun hin milkoofne."
-    );
+            throw new Error(
+              "Checkout URL not found"
+            );
 
-  }
+          }
 
-  alert(
-    paymentMethod === "telebirr"
-      ? "📱 Telebirr payment jalqabameera. Mee bilbila keessan ilaalaa."
-      : "🏦 CBE Birr payment jalqabameera. Mee bilbila keessan ilaalaa."
-  );
+          window.location.replace(
+            result.checkout_url
+          );
 
-  return;
-}
+          return;
+        }
 
 
-/* =========================
-   BANK
-========================= */
+        /* =========================
+           UNKNOWN PAYMENT METHOD
+        ========================= */
 
-if (paymentMethod === "bank") {
-
-  if (
-    !result ||
-    result.success !== true ||
-    !result.bank_ref
-  ) {
-
-    throw new Error(
-      result?.message ||
-      "Bank payment jalqabsiisuun hin milkoofne."
-    );
-
-  }
-
-  alert(
-    "🏦 Bank payment jalqabameera. Mee receipt keessan ergaa."
-  );
-
-  return;
-}
-
-
-/* =========================
-   CHAPA
-========================= */
-
-if (
-  paymentMethod === "chapa"
-) {
-
-  if (
-    !result ||
-    !result.checkout_url
-  ) {
-
-    throw new Error(
-      "Checkout URL not found"
-    );
-
-  }
-
-  window.location.replace(
-    result.checkout_url
-  );
-
-  return;
-}
-
-
-/* =========================
-   UNKNOWN PAYMENT METHOD
-========================= */
-
-throw new Error(
-  "Payment method hin beekamne."
-);
-
-  }
-
-  window.location.replace(
-    result.checkout_url
-  );
-
-  return;
-}
-
-
-/* =========================
-   UNKNOWN PAYMENT METHOD
-========================= */
-
-throw new Error(
-  "Payment method hin beekamne."
-);
-
+        throw new Error(
+          "Payment method hin beekamne."
+        );
 
       } catch (error) {
 
@@ -2946,7 +2869,7 @@ document.getElementById("book-title").textContent = "📚 My Book";
 document.getElementById("book-intro").textContent =
   "One of the books I have written and part of my research work.";
 
-document.getElementById("book-name").textContent =
+document.getElementById("book-title-name").textContent =
   "IYYAAFI IYYATA";
 
 document.getElementById("book-description").textContent =
@@ -3313,7 +3236,7 @@ document.getElementById("book-title").textContent =
 document.getElementById("book-intro").textContent =
   "Kitaaba ani barreesse fi hojii qorannoo koo keessaa tokko.";
 
-document.getElementById("book-name").textContent =
+document.getElementById("book-title-name").textContent =
   "IYYAAFI IYYATA";
 
 document.getElementById("book-description").textContent =
