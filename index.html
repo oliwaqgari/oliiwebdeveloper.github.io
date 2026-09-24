@@ -2347,25 +2347,109 @@ if (!bookButton) {
 
 
         /* =========================
-           GO TO CHAPA
-        ========================= */
+           /* =========================
+   PAYMENT METHOD HANDLING
+========================= */
 
-        if (
-          result &&
-          result.checkout_url
-        ) {
-
-          window.location.replace(
-            result.checkout_url
-          );
-
-          return;
-        }
+console.log(
+  "Payment response:",
+  result
+);
 
 
-        throw new Error(
-          "Checkout URL not found"
-        );
+/* =========================
+   TELEBIRR / CBE BIRR
+========================= */
+
+if (
+  paymentMethod === "telebirr" ||
+  paymentMethod === "cbebirr"
+) {
+
+  if (
+    !result ||
+    result.success !== true ||
+    !result.tx_ref
+  ) {
+
+    throw new Error(
+      result?.message ||
+      "Telebirr/CBE Birr payment jalqabsiisuun hin milkoofne."
+    );
+
+  }
+
+  alert(
+    paymentMethod === "telebirr"
+      ? "📱 Telebirr payment jalqabameera. Mee bilbila keessan ilaalaa."
+      : "🏦 CBE Birr payment jalqabameera. Mee bilbila keessan ilaalaa."
+  );
+
+  return;
+}
+
+
+/* =========================
+   BANK
+========================= */
+
+if (paymentMethod === "bank") {
+
+  if (
+    !result ||
+    result.success !== true ||
+    !result.bank_ref
+  ) {
+
+    throw new Error(
+      result?.message ||
+      "Bank payment jalqabsiisuun hin milkoofne."
+    );
+
+  }
+
+  alert(
+    "🏦 Bank payment jalqabameera. Mee receipt keessan ergaa."
+  );
+
+  return;
+}
+
+
+/* =========================
+   CHAPA
+========================= */
+
+if (
+  paymentMethod === "chapa"
+) {
+
+  if (
+    !result ||
+    !result.checkout_url
+  ) {
+
+    throw new Error(
+      "Checkout URL not found"
+    );
+
+  }
+
+  window.location.replace(
+    result.checkout_url
+  );
+
+  return;
+}
+
+
+/* =========================
+   UNKNOWN PAYMENT METHOD
+========================= */
+
+throw new Error(
+  "Payment method hin beekamne."
+);
 
 
       } catch (error) {
