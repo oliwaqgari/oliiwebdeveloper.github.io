@@ -1126,6 +1126,7 @@ footer p:last-child {
   margin-right: 8px;
 }
   </style>
+  <script src="https://js.chapa.co/v1/inline.js"></script>
 </head>
 
 <body>
@@ -1773,46 +1774,14 @@ footer p:last-child {
 
   <h4>💳 Payment Method</h4>
 
- <label class="payment-option">
-  <input
-    type="radio"
-    name="payment-method"
-    value="chapa"
-    checked>
-  🟣 Chapa
-</label>
+<div id="chapa-inline-form"></div>
 
-<label class="payment-option">
-  <input
-    type="radio"
-    name="payment-method"
-    value="telebirr">
-  📱 Telebirr
-</label>
-
-<label class="payment-option">
-  <input
-    type="radio"
-    name="payment-method"
-    value="cbebirr">
-  🏦 CBE Birr
-</label>
-
-<label class="payment-option">
-  <input
-    type="radio"
-    name="payment-method"
-    value="bank">
-  🏦 Bank
-</label>
-
-  <button
-    type="button"
-    class="book-button"
-    id="book-button">
-    💳 Kaffaltii Itti Fufi
-  </button>
-
+<button
+  type="button"
+  class="book-button"
+  id="book-button">
+  💳 Kaffaltii Itti Fufi
+</button>
 </div>
 
 <!-- DOWNLOAD -->
@@ -2057,60 +2026,6 @@ const PAYMENT_WORKER =
 
 let paymentProcessing = false;
 
-const paymentMethodInputs =
-  document.querySelectorAll(
-    'input[name="payment-method"]'
-  );
-
-const bookPhoneInput =
-  document.getElementById("book-phone");
-
-paymentMethodInputs.forEach(function (input) {
-
-  input.addEventListener("change", function () {
-
-    if (!bookPhoneInput) return;
-
-   if (
-  input.value === "telebirr" ||
-  input.value === "cbebirr"
-) {
-
-  bookPhoneInput.placeholder =
-    input.value === "telebirr"
-      ? "📱 Lakkoofsa Telebirr keessanii galchaa"
-      : "🏦 Lakkoofsa bilbilaa CBE keessanii galchaa";
-
-  const phoneLabel =
-    document.getElementById("book-phone-label");
-
-  if (phoneLabel) {
-    phoneLabel.textContent =
-      input.value === "telebirr"
-        ? "📱 Lakkoofsa Telebirr keessanii galchaa"
-        : "🏦 Lakkoofsa bilbilaa CBE keessanii galchaa";
-  }
-
-  bookPhoneInput.focus();
-
-} else {
-
-  bookPhoneInput.placeholder =
-    "Lakkoofsa bilbilaa kee";
-
-  const phoneLabel =
-    document.getElementById("book-phone-label");
-
-  if (phoneLabel) {
-    phoneLabel.textContent =
-      "📱 Lakkoofsa bilbilaa kee";
-  }
-
-}
-
-  });
-
-});
 /* =========================
    RESET DOWNLOAD BUTTON
 ========================= */
@@ -2271,18 +2186,14 @@ async function verifyBookPayment(tx_ref) {
     return false;
   }
 }
-
-
-/* =========================
+    /* =========================
    BOOK ORDER
-   ONLY ONE CLICK HANDLER
+   CHAPA INLINE PAYMENT
 ========================= */
 
 if (!bookButton) {
 
-  console.error(
-    "Book button not found!"
-  );
+  console.error("Book button not found!");
 
 } else {
 
@@ -2294,6 +2205,33 @@ if (!bookButton) {
         return;
       }
 
+      const nameInput =
+        document.getElementById("book-name");
+
+      const emailInput =
+        document.getElementById("book-email");
+
+      const phoneInput =
+        document.getElementById("book-phone");
+
+      const name =
+        nameInput ? nameInput.value.trim() : "";
+
+      const email =
+        emailInput ? emailInput.value.trim() : "";
+
+      const phone =
+        phoneInput ? phoneInput.value.trim() : "";
+
+      if (!name || !email || !phone) {
+
+        alert(
+          "Maqaa, email fi lakkoofsa bilbilaa guuti."
+        );
+
+        return;
+      }
+
       paymentProcessing = true;
 
       bookButton.disabled = true;
@@ -2302,68 +2240,6 @@ if (!bookButton) {
         document.documentElement.lang === "en"
           ? "⏳ Processing..."
           : "⏳ Qopheessaa jira...";
-
-
-      const name =
-        document.getElementById("book-name").value;
-
-      const email =
-        document.getElementById("book-email").value;
-
-      const phone =
-        document.getElementById("book-phone").value;
-
-      const paymentMethod =
-        document.querySelector(
-          'input[name="payment-method"]:checked'
-        )?.value;
-
-
-      if (
-        !name.trim() ||
-        !email.trim() ||
-        !phone.trim()
-      ) {
-
-        alert(
-          "Maqaa, email fi lakkoofsa bilbilaa guuti."
-        );
-
-        paymentProcessing = false;
-
-        bookButton.disabled = false;
-
-        bookButton.textContent =
-          document.documentElement.lang === "en"
-            ? "📖 Order the Book"
-            : "📖 Kitaaba Ajaji";
-
-        return;
-      }
-
-
-      if (!paymentMethod) {
-
-        alert(
-          "Mee Payment Method tokko filadhu."
-        );
-
-        paymentProcessing = false;
-
-        bookButton.disabled = false;
-
-        bookButton.textContent =
-          document.documentElement.lang === "en"
-            ? "📖 Order the Book"
-            : "📖 Kitaaba Ajaji";
-
-        return;
-      }
-
-
-      /* =========================
-         CREATE PAYMENT
-      ========================= */
 
       try {
 
@@ -2381,137 +2257,28 @@ if (!bookButton) {
 
               body: JSON.stringify({
 
-                name: name.trim(),
+                name: name,
 
-                email: email.trim(),
+                email: email,
 
-                phone: phone.trim(),
-
-                payment_method:
-                  paymentMethod
+                phone: phone
 
               })
             }
           );
 
-
         const result =
           await response.json();
 
-
         console.log(
           "Payment response:",
           result
         );
 
-
-               /* =========================
-           PAYMENT METHOD HANDLING
-        ========================= */
-
-        console.log(
-          "Payment response:",
-          result
-        );
-
-
-        /* =========================
-           TELEBIRR / CBE BIRR
-        ========================= */
-
         if (
-          paymentMethod === "telebirr" ||
-          paymentMethod === "cbebirr"
+          result &&
+          result.checkout_url
         ) {
-
-          if (
-            !result ||
-            result.success !== true ||
-            !result.tx_ref
-          ) {
-
-            throw new Error(
-              result?.message ||
-              "Telebirr/CBE Birr payment jalqabsiisuun hin milkoofne."
-            );
-
-          }
-
-          alert(
-            paymentMethod === "telebirr"
-              ? "📱 Telebirr payment jalqabameera. Mee bilbila keessan ilaalaa."
-              : "🏦 CBE Birr payment jalqabameera. Mee bilbila keessan ilaalaa."
-          );
-
-          paymentProcessing = false;
-
-          bookButton.disabled = false;
-
-          bookButton.textContent =
-            document.documentElement.lang === "en"
-              ? "📖 Order the Book"
-              : "📖 Kitaaba Ajaji";
-
-          return;
-        }
-
-
-        /* =========================
-           BANK
-        ========================= */
-
-        if (
-          paymentMethod === "bank"
-        ) {
-
-          if (
-            !result ||
-            result.success !== true ||
-            !result.bank_ref
-          ) {
-
-            throw new Error(
-              result?.message ||
-              "Bank payment jalqabsiisuun hin milkoofne."
-            );
-
-          }
-
-          alert(
-            "🏦 Bank payment jalqabameera. Mee receipt keessan ergaa."
-          );
-
-          paymentProcessing = false;
-
-          bookButton.disabled = false;
-
-          bookButton.textContent =
-            document.documentElement.lang === "en"
-              ? "📖 Order the Book"
-              : "📖 Kitaaba Ajaji";
-
-          return;
-        }
-
-
-        /* =========================
-           CHAPA
-        ========================= */
-
-        if (
-          paymentMethod === "chapa"
-        ) {
-
-          if (
-            !result ||
-            !result.checkout_url
-          ) {
-
-            throw new Error(
-              "Checkout URL not found"
-            );
-
-          }
 
           window.location.replace(
             result.checkout_url
@@ -2520,13 +2287,9 @@ if (!bookButton) {
           return;
         }
 
-
-        /* =========================
-           UNKNOWN PAYMENT METHOD
-        ========================= */
-
         throw new Error(
-          "Payment method hin beekamne."
+          result?.message ||
+          "Checkout URL not found"
         );
 
       } catch (error) {
@@ -2536,13 +2299,11 @@ if (!bookButton) {
           error
         );
 
-
         alert(
           document.documentElement.lang === "en"
             ? "❌ An error occurred. Please try again."
             : "❌ Rakkoon uumameera. Mee irra deebi'ii yaali."
         );
-
 
         paymentProcessing = false;
 
