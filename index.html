@@ -2591,7 +2591,6 @@ paymentMethodInputs.forEach(
   }
 );
 
-
 /* =========================
    BOOK PAYMENT
 ========================= */
@@ -2612,82 +2611,6 @@ if (!bookButton) {
         return;
       }
 
-/* =========================
-   CHECK PAYMENT AFTER LOAD
-========================= */
-
-(function() {
-
-  const params =
-    new URLSearchParams(
-      window.location.search
-    );
-
-
-  /* =========================
-     CHAPA SUCCESS
-  ========================= */
-
-  const payment =
-    params.get("payment");
-
-  const tx_ref =
-    params.get("tx_ref");
-
-
-  if (
-    payment === "success" &&
-    tx_ref
-  ) {
-
-    verifyBookPayment(
-      tx_ref
-    );
-
-  }
-
-
-  /* =========================
-     BANK PAYMENT
-  ========================= */
-
-  const savedBankRef =
-    localStorage.getItem(
-      "bookBankRef"
-    );
-
-
-  if (savedBankRef) {
-
-    paymentProcessing = true;
-
-    if (paymentStatus) {
-
-      paymentStatus.style.display =
-        "block";
-
-      paymentStatus.style.background =
-        "#fff8e1";
-
-      paymentStatus.style.color =
-        "#8d6e00";
-
-      paymentStatus.textContent =
-        document.documentElement.lang === "en"
-          ? "⏳ Checking payment approval..."
-          : "⏳ Mirkaneessa kaffaltii ilaalaa jira...";
-
-    }
-
-
-    waitForBankApproval(
-      savedBankRef
-    );
-
-  }
-
-})();
-
       /* =========================
          GET FORM VALUES
       ========================= */
@@ -2707,6 +2630,10 @@ if (!bookButton) {
           "book-phone"
         );
 
+      const receiptInput =
+        document.getElementById(
+          "book-receipt"
+        );
 
       const name =
         nameInput
@@ -2758,6 +2685,31 @@ if (!bookButton) {
 
 
       /* =========================
+         RECEIPT VALIDATION
+         TELEBIRR / CBE BIRR
+      ========================= */
+
+      if (
+        paymentMethod === "telebirr" ||
+        paymentMethod === "cbebirr"
+      ) {
+
+        if (
+          !receiptInput ||
+          !receiptInput.files ||
+          !receiptInput.files[0]
+        ) {
+
+          alert(
+            "Mee receipt kaffaltii kee fe'i."
+          );
+
+          return;
+        }
+      }
+
+
+      /* =========================
          START PAYMENT
       ========================= */
 
@@ -2792,7 +2744,7 @@ if (!bookButton) {
       try {
 
         /* =========================
-           SEND TO CLOUDFLARE WORKER
+           CREATE PAYMENT
         ========================= */
 
         const response =
@@ -2856,6 +2808,7 @@ if (!bookButton) {
 
         /* =========================
            TELEBIRR / CBE BIRR
+           MANUAL RECEIPT
         ========================= */
 
         if (
@@ -2864,8 +2817,182 @@ if (!bookButton) {
             paymentMethod === "cbebirr"
           ) &&
           result &&
-          result.success === true
+          result.success === true &&
+          result.bank_ref
         ) {
+
+          const file =
+            receiptInput.files[0];
+
+
+          /* =========================
+             READ RECEIPT
+          ========================= */
+
+          const receiptData =
+            await new Promise(
+              (resolve, reject) => {
+
+                const reader =
+                  new FileReader();
+
+                reader.onload =
+                  function () {
+
+                    resolve(
+                      reader.result
+                    );
+
+                  };
+
+                reader.onerror =
+                  function () {
+
+                    reject(
+                      new Error(
+                        "Receipt dubbisuun hin danda'amne."
+                      )
+                    );
+
+                  };
+
+                reader.readAsDataURL(
+                  file
+                );
+              }
+            );
+
+
+          /* =========================
+             SUBMIT RECEIPT
+          ========================= */
+
+          if (paymentStatus) {
+
+            paymentStatus.textContent =
+              document.documentElement.lang === "en"
+                ? "📸 Sending receipt..."
+                : "📸 Receipt ergaa jira...";
+          }
+
+
+          const receiptResponse =
+            await fetch(
+              PAYMENT_WORKER +
+              "/submit-bank-payment",
+              {
+                method: "POST",
+
+                headers: {
+                  "Content-Type":
+                    "application/json"
+                },
+
+                body:
+                  JSON.stringify({
+
+                    bank_ref:
+                      result.bank_ref,
+
+                    name:
+                      name,
+
+                    email:
+                      email,
+
+                    phone:
+                      phone,
+
+                    payment_method:
+                      paymentMethod,
+
+                    receipt:
+                      receiptData
+                  })
+              }
+            );
+
+
+          const receiptResult =
+            await receiptResponse.json();
+
+
+          console.log(
+            "Receipt response:",
+            receiptResult
+          );
+
+
+          if (
+            !receiptResponse.ok ||
+            !receiptResult.success
+          ) {
+
+            throw new Error(
+              receiptResult?.message ||
+              "Receipt erguun hin milkoofne."
+            );
+          }
+
+
+          /* =========================
+             SAVE BANK REFERENCE
+          ========================= */
+
+          localStorage.setItem(
+            "bookBankRef",
+            result.bank_ref
+          );
+
+
+          /* =========================
+             EMAIL NOTIFICATION
+          ========================= */
+
+          try {
+
+            await emailjs.send(
+              "service_l9iavpf",
+              "template_9e70qsl",
+              {
+
+                name:
+                  name,
+
+                email:
+                  email,
+
+                phone:
+                  phone,
+
+                payment_method:
+                  paymentMethod,
+
+                amount:
+                  "350",
+
+                bank_ref:
+                  result.bank_ref
+              }
+            );
+
+            console.log(
+              "Admin notification sent."
+            );
+
+          } catch (emailError) {
+
+            console.error(
+              "Admin email notification failed:",
+              emailError
+            );
+
+          }
+
+
+          /* =========================
+             SHOW WAITING MESSAGE
+          ========================= */
 
           if (paymentStatus) {
 
@@ -2873,34 +3000,32 @@ if (!bookButton) {
               "block";
 
             paymentStatus.style.background =
-              "#e8f5e9";
+              "#fff8e1";
 
             paymentStatus.style.color =
-              "#1b5e20";
+              "#8d6e00";
 
             paymentStatus.textContent =
               document.documentElement.lang === "en"
-                ? "📱 Payment request sent. Please check your phone and authorize the payment."
-                : "📱 Gaaffiin kaffaltii ergameera. Mee bilbila kee ilaaliitii kaffaltii mirkaneessi.";
+                ? "📸 Receipt received. Please wait for payment approval."
+                : "📸 Receipt nu gaheera. Mee mirkaneessa kaffaltii eegi.";
           }
+
+
+          bookButton.textContent =
+            document.documentElement.lang === "en"
+              ? "⏳ Waiting for approval..."
+              : "⏳ Mirkaneessa eeggachaa jira...";
 
 
           /* =========================
-             WAIT FOR PAYMENT
+             WAIT FOR ADMIN APPROVAL
           ========================= */
 
-          if (result.tx_ref) {
+          await waitForBankApproval(
+            result.bank_ref
+          );
 
-            await waitForMobilePayment(
-              result.tx_ref
-            );
-
-          } else {
-
-            throw new Error(
-              "tx_ref hin argamne."
-            );
-          }
 
           return;
         }
@@ -2914,6 +3039,7 @@ if (!bookButton) {
           result?.message ||
           "Payment initialization failed."
         );
+
 
       } catch (error) {
 
@@ -2953,7 +3079,6 @@ if (!bookButton) {
     }
   );
 }
-
 /* =========================
    CHECK PAYMENT AFTER LOAD
 ========================= */
@@ -2962,12 +3087,7 @@ window.addEventListener(
   "load",
   async function () {
 
-    /*
-      ALWAYS start with download disabled.
-    */
-
     resetDownloadButton();
-
 
     const params =
       new URLSearchParams(
@@ -2982,31 +3102,7 @@ window.addEventListener(
 
 
     /* =========================
-       FIND TX_REF
-    ========================= */
-
-    if (!tx_ref) {
-
-      const rawUrl =
-        window.location.href;
-
-      const match =
-        rawUrl.match(
-          /(?:[?&]|&amp;)tx_ref=([^&]+)/
-        );
-
-      if (match) {
-
-        tx_ref =
-          decodeURIComponent(
-            match[1]
-          );
-      }
-    }
-
-
-    /* =========================
-       NEW SUCCESSFUL PAYMENT
+       CHAPA SUCCESS
     ========================= */
 
     if (
@@ -3015,32 +3111,16 @@ window.addEventListener(
     ) {
 
       console.log(
-        "New payment found:",
+        "Checking Chapa payment:",
         tx_ref
       );
 
-
       const verified =
-        await verifyBookPayment(tx_ref);
-
-
-      if (verified) {
-
-        /*
-          Payment verified.
-          PDF download is now available
-          for ONE download only.
-        */
-
-        console.log(
-          "Payment verified. One download allowed."
+        await verifyBookPayment(
+          tx_ref
         );
 
-
-        /*
-          Remove payment parameters
-          from browser URL.
-        */
+      if (verified) {
 
         window.history.replaceState(
           {},
@@ -3048,16 +3128,24 @@ window.addEventListener(
           window.location.pathname
         );
 
-      } else {
+        return;
+      }
 
-        resetDownloadButton();
+      if (paymentStatus) {
 
+        paymentStatus.style.display =
+          "block";
 
-        alert(
+        paymentStatus.style.background =
+          "#ffebee";
+
+        paymentStatus.style.color =
+          "#c62828";
+
+        paymentStatus.textContent =
           document.documentElement.lang === "en"
-            ? "❌ Your payment could not be verified."
-            : "❌ Kaffaltiin kee sirriitti mirkanaa'uu hin dandeenye."
-        );
+            ? "❌ Payment could not be verified."
+            : "❌ Kaffaltiin kee mirkanaa'uu hin dandeenye.";
       }
 
       return;
@@ -3065,19 +3153,44 @@ window.addEventListener(
 
 
     /* =========================
-       NO PREVIOUS PAYMENT
-       ========================= */
+       BANK RECEIPT
+    ========================= */
 
-    /*
-      IMPORTANT:
-      We intentionally DO NOT read
-      bookPaymentTxRef from localStorage.
+    const savedBankRef =
+      localStorage.getItem(
+        "bookBankRef"
+      );
 
-      Therefore an old payment cannot
-      reactivate the PDF button.
-    */
+    if (savedBankRef) {
 
-    resetDownloadButton();
+      console.log(
+        "Checking bank payment:",
+        savedBankRef
+      );
+
+      paymentProcessing = true;
+
+      if (paymentStatus) {
+
+        paymentStatus.style.display =
+          "block";
+
+        paymentStatus.style.background =
+          "#fff8e1";
+
+        paymentStatus.style.color =
+          "#8d6e00";
+
+        paymentStatus.textContent =
+          document.documentElement.lang === "en"
+            ? "⏳ Checking payment approval..."
+            : "⏳ Mirkaneessa kaffaltii ilaalaa jira...";
+      }
+
+      await waitForBankApproval(
+        savedBankRef
+      );
+    }
 
   }
 );
