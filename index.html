@@ -2163,6 +2163,11 @@ function showPaidBook(reference, type) {
       "important"
     );
 
+    successMessage.textContent =
+      document.documentElement.lang === "en"
+        ? "🎉 Payment successful! Your PDF is ready."
+        : "🎉 Kaffaltiin kee milkaa'eera! PDF keessan qophiidha.";
+
   }
 
   downloadButton.disabled = false;
@@ -2228,17 +2233,9 @@ function showPaidBook(reference, type) {
 
     }
 
-
-    setTimeout(function () {
-
-      downloadButton.disabled = true;
-
-    }, 1000);
-
   };
 
 }
-
 
 /* =========================
    VERIFY CHAPA PAYMENT
