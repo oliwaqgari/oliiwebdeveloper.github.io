@@ -1832,7 +1832,26 @@ footer p:last-child {
   </p>
 
 </div>
+<div id="receipt-upload" style="display:none; margin:15px 0; padding:15px; background:#f4f8ff; border:1px solid #d6e4f5; border-radius:10px;">
 
+  <strong>📸 Receipt Kaffaltii Ergi</strong>
+
+  <p style="margin:8px 0;">
+    Kaffaltii 350 BIRR erga raawwattanii booda,
+    receipt keessan asitti fe'i.
+  </p>
+
+  <input
+    type="file"
+    id="book-receipt"
+    accept="image/*,application/pdf"
+  >
+
+  <small style="display:block; margin-top:8px;">
+    Suuraa ykn PDF qofa. Faayilichi xiqqaa haa ta'u.
+  </small>
+
+</div>
 <div
   id="payment-status"
   style="
@@ -2085,6 +2104,13 @@ const downloadButton =
 const successMessage =
   document.getElementById("payment-success-message");
 
+const receiptUpload =
+  document.getElementById("receipt-upload");
+
+const receiptInput =
+  document.getElementById("book-receipt");
+
+
 if (successMessage) {
   successMessage.style.display = "none";
 }
@@ -2094,6 +2120,7 @@ const PAYMENT_WORKER =
   "https://olii-book-payment.oliwaqgari.workers.dev";
 
 let paymentProcessing = false;
+
 
 /* =========================
    RESET DOWNLOAD BUTTON
@@ -2122,17 +2149,21 @@ function resetDownloadButton() {
    SHOW PAID BOOK
 ========================= */
 
-function showPaidBook(tx_ref) {
+function showPaidBook(reference, type) {
 
-  if (!tx_ref || !downloadButton) return;
+  if (!reference || !downloadButton) {
+    return;
+  }
 
- if (successMessage) {
-  successMessage.style.setProperty(
-    "display",
-    "block",
-    "important"
-  );
-}
+  if (successMessage) {
+
+    successMessage.style.setProperty(
+      "display",
+      "block",
+      "important"
+    );
+
+  }
 
   downloadButton.disabled = false;
 
@@ -2148,12 +2179,10 @@ function showPaidBook(tx_ref) {
 
   downloadButton.onclick = function () {
 
-    /* Prevent second click */
     if (downloadButton.disabled) {
       return;
     }
 
-    /* Disable immediately */
     downloadButton.disabled = true;
 
     downloadButton.textContent =
@@ -2161,10 +2190,10 @@ function showPaidBook(tx_ref) {
         ? "✅ Download Started"
         : "✅ Buufachuun jalqabame";
 
-    /*
-      Payment/download already used.
-      Remove saved payment information.
-    */
+
+    /* =========================
+       CLEAR SAVED PAYMENT
+    ========================= */
 
     localStorage.removeItem(
       "bookPaymentTxRef"
@@ -2174,20 +2203,31 @@ function showPaidBook(tx_ref) {
       "bookPaymentSuccess"
     );
 
-
-    /*
-      Start PDF download
-    */
-
-    window.location.href =
-      PAYMENT_WORKER +
-      "/download-pdf?tx_ref=" +
-      encodeURIComponent(tx_ref);
+    localStorage.removeItem(
+      "bookBankRef"
+    );
 
 
-    /*
-      Make sure button stays disabled.
-    */
+    /* =========================
+       DOWNLOAD PDF
+    ========================= */
+
+    if (type === "bank") {
+
+      window.location.href =
+        PAYMENT_WORKER +
+        "/download-pdf?bank_ref=" +
+        encodeURIComponent(reference);
+
+    } else {
+
+      window.location.href =
+        PAYMENT_WORKER +
+        "/download-pdf?tx_ref=" +
+        encodeURIComponent(reference);
+
+    }
+
 
     setTimeout(function () {
 
@@ -2196,11 +2236,12 @@ function showPaidBook(tx_ref) {
     }, 1000);
 
   };
+
 }
 
 
 /* =========================
-   VERIFY PAYMENT
+   VERIFY CHAPA PAYMENT
 ========================= */
 
 async function verifyBookPayment(tx_ref) {
@@ -2222,7 +2263,7 @@ async function verifyBookPayment(tx_ref) {
       await response.json();
 
     console.log(
-      "Payment verification:",
+      "Chapa payment verification:",
       result
     );
 
@@ -2233,12 +2274,10 @@ async function verifyBookPayment(tx_ref) {
       result.paid === true
     ) {
 
-      /*
-        Do NOT save the payment permanently.
-        It is valid only for this download.
-      */
-
-      showPaidBook(tx_ref);
+      showPaidBook(
+        tx_ref,
+        "chapa"
+      );
 
       return true;
     }
@@ -2248,21 +2287,100 @@ async function verifyBookPayment(tx_ref) {
   } catch (error) {
 
     console.error(
-      "Payment verification error:",
+      "Chapa verification error:",
       error
     );
 
     return false;
   }
 }
-  /* =========================
-   WAIT FOR MOBILE PAYMENT
+
+
+/* =========================
+   VERIFY BANK PAYMENT
 ========================= */
 
-async function waitForMobilePayment(tx_ref) {
+async function verifyBankPayment(bank_ref) {
 
-  const maxAttempts = 30;
-  const delay = 3000;
+  if (!bank_ref) {
+    return false;
+  }
+
+  try {
+
+    const response =
+      await fetch(
+        PAYMENT_WORKER +
+        "/verify-bank-payment?bank_ref=" +
+        encodeURIComponent(bank_ref)
+      );
+
+    const result =
+      await response.json();
+
+    console.log(
+      "Bank payment verification:",
+      result
+    );
+
+
+    if (
+      result &&
+      result.success === true &&
+      result.paid === true
+    ) {
+
+      paymentProcessing = false;
+
+      if (paymentStatus) {
+
+        paymentStatus.style.display =
+          "block";
+
+        paymentStatus.style.background =
+          "#e8f5e9";
+
+        paymentStatus.style.color =
+          "#1b5e20";
+
+        paymentStatus.textContent =
+          document.documentElement.lang === "en"
+            ? "🎉 Payment approved! Your PDF is ready."
+            : "🎉 Kaffaltiin mirkanaa'eera! PDF keessan qophiidha.";
+
+      }
+
+      showPaidBook(
+        bank_ref,
+        "bank"
+      );
+
+      return true;
+    }
+
+    return false;
+
+  } catch (error) {
+
+    console.error(
+      "Bank payment verification error:",
+      error
+    );
+
+    return false;
+  }
+
+}
+
+
+/* =========================
+   WAIT FOR BANK APPROVAL
+========================= */
+
+async function waitForBankApproval(bank_ref) {
+
+  const maxAttempts = 60;
+  const delay = 5000;
 
   for (
     let attempt = 0;
@@ -2270,79 +2388,57 @@ async function waitForMobilePayment(tx_ref) {
     attempt++
   ) {
 
-    try {
-
-      const response =
-        await fetch(
-          PAYMENT_WORKER +
-          "/verify-payment?tx_ref=" +
-          encodeURIComponent(tx_ref)
-        );
-
-      const result =
-        await response.json();
-
-      console.log(
-        "Mobile payment check:",
-        result
+    const approved =
+      await verifyBankPayment(
+        bank_ref
       );
 
-      if (
-        result &&
-        result.success === true &&
-        result.paid === true
-      ) {
+    if (approved) {
+      return true;
+    }
 
-        paymentProcessing = false;
+    if (paymentStatus) {
 
-        if (paymentStatus) {
+      paymentStatus.style.display =
+        "block";
 
-          paymentStatus.style.display =
-            "block";
+      paymentStatus.style.background =
+        "#fff8e1";
 
-          paymentStatus.style.background =
-            "#e8f5e9";
+      paymentStatus.style.color =
+        "#8d6e00";
 
-          paymentStatus.style.color =
-            "#1b5e20";
+      paymentStatus.textContent =
+        document.documentElement.lang === "en"
+          ? "⏳ Receipt received. Waiting for payment approval..."
+          : "⏳ Receipt keessan nu gaheera. Mirkaneessa kaffaltii eeggachaa jira...";
 
-          paymentStatus.textContent =
-            document.documentElement.lang === "en"
-              ? "🎉 Payment successful!"
-              : "🎉 Kaffaltiin milkaa'eera!";
-        }
-
-        showPaidBook(tx_ref);
-
-        return true;
-      }
-
-    } catch (error) {
-
-      console.error(
-        "Mobile payment check error:",
-        error
-      );
     }
 
     await new Promise(
       function(resolve) {
+
         setTimeout(
           resolve,
           delay
         );
+
       }
     );
+
   }
+
 
   paymentProcessing = false;
 
-  bookButton.disabled = false;
+  if (bookButton) {
+    bookButton.disabled = false;
 
-  bookButton.textContent =
-    document.documentElement.lang === "en"
-      ? "💳 Continue Payment"
-      : "💳 Kaffaltii Itti Fufi";
+    bookButton.textContent =
+      document.documentElement.lang === "en"
+        ? "💳 Continue Payment"
+        : "💳 Kaffaltii Itti Fufi";
+  }
 
   if (paymentStatus) {
 
@@ -2357,15 +2453,18 @@ async function waitForMobilePayment(tx_ref) {
 
     paymentStatus.textContent =
       document.documentElement.lang === "en"
-        ? "⏳ Payment has not been confirmed yet. Please check your phone and try again."
-        : "⏳ Kaffaltiin ammallee hin mirkanoofne. Mee bilbila kee ilaaliitii irra deebi'ii yaali.";
+        ? "⏳ Approval is still pending. Please wait and refresh later."
+        : "⏳ Mirkaneessi ammallee eeggachaa jira. Mee yeroo muraasa booda deebi'ii ilaali.";
+
   }
 
   return false;
+
 }
-    /* =========================
-   BOOK ORDER
-   CHAPA / TELEBIRR / CBE BIRR
+
+
+/* =========================
+   PAYMENT METHOD
 ========================= */
 
 const paymentMethodInputs =
@@ -2403,6 +2502,30 @@ paymentMethodInputs.forEach(
         const method =
           this.value;
 
+
+        /* =========================
+           CHAPA
+        ========================= */
+
+        if (method === "chapa") {
+
+          if (mobilePaymentInfo) {
+            mobilePaymentInfo.style.display =
+              "none";
+          }
+
+          if (receiptUpload) {
+            receiptUpload.style.display =
+              "none";
+          }
+
+        }
+
+
+        /* =========================
+           TELEBIRR / CBE BIRR
+        ========================= */
+
         if (
           method === "telebirr" ||
           method === "cbebirr"
@@ -2412,37 +2535,59 @@ paymentMethodInputs.forEach(
 
             mobilePaymentInfo.style.display =
               "block";
+
+            mobilePaymentInfo.innerHTML = `
+
+              <strong>💳 Kaffaltii ${method === "telebirr" ? "Telebirr" : "CBE Birr"}</strong>
+
+              <p>
+                Mee lakkoofsa armaan gadii irratti
+                <strong>350 BIRR</strong> kaffali.
+              </p>
+
+              <p>
+                💰 Gatii:
+                <strong>350 BIRR</strong>
+              </p>
+
+              <p>
+                ${
+                  method === "telebirr"
+                    ? "📱 Telebirr: 0979025185"
+                    : "🏦 CBE Birr: 1000394655353"
+                }
+              </p>
+
+              <p>
+                👤 Maqaa:
+                <strong>Oliyaad Waaqgaarii</strong>
+              </p>
+
+              <p style="color:#1565c0;">
+                📸 Kaffaltii erga raawwattanii booda
+                receipt keessan asitti fe'i.
+              </p>
+
+            `;
+
           }
 
-          if (selectedPaymentPhone) {
-
-            const phoneInput =
-              document.getElementById(
-                "book-phone"
-              );
-
-            selectedPaymentPhone.textContent =
-              phoneInput
-                ? phoneInput.value.trim()
-                : "";
+          if (receiptUpload) {
+            receiptUpload.style.display =
+              "block";
           }
 
-        } else {
-
-          if (mobilePaymentInfo) {
-
-            mobilePaymentInfo.style.display =
-              "none";
-          }
         }
 
-        if (paymentStatus) {
 
+        if (paymentStatus) {
           paymentStatus.style.display =
             "none";
         }
+
       }
     );
+
   }
 );
 
@@ -2467,6 +2612,606 @@ if (!bookButton) {
         return;
       }
 
+
+      /* =========================
+         GET FORM VALUES
+      ========================= */
+
+      const nameInput =
+        document.getElementById(
+          "book-name"
+        );
+
+      const emailInput =
+        document.getElementById(
+          "book-email"
+        );
+
+      const phoneInput =
+        document.getElementById(
+          "book-phone"
+        );
+
+
+      const name =
+        nameInput
+          ? nameInput.value.trim()
+          : "";
+
+      const email =
+        emailInput
+          ? emailInput.value.trim()
+          : "";
+
+      const phone =
+        phoneInput
+          ? phoneInput.value.trim()
+          : "";
+
+
+      /* =========================
+         GET PAYMENT METHOD
+      ========================= */
+
+      const selectedMethod =
+        document.querySelector(
+          'input[name="payment-method"]:checked'
+        );
+
+      const paymentMethod =
+        selectedMethod
+          ? selectedMethod.value
+          : "chapa";
+
+
+      /* =========================
+         VALIDATE BASIC FORM
+      ========================= */
+
+      if (
+        !name ||
+        !email ||
+        !phone
+      ) {
+
+        alert(
+          "Maqaa, email fi lakkoofsa bilbilaa guuti."
+        );
+
+        return;
+      }
+
+
+      /* =========================
+         MANUAL RECEIPT PAYMENT
+      ========================= */
+
+      if (
+        paymentMethod === "telebirr" ||
+        paymentMethod === "cbebirr"
+      ) {
+
+        if (
+          !receiptInput ||
+          !receiptInput.files ||
+          !receiptInput.files[0]
+        ) {
+
+          alert(
+            "Mee receipt kaffaltii keessanii filadhaa."
+          );
+
+          return;
+        }
+
+
+        const receiptFile =
+          receiptInput.files[0];
+
+
+        /* =========================
+           FILE SIZE CHECK
+        ========================= */
+
+        if (
+          receiptFile.size >
+          1800000
+        ) {
+
+          alert(
+            "Receipt baay'ee guddaa dha. Mee suuraa xiqqaa ykn PDF xiqqaa fayyadami."
+          );
+
+          return;
+        }
+
+
+        paymentProcessing = true;
+
+        bookButton.disabled = true;
+
+        bookButton.textContent =
+          document.documentElement.lang === "en"
+            ? "⏳ Uploading receipt..."
+            : "⏳ Receipt ergaa jira...";
+
+
+        if (paymentStatus) {
+
+          paymentStatus.style.display =
+            "block";
+
+          paymentStatus.style.background =
+            "#f4f8ff";
+
+          paymentStatus.style.color =
+            "#082f6b";
+
+          paymentStatus.textContent =
+            document.documentElement.lang === "en"
+              ? "⏳ Preparing receipt..."
+              : "⏳ Receipt qopheessaa jira...";
+
+        }
+
+
+        try {
+
+          /* =========================
+             CREATE BANK REFERENCE
+          ========================= */
+
+          const createResponse =
+            await fetch(
+              PAYMENT_WORKER +
+              "/create-payment",
+              {
+                method:"POST",
+
+                headers:{
+                  "Content-Type":
+                    "application/json"
+                },
+
+                body:
+                  JSON.stringify({
+
+                    name:name,
+
+                    email:email,
+
+                    phone:phone,
+
+                    payment_method:"bank"
+
+                  })
+              }
+            );
+
+
+          const createResult =
+            await createResponse.json();
+
+
+          console.log(
+            "Bank reference response:",
+            createResult
+          );
+
+
+          if (
+            !createResult ||
+            createResult.success !== true ||
+            !createResult.bank_ref
+          ) {
+
+            throw new Error(
+              createResult?.message ||
+              "Bank reference uumamuu hin dandeenye."
+            );
+
+          }
+
+
+          const bank_ref =
+            createResult.bank_ref;
+
+
+          /* =========================
+             READ RECEIPT
+          ========================= */
+
+          const receiptData =
+            await new Promise(
+              function(resolve, reject) {
+
+                const reader =
+                  new FileReader();
+
+                reader.onload =
+                  function() {
+                    resolve(
+                      reader.result
+                    );
+                  };
+
+                reader.onerror =
+                  function() {
+                    reject(
+                      new Error(
+                        "Receipt dubbisuu hin dandeenye."
+                      )
+                    );
+                  };
+
+                reader.readAsDataURL(
+                  receiptFile
+                );
+
+              }
+            );
+
+
+          /* =========================
+             SUBMIT RECEIPT
+          ========================= */
+
+          const submitResponse =
+            await fetch(
+              PAYMENT_WORKER +
+              "/submit-bank-payment",
+              {
+                method:"POST",
+
+                headers:{
+                  "Content-Type":
+                    "application/json"
+                },
+
+                body:
+                  JSON.stringify({
+
+                    bank_ref:
+                      bank_ref,
+
+                    name:
+                      name,
+
+                    email:
+                      email,
+
+                    phone:
+                      phone,
+
+                    payment_method:
+                      paymentMethod,
+
+                    receipt:
+                      receiptData
+
+                  })
+
+              }
+            );
+
+
+          const submitResult =
+            await submitResponse.json();
+
+
+          console.log(
+            "Receipt submit response:",
+            submitResult
+          );
+
+
+          if (
+            !submitResult ||
+            submitResult.success !== true
+          ) {
+
+            throw new Error(
+              submitResult?.message ||
+              "Receipt erguun hin milkoofne."
+            );
+
+          }
+
+
+          /* =========================
+             SAVE BANK REFERENCE
+          ========================= */
+
+          localStorage.setItem(
+            "bookBankRef",
+            bank_ref
+          );
+
+
+          if (paymentStatus) {
+
+            paymentStatus.style.display =
+              "block";
+
+            paymentStatus.style.background =
+              "#fff8e1";
+
+            paymentStatus.style.color =
+              "#8d6e00";
+
+            paymentStatus.textContent =
+              document.documentElement.lang === "en"
+                ? "⏳ Receipt received. Waiting for approval..."
+                : "⏳ Receipt keessan nu gaheera. Mirkaneessa eeggachaa jira...";
+
+          }
+
+
+          /* =========================
+             WAIT FOR ADMIN APPROVAL
+          ========================= */
+
+          await waitForBankApproval(
+            bank_ref
+          );
+
+          return;
+
+        } catch (error) {
+
+          console.error(
+            "Receipt payment error:",
+            error
+          );
+
+
+          paymentProcessing = false;
+
+          bookButton.disabled = false;
+
+          bookButton.textContent =
+            document.documentElement.lang === "en"
+              ? "💳 Continue Payment"
+              : "💳 Kaffaltii Itti Fufi";
+
+
+          if (paymentStatus) {
+
+            paymentStatus.style.display =
+              "block";
+
+            paymentStatus.style.background =
+              "#ffebee";
+
+            paymentStatus.style.color =
+              "#c62828";
+
+            paymentStatus.textContent =
+              document.documentElement.lang === "en"
+                ? "❌ Receipt could not be submitted."
+                : "❌ Receipt erguun hin milkoofne.";
+
+          }
+
+        }
+
+        return;
+      }
+
+
+      /* =========================
+         CHAPA PAYMENT
+      ========================= */
+
+      paymentProcessing = true;
+
+      bookButton.disabled = true;
+
+      bookButton.textContent =
+        document.documentElement.lang === "en"
+          ? "⏳ Processing..."
+          : "⏳ Qopheessaa jira...";
+
+
+      if (paymentStatus) {
+
+        paymentStatus.style.display =
+          "block";
+
+        paymentStatus.style.background =
+          "#f4f8ff";
+
+        paymentStatus.style.color =
+          "#082f6b";
+
+        paymentStatus.textContent =
+          document.documentElement.lang === "en"
+            ? "⏳ Starting payment..."
+            : "⏳ Kaffaltii jalqabsiisaa jira...";
+
+      }
+
+
+      try {
+
+        const response =
+          await fetch(
+            PAYMENT_WORKER +
+            "/create-payment",
+            {
+              method:"POST",
+
+              headers:{
+                "Content-Type":
+                  "application/json"
+              },
+
+              body:
+                JSON.stringify({
+
+                  name:name,
+
+                  email:email,
+
+                  phone:phone,
+
+                  payment_method:"chapa"
+
+                })
+
+            }
+          );
+
+
+        const result =
+          await response.json();
+
+
+        console.log(
+          "Chapa payment response:",
+          result
+        );
+
+
+        if (
+          result &&
+          result.checkout_url
+        ) {
+
+          window.location.replace(
+            result.checkout_url
+          );
+
+          return;
+
+        }
+
+
+        throw new Error(
+          result?.message ||
+          "Payment initialization failed."
+        );
+
+
+      } catch (error) {
+
+        console.error(
+          "Chapa payment error:",
+          error
+        );
+
+
+        paymentProcessing = false;
+
+        bookButton.disabled = false;
+
+        bookButton.textContent =
+          document.documentElement.lang === "en"
+            ? "💳 Continue Payment"
+            : "💳 Kaffaltii Itti Fufi";
+
+
+        if (paymentStatus) {
+
+          paymentStatus.style.display =
+            "block";
+
+          paymentStatus.style.background =
+            "#ffebee";
+
+          paymentStatus.style.color =
+            "#c62828";
+
+          paymentStatus.textContent =
+            document.documentElement.lang === "en"
+              ? "❌ Payment could not be started."
+              : "❌ Kaffaltii jalqabsiisuun hin milkoofne.";
+
+        }
+
+      }
+
+    }
+  );
+
+}
+
+
+/* =========================
+   CHECK PAYMENT AFTER LOAD
+========================= */
+
+(function() {
+
+  const params =
+    new URLSearchParams(
+      window.location.search
+    );
+
+
+  /* =========================
+     CHAPA SUCCESS
+  ========================= */
+
+  const payment =
+    params.get("payment");
+
+  const tx_ref =
+    params.get("tx_ref");
+
+
+  if (
+    payment === "success" &&
+    tx_ref
+  ) {
+
+    verifyBookPayment(
+      tx_ref
+    );
+
+  }
+
+
+  /* =========================
+     BANK PAYMENT
+  ========================= */
+
+  const savedBankRef =
+    localStorage.getItem(
+      "bookBankRef"
+    );
+
+
+  if (savedBankRef) {
+
+    paymentProcessing = true;
+
+    if (paymentStatus) {
+
+      paymentStatus.style.display =
+        "block";
+
+      paymentStatus.style.background =
+        "#fff8e1";
+
+      paymentStatus.style.color =
+        "#8d6e00";
+
+      paymentStatus.textContent =
+        document.documentElement.lang === "en"
+          ? "⏳ Checking payment approval..."
+          : "⏳ Mirkaneessa kaffaltii ilaalaa jira...";
+
+    }
+
+
+    waitForBankApproval(
+      savedBankRef
+    );
+
+  }
+
+})();
 
       /* =========================
          GET FORM VALUES
