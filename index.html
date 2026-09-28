@@ -1014,69 +1014,6 @@ footer p:last-child {
   text-align: center;
   box-shadow: 0 5px 15px rgba(0,0,0,0.08);
 }
-  .other-payment {
-  margin: 20px 0;
-}
-
-.other-payment-button {
-  width: 100%;
-  padding: 14px;
-  border: none;
-  border-radius: 10px;
-  background: #f4f8ff;
-  color: #082f6b;
-  font-size: 16px;
-  font-weight: bold;
-  cursor: pointer;
-  border: 1px solid #d6e4f5;
-}
-
-.other-payment-button:hover {
-  background: #e8f1ff;
-}
-
-#payment-arrow {
-  margin-left: 8px;
-}
-
-.other-payment-details {
-  display: none;
-  margin-top: 12px;
-  padding: 15px;
-  background: #f4f8ff;
-  border-radius: 12px;
-  border: 1px solid #d6e4f5;
-  text-align: left;
-}
-
-.other-payment-details.show {
-  display: block;
-}
-
-.payment-method {
-  margin-bottom: 12px;
-  padding: 12px;
-  background: #ffffff;
-  border-radius: 8px;
-}
-
-.payment-method strong {
-  color: #1565c0;
-}
-
-.payment-method p {
-  margin: 5px 0;
-}
-
-.payment-method span {
-  font-weight: bold;
-}
-
-.payment-note {
-  margin-top: 12px;
-  font-size: 14px;
-  color: #555;
-}
     .book-order-form {
   margin-top: 20px;
   padding: 20px;
@@ -1690,42 +1627,6 @@ footer p:last-child {
         <strong>350 BIRR</strong>
         <span>$2.15</span>
       </div>
-              
-<div class="other-payment">
-
-  <button
-    type="button"
-    class="other-payment-button"
-    onclick="toggleOtherPayment()">
-    💳 Karaa Kaffaltii Biroo
-    <span id="payment-arrow">▼</span>
-  </button>
-
-  <div id="other-payment-details" class="other-payment-details">
-
-    <div class="payment-method">
-      <strong>🏦 CBE Birr</strong>
-      <p>Lakkoofsa: <span>1000394655353</span></p>
-      <p>Maqaa: <span>Oliyaad Waaqgaarii</span></p>
-    </div>
-
-    <div class="payment-method">
-      <strong>📱 Telebirr</strong>
-      <p>Lakkoofsa: <span>0979025185</span></p>
-      <p>Maqaa: <span>Oliyaad Waaqgaarii</span></p>
-    </div>
-
-    <p class="payment-note">
-      📸 Kaffaltii erga raawwattanii booda receipt keessan nuuf ergaa.
-    </p>
-
-  </div>
-
-</div>
-
-        <p class="payment-note">
-          📸 Kaffaltii erga raawwattanii booda receipt keessan nuuf ergaa.
-        </p>
       </div>
 
     <!-- BUTTON JALQABAA -->
@@ -3932,18 +3833,6 @@ document.getElementById(
 
       }
     }
-function toggleOtherPayment() {
-  const details = document.getElementById("other-payment-details");
-  const arrow = document.getElementById("payment-arrow");
-
-  details.classList.toggle("show");
-
-  if (details.classList.contains("show")) {
-    arrow.textContent = "▲";
-  } else {
-    arrow.textContent = "▼";
-  }
-}
    
   </script>
 
