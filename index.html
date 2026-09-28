@@ -2987,10 +2987,16 @@ window.addEventListener(
 
     resetDownloadButton();
 
-    const params =
-      new URLSearchParams(
-        window.location.search
-      );
+   const cleanSearch =
+  window.location.search.replace(
+    /&amp;/g,
+    "&"
+  );
+
+const params =
+  new URLSearchParams(
+    cleanSearch
+  );
 
     const payment =
       params.get("payment");
