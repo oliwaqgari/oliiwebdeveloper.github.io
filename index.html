@@ -363,20 +363,29 @@
 }
 
 .about-profile-image img {
-  width: 230px;
-  height: 230px;
+  width: 250px;
+  height: 250px;
 
   object-fit: cover;
   border-radius: 50%;
 
-  border: 6px solid #1565c0;
+  border: 7px solid #1565c0;
 
   box-shadow:
-    0 10px 30px rgba(21, 101, 192, 0.25);
+    0 0 0 10px rgba(21, 101, 192, 0.08),
+    0 15px 35px rgba(21, 101, 192, 0.25);
 
   transition:
     transform 0.4s ease,
     box-shadow 0.4s ease;
+}
+
+.about-profile-image img:hover {
+  transform: scale(1.05);
+
+  box-shadow:
+    0 0 0 14px rgba(21, 101, 192, 0.10),
+    0 20px 45px rgba(21, 101, 192, 0.35);
 }
 
 .about-profile-image img:hover {
