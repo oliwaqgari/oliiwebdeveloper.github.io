@@ -445,8 +445,9 @@
 
 .projects-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 24px;
+  align-items: start;
 }
 
 .project-card {
@@ -824,10 +825,18 @@
 
 /* Responsive - Tablet */
 @media (max-width: 800px) {
+
   .services-grid {
     grid-template-columns: 1fr;
     gap: 20px;
   }
+
+  .projects-grid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
+}
 
   .service-card {
     padding: 28px 22px;
