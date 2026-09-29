@@ -592,6 +592,58 @@
   background: #0d47a1;
   transform: translateX(4px);
 }
+    /* =========================
+   PROJECT LEARNING
+========================= */
+
+.project-learn-button {
+  display: inline-block;
+  margin-top: 12px;
+  padding: 10px 16px;
+  border: none;
+  border-radius: 8px;
+  background: #eaf4ff;
+  color: #1565c0;
+  font-size: 14px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.3s ease;
+}
+
+.project-learn-button:hover {
+  background: #d5e9ff;
+  transform: translateY(-2px);
+}
+
+.project-learning {
+  display: none;
+  margin-top: 18px;
+  padding: 18px;
+  background: #f4f8ff;
+  border-left: 4px solid #1565c0;
+  border-radius: 10px;
+}
+
+.project-learning.show {
+  display: block;
+}
+
+.project-learning h4 {
+  margin: 0 0 12px;
+  color: #082f6b;
+  font-size: 18px;
+}
+
+.project-learning ul {
+  margin: 0;
+  padding-left: 20px;
+}
+
+.project-learning li {
+  margin-bottom: 9px;
+  color: #555;
+  line-height: 1.6;
+}
    /* SERVICES */
 .services-grid {
   display: grid;
@@ -1477,24 +1529,70 @@ footer p:last-child {
 
 </section>
 
- <!-- PROJECTS -->
-<section id="works">
+ <!-- PROJECT 1 -->
+<div class="project-card">
 
-  <h2 id="works-title">Hojiiwwan Koo</h2>
+  <div class="project-top">
+    <span class="project-number">01</span>
+    <span class="project-icon">🌐</span>
+  </div>
 
-<p class="section-intro" id="works-intro">
-    Pirojektoota ani hojjedhe fi irratti hojjechaa jiru.
-  </p>
+  <img
+    src="project1.png"
+    alt="Website Dhuunfaa Koo"
+    class="project-image"
+  >
 
-  <div class="projects-grid">
+  <div class="project-content">
 
-    <!-- PROJECT 1 -->
-    <div class="project-card">
+    <h3 id="project1-title">
+      Website Dhuunfaa Koo
+    </h3>
 
-      <div class="project-top">
-        <span class="project-number">01</span>
-        <span class="project-icon">🌐</span>
-      </div>
+    <p id="project1-text">
+      Website dhuunfaa koo kan hojii koo, dandeettii koo fi
+      tajaajilawwan ani kennu agarsiisu.
+    </p>
+
+    <div class="project-tags">
+      <span>HTML</span>
+      <span>CSS</span>
+      <span>JavaScript</span>
+    </div>
+
+    <button
+      class="project-learn-button"
+      onclick="toggleLearning('learning1')">
+      📖 Waan Irraa Baradhu
+    </button>
+
+    <div
+      class="project-learning"
+      id="learning1">
+
+      <h4>📚 Waan Irraa Barattu</h4>
+
+      <ul>
+        <li>HTML fayyadamuun caasaa website ijaaruu.</li>
+        <li>CSS fayyadamuun website bareechuu fi design gochuu.</li>
+        <li>JavaScript fayyadamuun website interactive gochuu.</li>
+        <li>Website mobile, tablet fi computer irratti madaqsuu.</li>
+        <li>GitHub Pages irratti website publish gochuu.</li>
+      </ul>
+
+    </div>
+
+    <a
+      href="https://oliwaqgari.github.io/oliiwebdeveloper.github.io/"
+      target="_blank"
+      class="project-link"
+      id="project1-button">
+      🔗 Pirojektii Ilaali →
+    </a>
+
+  </div>
+
+</div>
 
       <img
         src="project1.png"
@@ -1502,22 +1600,54 @@ footer p:last-child {
         class="project-image"
       >
 
-      <div class="project-content">
+     .project-learn-button {
+  display: inline-block;
+  margin-top: 12px;
+  padding: 10px 16px;
+  border: none;
+  border-radius: 8px;
+  background: #eaf4ff;
+  color: #1565c0;
+  font-size: 14px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.3s ease;
+}
 
-        <h3 id="project1-title">
-          Website Dhuunfaa Koo
-        </h3>
+.project-learn-button:hover {
+  background: #d5e9ff;
+  transform: translateY(-2px);
+}
 
-        <p id="project1-text">
-          Website dhuunfaa koo kan hojii koo, dandeettii koo
-          fi tajaajilawwan ani kennu agarsiisu.
-        </p>
+.project-learning {
+  display: none;
+  margin-top: 18px;
+  padding: 18px;
+  background: #f4f8ff;
+  border-left: 4px solid #1565c0;
+  border-radius: 10px;
+}
 
-        <div class="project-tags">
-          <span>HTML</span>
-          <span>CSS</span>
-          <span>JavaScript</span>
-        </div>
+.project-learning.show {
+  display: block;
+}
+
+.project-learning h4 {
+  margin: 0 0 12px;
+  color: #082f6b;
+  font-size: 18px;
+}
+
+.project-learning ul {
+  margin: 0;
+  padding-left: 20px;
+}
+
+.project-learning li {
+  margin-bottom: 9px;
+  color: #555;
+  line-height: 1.6;
+}
 
         <a
   href="https://oliwaqgari.github.io/oliiwebdeveloper.github.io/"
@@ -1534,80 +1664,210 @@ footer p:last-child {
 
 
     <!-- PROJECT 2 -->
-    <div class="project-card">
+<div class="project-card">
 
-      <div class="project-top">
-        <span class="project-number">02</span>
-        <span class="project-icon">📱</span>
-      </div>
+  <div class="project-top">
+    <span class="project-number">02</span>
+    <span class="project-icon">📱</span>
+  </div>
 
-      <div class="project-visual project-visual-2">
-  <img
-    src="project2.jpg"
-    alt="Responsive Web Design">
+  <div class="project-visual project-visual-2">
+    <img
+      src="project2.jpg"
+      alt="Responsive Web Design">
+  </div>
+
+  <div class="project-content">
+
+    <h3 id="project2-title">
+      Responsive Web Design
+    </h3>
+
+    <p id="project2-text">
+      Website kamiyyuu computer, tablet fi mobile irratti
+      sirriitti hojjetu design fi ijaaruu.
+    </p>
+
+    <div class="project-tags">
+      <span>Responsive</span>
+      <span>CSS</span>
+      <span>UI Design</span>
+    </div>
+
+    <button
+      class="project-learn-button"
+      onclick="toggleLearning('learning2')">
+      📖 Waan Irraa Baradhu
+    </button>
+
+    <div
+      class="project-learning"
+      id="learning2">
+
+      <h4>📚 Waan Irraa Barattu</h4>
+
+      <ul>
+        <li>Responsive design jechuun maal akka ta'e hubachuu.</li>
+        <li>CSS Media Query fayyadamuun screen sizes adda addaa madaqsuu.</li>
+        <li>Website mobile, tablet fi computer irratti sirriitti mul'achuu gochuu.</li>
+        <li>Suuraa fi elementoota screen size adda addaatti madaqsuu.</li>
+        <li>Design qulqulluu fi user-friendly ijaaruu.</li>
+      </ul>
+
+    </div>
+
+    <a
+      href="#contact"
+      class="project-link"
+      id="project2-button">
+      Ilaali / Na Quunnami →
+    </a>
+
+  </div>
+
 </div>
 
-      <div class="project-content">
+  <button
+    class="project-learn-button"
+    onclick="toggleLearning('learning2')">
+    📖 Waan Irraa Baradhu
+  </button>
 
-        <h3 id="project2-title">
-          Responsive Web Design
-        </h3>
+  <div class="project-learning" id="learning2">
 
-        <p id="project2-text">
-          Website kamiyyuu computer, tablet fi mobile irratti
-          sirriitti hojjetu design fi ijaaruu.
-        </p>
+    <h4>📚 Waan Irraa Barattu</h4>
 
-        <div class="project-tags">
-          <span>Responsive</span>
-          <span>CSS</span>
-          <span>UI Design</span>
-        </div>
+    <ul>
+      <li>Responsive design jechuun maal akka ta'e hubachuu.</li>
+      <li>CSS Media Query fayyadamuun screen sizes adda addaa madaqsuu.</li>
+      <li>Website mobile, tablet fi computer irratti sirriitti mul'achuu gochuu.</li>
+      <li>Suuraa fi elementoota screen size adda addaatti madaqsuu.</li>
+      <li>Design qulqulluu fi user-friendly ijaaruu.</li>
+    </ul>
 
-        <a
-          href="#contact"
-          class="project-link"
-          id="project2-button"
-        >
-          Ilaali / Na Quunnami →
-        </a>
+  </div>
 
-      </div>
+  <a
+    href="#contact"
+    class="project-link"
+    id="project2-button">
+    Ilaali / Na Quunnami →
+  </a>
+
+</div>
 
     </div>
 
 
     <!-- PROJECT 3 -->
-    <div class="project-card">
+<div class="project-card">
 
-      <div class="project-top">
-        <span class="project-number">03</span>
-        <span class="project-icon">📩</span>
-      </div>
+  <div class="project-top">
+    <span class="project-number">03</span>
+    <span class="project-icon">📩</span>
+  </div>
 
-      <div class="project-visual project-visual-3">
-  <img
-    src="project3.jpg"
-    alt="EmailJS Contact Form">
+  <div class="project-visual project-visual-3">
+    <img
+      src="project3.jpg"
+      alt="EmailJS Contact Form">
+  </div>
+
+  <div class="project-content">
+
+    <h3 id="project3-title">
+      Contact Form & EmailJS
+    </h3>
+
+    <p id="project3-text">
+      Formii quunnamtii website keessatti fayyadamuun
+      ergaa maamiltootaa email irratti fudhachuu.
+    </p>
+
+    <div class="project-tags">
+      <span>JavaScript</span>
+      <span>EmailJS</span>
+      <span>Form</span>
+    </div>
+
+    <button
+      class="project-learn-button"
+      onclick="toggleLearning('learning3')">
+      📖 Waan Irraa Baradhu
+    </button>
+
+    <div
+      class="project-learning"
+      id="learning3">
+
+      <h4>📚 Waan Irraa Barattu</h4>
+
+      <ul>
+        <li>HTML fayyadamuun contact form ijaaruu.</li>
+        <li>Input, email fi message fields qopheessuu.</li>
+        <li>JavaScript fayyadamuun form handling gochuu.</li>
+        <li>EmailJS waliin website walqunnamsiisuu.</li>
+        <li>Ergaa maamiltootaa gara emailitti erguu fi fudhachuu.</li>
+      </ul>
+
+    </div>
+
+    <a
+      href="#contact"
+      class="project-link"
+      id="project3-button">
+      Ilaali / Na Quunnami →
+    </a>
+
+  </div>
+
 </div>
 
-      <div class="project-content">
+<div class="project-content">
 
-        <h3 id="project3-title">
-          Contact Form & EmailJS
-        </h3>
+  <h3 id="project3-title">
+    Contact Form & EmailJS
+  </h3>
 
-        <p id="project3-text">
-          Formii quunnamtii website keessatti fayyadamuun
-          ergaa maamiltootaa email irratti fudhachuu.
-        </p>
+  <p id="project3-text">
+    Formii quunnamtii website keessatti fayyadamuun
+    ergaa maamiltootaa email irratti fudhachuu.
+  </p>
 
-        <div class="project-tags">
-          <span>JavaScript</span>
-          <span>EmailJS</span>
-          <span>Form</span>
-        </div>
+  <div class="project-tags">
+    <span>JavaScript</span>
+    <span>EmailJS</span>
+    <span>Form</span>
+  </div>
 
+  <button
+    class="project-learn-button"
+    onclick="toggleLearning('learning3')">
+    📖 Waan Irraa Baradhu
+  </button>
+
+  <div class="project-learning" id="learning3">
+
+    <h4>📚 Waan Irraa Barattu</h4>
+
+    <ul>
+      <li>HTML fayyadamuun contact form ijaaruu.</li>
+      <li>Input, email fi message fields qopheessuu.</li>
+      <li>JavaScript fayyadamuun form handling gochuu.</li>
+      <li>EmailJS waliin website walqunnamsiisuu.</li>
+      <li>Ergaa maamiltootaa gara emailitti erguu fi fudhachuu.</li>
+    </ul>
+
+  </div>
+
+  <a
+    href="#contact"
+    class="project-link"
+    id="project3-button">
+    Ilaali / Na Quunnami →
+  </a>
+
+</div>
         <a
           href="#contact"
           class="project-link"
@@ -4138,6 +4398,13 @@ document.getElementById(
 
       }
     }
+    function toggleLearning(id) {
+  const section = document.getElementById(id);
+
+  if (section) {
+    section.classList.toggle("show");
+  }
+}
    
   </script>
 
