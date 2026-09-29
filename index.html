@@ -587,6 +587,59 @@
   font-weight: bold;
   transition: 0.3s ease;
 }
+    /* =========================
+   PROJECT LEARNING
+========================= */
+
+.project-learn-button {
+  display: inline-block;
+  margin-top: 12px;
+  padding: 10px 16px;
+  border: none;
+  border-radius: 8px;
+  background: #eaf4ff;
+  color: #1565c0;
+  font-size: 14px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.3s ease;
+}
+
+.project-learn-button:hover {
+  background: #d5e9ff;
+  transform: translateY(-2px);
+}
+
+.project-learning {
+  display: none;
+  margin-top: 18px;
+  padding: 18px;
+  background: #f4f8ff;
+  border-left: 4px solid #1565c0;
+  border-radius: 10px;
+  text-align: left;
+}
+
+.project-learning.show {
+  display: block;
+}
+
+.project-learning h4 {
+  margin: 0 0 12px;
+  color: #082f6b;
+  font-size: 18px;
+}
+
+.project-learning ul {
+  margin: 0;
+  padding-left: 20px;
+}
+
+.project-learning li {
+  margin-bottom: 9px;
+  color: #555;
+  line-height: 1.6;
+}
 
 .project-link:hover {
   background: #0d47a1;
@@ -1560,12 +1613,15 @@ footer p:last-child {
     </div>
 
     <button
+      type="button"
       class="project-learn-button"
       onclick="toggleLearning('learning1')">
       📖 Waan Irraa Baradhu
     </button>
 
-    <div class="project-learning" id="learning1">
+    <div
+      class="project-learning"
+      id="learning1">
 
       <h4>📚 Waan Irraa Barattu</h4>
 
@@ -1604,7 +1660,8 @@ footer p:last-child {
 
     <img
       src="project2.jpg"
-      alt="Responsive Web Design">
+      alt="Responsive Web Design"
+    >
 
   </div>
 
@@ -1626,12 +1683,15 @@ footer p:last-child {
     </div>
 
     <button
+      type="button"
       class="project-learn-button"
       onclick="toggleLearning('learning2')">
       📖 Waan Irraa Baradhu
     </button>
 
-    <div class="project-learning" id="learning2">
+    <div
+      class="project-learning"
+      id="learning2">
 
       <h4>📚 Waan Irraa Barattu</h4>
 
@@ -1669,7 +1729,8 @@ footer p:last-child {
 
     <img
       src="project3.jpg"
-      alt="EmailJS Contact Form">
+      alt="EmailJS Contact Form"
+    >
 
   </div>
 
@@ -1691,12 +1752,15 @@ footer p:last-child {
     </div>
 
     <button
+      type="button"
       class="project-learn-button"
       onclick="toggleLearning('learning3')">
       📖 Waan Irraa Baradhu
     </button>
 
-    <div class="project-learning" id="learning3">
+    <div
+      class="project-learning"
+      id="learning3">
 
       <h4>📚 Waan Irraa Barattu</h4>
 
@@ -4246,7 +4310,16 @@ document.getElementById(
     section.classList.toggle("show");
   }
 }
-   
+  function toggleLearning(id) {
+
+  const section = document.getElementById(id);
+
+  if (!section) {
+    return;
+  }
+
+  section.classList.toggle("show");
+} 
   </script>
 
 </body>
