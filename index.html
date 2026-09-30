@@ -439,24 +439,36 @@
       margin-top: 0;
     }
 
-    /* =========================
-   PROJECTS IMPROVED DESIGN
+/* =========================
+   PROJECTS GRID
 ========================= */
+
+#works {
+
+  max-width: 1200px;
+  margin: 35px auto;
+  padding: 45px 25px;
+}
 
 .projects-grid {
   width: 100%;
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 35px;
-  align-items: start;
+  gap: 28px;
+  align-items: stretch;
 }
 
 .project-card {
+  width: 100%;
+  min-width: 0;
   background: white;
   border-radius: 18px;
   overflow: hidden;
   border: 1px solid #e2eaf5;
-  box-shadow: 0 8px 25px rgba(8, 47, 107, 0.08);
+
+  box-shadow:
+    0 8px 25px rgba(8, 47, 107, 0.08);
+
   transition:
     transform 0.35s ease,
     box-shadow 0.35s ease;
@@ -464,8 +476,12 @@
 
 .project-card:hover {
   transform: translateY(-10px);
-  box-shadow: 0 18px 40px rgba(8, 47, 107, 0.16);
+
+  box-shadow:
+    0 18px 40px rgba(8, 47, 107, 0.16);
 }
+
+/* PROJECT TOP */
 
 .project-top {
   display: flex;
@@ -487,6 +503,8 @@
   font-size: 32px;
 }
 
+/* PROJECT IMAGE */
+
 .project-image {
   width: 100%;
   height: 220px;
@@ -496,22 +514,32 @@
   background: #ffffff;
 }
 
+/* PROJECT VISUAL */
+
 .project-visual {
+  width: 100%;
   height: 220px;
+
   display: flex;
   justify-content: center;
   align-items: center;
+
   background: linear-gradient(
     135deg,
     #eaf4ff,
     #d5e9ff
   );
+
+  overflow: hidden;
 }
-    .project-visual img {
+
+.project-visual img {
   width: 100%;
   height: 100%;
+
   object-fit: contain;
   object-position: center;
+
   display: block;
 }
 
@@ -523,28 +551,7 @@
   );
 }
 
-.visual-code,
-.visual-email {
-  width: 100px;
-  height: 100px;
-  border-radius: 25px;
-  background: white;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  box-shadow: 0 10px 25px rgba(8, 47, 107, 0.12);
-}
-
-.visual-code span {
-  font-size: 45px;
-  color: #1565c0;
-  font-weight: bold;
-}
-
-.visual-email span {
-  font-size: 50px;
-  color: #1565c0;
-}
+/* PROJECT CONTENT */
 
 .project-content {
   padding: 22px;
@@ -563,6 +570,8 @@
   margin-bottom: 18px;
 }
 
+/* PROJECT TAGS */
+
 .project-tags {
   display: flex;
   flex-wrap: wrap;
@@ -579,6 +588,8 @@
   font-weight: bold;
 }
 
+/* PROJECT LINK */
+
 .project-link {
   display: inline-block;
   text-decoration: none;
@@ -589,63 +600,65 @@
   font-weight: bold;
   transition: 0.3s ease;
 }
-    /* =========================
-   PROJECT LEARNING
-========================= */
-
-.project-learn-button {
-  display: inline-block;
-  margin-top: 12px;
-  padding: 10px 16px;
-  border: none;
-  border-radius: 8px;
-  background: #eaf4ff;
-  color: #1565c0;
-  font-size: 14px;
-  font-weight: bold;
-  cursor: pointer;
-  transition: 0.3s ease;
-}
-
-.project-learn-button:hover {
-  background: #d5e9ff;
-  transform: translateY(-2px);
-}
-
-.project-learning {
-  display: none;
-  margin-top: 18px;
-  padding: 18px;
-  background: #f4f8ff;
-  border-left: 4px solid #1565c0;
-  border-radius: 10px;
-  text-align: left;
-}
-
-.project-learning.show {
-  display: block;
-}
-
-.project-learning h4 {
-  margin: 0 0 12px;
-  color: #082f6b;
-  font-size: 18px;
-}
-
-.project-learning ul {
-  margin: 0;
-  padding-left: 20px;
-}
-
-.project-learning li {
-  margin-bottom: 9px;
-  color: #555;
-  line-height: 1.6;
-}
 
 .project-link:hover {
   background: #0d47a1;
   transform: translateX(4px);
+}
+
+/* =========================
+   PROJECT MOBILE
+========================= */
+
+@media (max-width: 800px) {
+
+  #works {
+    margin: 20px 10px;
+    padding: 35px 18px;
+  }
+
+  .projects-grid {
+    grid-template-columns: 1fr;
+    gap: 22px;
+  }
+
+  .project-image {
+    height: 220px;
+  }
+
+  .project-visual {
+    height: 220px;
+  }
+
+}
+
+/* =========================
+   SMALL MOBILE
+========================= */
+
+@media (max-width: 450px) {
+
+  #works {
+    margin: 20px 10px;
+    padding: 30px 15px;
+  }
+
+  .projects-grid {
+    gap: 18px;
+  }
+
+  .project-image {
+    height: 200px;
+  }
+
+  .project-visual {
+    height: 200px;
+  }
+
+  .project-content {
+    padding: 18px;
+  }
+
 }
     /* =========================
    PROJECT LEARNING
@@ -1737,78 +1750,7 @@ footer p:last-child {
     </div>
 
 
-    <!-- PROJECT 3 -->
-    <div class="project-card">
-
-      <div class="project-top">
-        <span class="project-number">03</span>
-        <span class="project-icon">📩</span>
-      </div>
-
-      <div class="project-visual project-visual-3">
-
-        <img
-          src="project3.jpg"
-          alt="EmailJS Contact Form"
-        >
-
-      </div>
-
-      <div class="project-content">
-
-        <h3 id="project3-title">
-          Contact Form & EmailJS
-        </h3>
-
-        <p id="project3-text">
-          Formii quunnamtii website keessatti fayyadamuun
-          ergaa maamiltootaa email irratti fudhachuu.
-        </p>
-
-        <div class="project-tags">
-          <span>JavaScript</span>
-          <span>EmailJS</span>
-          <span>Form</span>
-        </div>
-
-        <button
-          type="button"
-          class="project-learn-button"
-          onclick="toggleLearning('learning3')">
-          📖 Waan Irraa Baradhu
-        </button>
-
-        <div
-          class="project-learning"
-          id="learning3">
-
-          <h4>📚 Waan Irraa Barattu</h4>
-
-          <ul>
-            <li>HTML fayyadamuun contact form ijaaruu.</li>
-            <li>Input, email fi message fields qopheessuu.</li>
-            <li>JavaScript fayyadamuun form handling gochuu.</li>
-            <li>EmailJS waliin website walqunnamsiisuu.</li>
-            <li>Ergaa maamiltootaa gara emailitti erguu fi fudhachuu.</li>
-          </ul>
-
-        </div>
-
-        <a
-          href="#contact"
-          class="project-link"
-          id="project3-button">
-          Ilaali / Na Quunnami →
-        </a>
-
-      </div>
-
-    </div>
-
-  </div>
-
-</section>
-
+   
   <div class="projects-grid">
 
 <!-- PROJECT 1 -->
@@ -4532,13 +4474,7 @@ document.getElementById(
 
       }
     }
-    function toggleLearning(id) {
-  const section = document.getElementById(id);
-
-  if (section) {
-    section.classList.toggle("show");
-  }
-}
+   
   function toggleLearning(id) {
 
   const section = document.getElementById(id);
