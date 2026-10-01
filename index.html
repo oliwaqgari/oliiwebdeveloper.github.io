@@ -2595,11 +2595,12 @@ footer p:last-child {
   class="book-order-form"
   style="display:none;">
 
-  <h3>📖 Kitaaba Ajaji</h3>
+ <h3 id="book-form-title">📖 Kitaaba Ajaji</h3>
 
-  <p class="book-price">
-    Gatii Kitaabaa: <strong>350 BIRR</strong>
-  </p>
+<p class="book-price">
+  <span id="book-price-label">Gatii Kitaabaa:</span>
+  <strong>350 BIRR</strong>
+</p>
 
   <input
     type="text"
@@ -2628,12 +2629,17 @@ footer p:last-child {
  <h4>💳 Karaa Kaffaltii Filadhu</h4>
 
 <label class="payment-option">
+  <h4 id="payment-method-title">
+  💳 Karaa Kaffaltii Filadhu
+</h4>
+
+<label class="payment-option">
   <input
     type="radio"
     name="payment-method"
     value="chapa"
     checked>
-  💳 Chapa
+  <span id="chapa-label">💳 Chapa</span>
 </label>
 
 <label class="payment-option">
@@ -2641,7 +2647,7 @@ footer p:last-child {
     type="radio"
     name="payment-method"
     value="telebirr">
-  📱 Telebirr
+  <span id="telebirr-label">📱 Telebirr</span>
 </label>
 
 <label class="payment-option">
@@ -2649,7 +2655,7 @@ footer p:last-child {
     type="radio"
     name="payment-method"
     value="cbebirr">
-  🏦 CBE Birr
+  <span id="cbebirr-label">🏦 CBE Birr</span>
 </label>
 
 <div
@@ -2663,33 +2669,44 @@ footer p:last-child {
     border:1px solid #d6e4f5;
   ">
 
-  <strong>📱 Kaffaltii Mobile</strong>
+  <strong id="mobile-payment-title">
+    📱 Kaffaltii Mobile
+  </strong>
 
-  <p>
+  <p id="mobile-payment-text">
     Kaffaltii itti fufuuf lakkoofsa bilbilaa
     kee irratti ergaa kaffaltii ni argatta.
   </p>
 
   <p>
-    💰 Gatii: <strong>350 BIRR</strong>
+    <span id="mobile-price-label">💰 Gatii:</span>
+    <strong>350 BIRR</strong>
   </p>
 
   <p>
-    📱 Lakkoofsa kee:
+    <span id="payment-phone-label">📱 Lakkoofsa kee:</span>
     <strong id="selected-payment-phone"></strong>
   </p>
 
-  <p style="color:#1565c0;">
+  <p
+    id="mobile-payment-instruction"
+    style="color:#1565c0;">
     Mee bilbila kee ilaali; ergaa USSD
     dhufetti kaffaltii mirkaneessi.
   </p>
 
 </div>
-<div id="receipt-upload" style="display:none; margin:15px 0; padding:15px; background:#f4f8ff; border:1px solid #d6e4f5; border-radius:10px;">
+<div
+  id="receipt-upload"
+  style="display:none; margin:15px 0; padding:15px; background:#f4f8ff; border:1px solid #d6e4f5; border-radius:10px;">
 
-  <strong>📸 Receipt Kaffaltii Ergi</strong>
+  <strong id="receipt-title">
+    📸 Receipt Kaffaltii Ergi
+  </strong>
 
-  <p style="margin:8px 0;">
+  <p
+    id="receipt-text"
+    style="margin:8px 0;">
     Kaffaltii 350 BIRR erga raawwattanii booda,
     receipt keessan asitti fe'i.
   </p>
@@ -2700,7 +2717,9 @@ footer p:last-child {
     accept="image/*,application/pdf"
   >
 
-  <small style="display:block; margin-top:8px;">
+  <small
+    id="receipt-note"
+    style="display:block; margin-top:8px;">
     Suuraa ykn PDF qofa. Faayilichi xiqqaa haa ta'u.
   </small>
 
@@ -2738,8 +2757,10 @@ footer p:last-child {
   id="payment-success-message"
   class="payment-success-message">
 
-  🎉 Kaffaltiin milkaa'eera!<br>
-  Ajajni kitaaba keessanii nu gaheera.
+  <span id="payment-success-text">
+    🎉 Kaffaltiin milkaa'eera!<br>
+    Ajajni kitaaba keessanii nu gaheera.
+  </span>
 
 </div>
 </section>
