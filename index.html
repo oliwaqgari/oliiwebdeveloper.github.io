@@ -2626,7 +2626,9 @@ footer p:last-child {
   placeholder="Lakkoofsa bilbilaa kee"
   required>
 
- <h4>💳 Karaa Kaffaltii Filadhu</h4>
+<h4 id="payment-method-title">
+  💳 Karaa Kaffaltii Filadhu
+</h4>
 
 <label class="payment-option">
   <h4 id="payment-method-title">
@@ -4567,6 +4569,8 @@ document.getElementById("book-phone-label").textContent =
 
 document.getElementById("book-phone").placeholder =
   "Your phone number";
+        document.getElementById("payment-method-title").textContent =
+  "💳 Choose Payment Method";
 
 document.getElementById("payment-method-title").textContent =
   "💳 Choose Payment Method";
