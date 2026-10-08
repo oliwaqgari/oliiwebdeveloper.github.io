@@ -3569,7 +3569,28 @@ const paymentMethodInputs =
     'input[name="payment-method"]'
   );
 
+/* =========================
+   SHOW RECEIPT ON PAGE LOAD
+========================= */
 
+const selectedPaymentMethod =
+  document.querySelector(
+    'input[name="payment-method"]:checked'
+  );
+
+if (
+  selectedPaymentMethod &&
+  (
+    selectedPaymentMethod.value === "telebirr" ||
+    selectedPaymentMethod.value === "cbebirr"
+  )
+) {
+
+  if (receiptUpload) {
+    receiptUpload.style.display = "block";
+  }
+
+}
 /* =========================
    PAYMENT METHOD CHANGE
 ========================= */
