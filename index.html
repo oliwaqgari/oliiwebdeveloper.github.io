@@ -2981,6 +2981,10 @@ if (showBookFormButton && bookOrderForm) {
 }
 
 
+/* =========================
+   BOOK ELEMENTS
+========================= */
+
 const bookButton =
   document.getElementById("book-button");
 
@@ -2996,11 +3000,8 @@ const receiptUpload =
 const receiptInput =
   document.getElementById("book-receipt");
 
-
-if (successMessage) {
-  successMessage.style.display = "none";
-}
-
+const paymentStatus =
+  document.getElementById("payment-status");
 
 const PAYMENT_WORKER =
   "https://olii-book-payment.oliwaqgari.workers.dev";
@@ -3028,6 +3029,7 @@ function resetDownloadButton() {
   if (successMessage) {
     successMessage.style.display = "none";
   }
+
 }
 
 
@@ -3051,10 +3053,11 @@ function showPaidBook(reference, type) {
 
     successMessage.textContent =
       document.documentElement.lang === "en"
-        ? "🎉 Payment successful! Your PDF is ready."
-        : "🎉 Kaffaltiin kee milkaa'eera! PDF keessan qophiidha.";
+        ? "🎉 Payment approved! Your PDF is ready."
+        : "🎉 Kaffaltiin mirkanaa'eera! PDF keessan qophiidha.";
 
   }
+
 
   downloadButton.disabled = false;
 
@@ -3065,10 +3068,10 @@ function showPaidBook(reference, type) {
 
 
   /* =========================
-     ONLY ONE DOWNLOAD
+     ONE-TIME DOWNLOAD
   ========================= */
 
-  downloadButton.onclick = function () {
+  downloadButton.onclick = async function () {
 
     if (downloadButton.disabled) {
       return;
@@ -3078,50 +3081,186 @@ function showPaidBook(reference, type) {
 
     downloadButton.textContent =
       document.documentElement.lang === "en"
-        ? "✅ Download Started"
-        : "✅ Buufachuun jalqabame";
+        ? "⏳ Downloading..."
+        : "⏳ Buufachaa jira...";
 
 
-    /* =========================
-       CLEAR SAVED PAYMENT
-    ========================= */
+    try {
 
-    localStorage.removeItem(
-      "bookPaymentTxRef"
-    );
+      let downloadURL = "";
 
-    localStorage.removeItem(
-      "bookPaymentSuccess"
-    );
+      /*
+        CHAPA
+      */
 
-    localStorage.removeItem(
-      "bookBankRef"
-    );
+      if (type === "chapa") {
+
+        downloadURL =
+          PAYMENT_WORKER +
+          "/download-pdf?tx_ref=" +
+          encodeURIComponent(reference);
+
+      }
 
 
-    /* =========================
-       DOWNLOAD PDF
-    ========================= */
+      /*
+        TELEBIRR / CBE BIRR
+      */
 
-    if (type === "bank") {
+      else if (
+        type === "telebirr" ||
+        type === "cbebirr"
+      ) {
 
-      window.location.href =
-        PAYMENT_WORKER +
-        "/download-pdf?bank_ref=" +
-        encodeURIComponent(reference);
+        downloadURL =
+          PAYMENT_WORKER +
+          "/download-pdf?bank_ref=" +
+          encodeURIComponent(reference);
 
-    } else {
+      }
 
-      window.location.href =
-        PAYMENT_WORKER +
-        "/download-pdf?tx_ref=" +
-        encodeURIComponent(reference);
+
+      else {
+
+        throw new Error(
+          "Payment type hin beekamne."
+        );
+
+      }
+
+
+      /*
+        DOWNLOAD REQUEST
+      */
+
+      const response =
+        await fetch(downloadURL);
+
+
+      if (!response.ok) {
+
+        let message =
+          document.documentElement.lang === "en"
+            ? "❌ PDF download failed or this payment has already been used."
+            : "❌ PDF buufachuun hin milkoofne ykn kaffaltiin kun duraan fayyadameera.";
+
+        throw new Error(message);
+
+      }
+
+
+      const blob =
+        await response.blob();
+
+
+      /*
+        CREATE DOWNLOAD LINK
+      */
+
+      const url =
+        window.URL.createObjectURL(blob);
+
+      const link =
+        document.createElement("a");
+
+      link.href = url;
+
+      link.download =
+        "IYYAAFI-IYYATA.pdf";
+
+      document.body.appendChild(link);
+
+      link.click();
+
+      link.remove();
+
+      window.URL.revokeObjectURL(url);
+
+
+      /*
+        PERMANENTLY DISABLE BUTTON
+      */
+
+      downloadButton.disabled = true;
+
+      downloadButton.onclick = null;
+
+      downloadButton.textContent =
+        document.documentElement.lang === "en"
+          ? "✅ PDF Downloaded"
+          : "✅ PDF Buufatameera";
+
+      if (successMessage) {
+
+        successMessage.textContent =
+          document.documentElement.lang === "en"
+            ? "✅ Your PDF has been downloaded successfully. The download link cannot be used again."
+            : "✅ PDF keessan milkaa'inaan buufatameera. Linkiin buufataa irra deebi'amee fayyadamuu hin danda'u.";
+
+      }
+
+
+      /*
+        CLEAR SAVED PAYMENT
+      */
+
+      localStorage.removeItem(
+        "bookPaymentTxRef"
+      );
+
+      localStorage.removeItem(
+        "bookPaymentSuccess"
+      );
+
+      localStorage.removeItem(
+        "bookBankRef"
+      );
+
+    } catch (error) {
+
+      console.error(
+        "PDF download error:",
+        error
+      );
+
+
+      /*
+        IF SERVER REJECTS SECOND DOWNLOAD,
+        KEEP BUTTON DISABLED
+      */
+
+      downloadButton.disabled = true;
+
+      downloadButton.onclick = null;
+
+      downloadButton.textContent =
+        document.documentElement.lang === "en"
+          ? "❌ Download unavailable"
+          : "❌ Buufachuun hin danda'amu";
+
+
+      if (paymentStatus) {
+
+        paymentStatus.style.display =
+          "block";
+
+        paymentStatus.style.background =
+          "#ffebee";
+
+        paymentStatus.style.color =
+          "#c62828";
+
+        paymentStatus.textContent =
+          error.message;
+
+      }
 
     }
 
   };
 
 }
+
 
 /* =========================
    VERIFY CHAPA PAYMENT
@@ -3133,11 +3272,12 @@ async function verifyBookPayment(tx_ref) {
     return false;
   }
 
-  /* =========================
-     TRY PAYMENT VERIFICATION
-  ========================= */
 
-  for (let attempt = 1; attempt <= 10; attempt++) {
+  for (
+    let attempt = 1;
+    attempt <= 10;
+    attempt++
+  ) {
 
     try {
 
@@ -3147,6 +3287,7 @@ async function verifyBookPayment(tx_ref) {
         tx_ref
       );
 
+
       const response =
         await fetch(
           PAYMENT_WORKER +
@@ -3154,18 +3295,16 @@ async function verifyBookPayment(tx_ref) {
           encodeURIComponent(tx_ref)
         );
 
+
       const result =
         await response.json();
+
 
       console.log(
         "Chapa payment verification:",
         result
       );
 
-
-      /* =========================
-         PAYMENT SUCCESS
-      ========================= */
 
       if (
         result &&
@@ -3179,12 +3318,9 @@ async function verifyBookPayment(tx_ref) {
         );
 
         return true;
+
       }
 
-
-      /* =========================
-         WAIT AND TRY AGAIN
-      ========================= */
 
       if (attempt < 10) {
 
@@ -3205,6 +3341,7 @@ async function verifyBookPayment(tx_ref) {
         error
       );
 
+
       if (attempt < 10) {
 
         await new Promise(
@@ -3221,19 +3358,26 @@ async function verifyBookPayment(tx_ref) {
 
   }
 
+
   return false;
 
 }
 
+
 /* =========================
-   VERIFY BANK PAYMENT
+   VERIFY MANUAL PAYMENT
+   TELEBIRR / CBE BIRR
 ========================= */
 
-async function verifyBankPayment(bank_ref) {
+async function verifyManualPayment(
+  bank_ref,
+  paymentMethod
+) {
 
   if (!bank_ref) {
     return false;
   }
+
 
   try {
 
@@ -3244,11 +3388,13 @@ async function verifyBankPayment(bank_ref) {
         encodeURIComponent(bank_ref)
       );
 
+
     const result =
       await response.json();
 
+
     console.log(
-      "Bank payment verification:",
+      "Manual payment verification:",
       result
     );
 
@@ -3260,6 +3406,7 @@ async function verifyBankPayment(bank_ref) {
     ) {
 
       paymentProcessing = false;
+
 
       if (paymentStatus) {
 
@@ -3279,37 +3426,52 @@ async function verifyBankPayment(bank_ref) {
 
       }
 
+
       showPaidBook(
         bank_ref,
-        "bank"
+        paymentMethod
       );
 
+
       return true;
+
     }
+
 
     return false;
 
   } catch (error) {
 
     console.error(
-      "Bank payment verification error:",
+      "Manual payment verification error:",
       error
     );
 
     return false;
+
   }
 
 }
 
 
 /* =========================
-   WAIT FOR BANK APPROVAL
+   WAIT FOR ADMIN APPROVAL
 ========================= */
 
-async function waitForBankApproval(bank_ref) {
+async function waitForManualApproval(
+  bank_ref,
+  paymentMethod
+) {
+
+  /*
+    Admin approval yeroo dheeraa fudhachuu danda'a.
+    Kanaaf frontend irraa yeroo muraasa qofa ilaalla.
+  */
 
   const maxAttempts = 60;
+
   const delay = 5000;
+
 
   for (
     let attempt = 0;
@@ -3318,13 +3480,16 @@ async function waitForBankApproval(bank_ref) {
   ) {
 
     const approved =
-      await verifyBankPayment(
-        bank_ref
+      await verifyManualPayment(
+        bank_ref,
+        paymentMethod
       );
+
 
     if (approved) {
       return true;
     }
+
 
     if (paymentStatus) {
 
@@ -3339,20 +3504,18 @@ async function waitForBankApproval(bank_ref) {
 
       paymentStatus.textContent =
         document.documentElement.lang === "en"
-          ? "⏳ Receipt received. Waiting for payment approval..."
-          : "⏳ Receipt keessan nu gaheera. Mirkaneessa kaffaltii eeggachaa jira...";
+          ? "⏳ Receipt received. Waiting for admin approval..."
+          : "⏳ Receipt nu gaheera. Mirkaneessa admin eeggachaa jira...";
 
     }
 
-    await new Promise(
-      function(resolve) {
 
+    await new Promise(
+      resolve =>
         setTimeout(
           resolve,
           delay
-        );
-
-      }
+        )
     );
 
   }
@@ -3360,14 +3523,18 @@ async function waitForBankApproval(bank_ref) {
 
   paymentProcessing = false;
 
+
   if (bookButton) {
+
     bookButton.disabled = false;
 
     bookButton.textContent =
       document.documentElement.lang === "en"
         ? "💳 Continue Payment"
         : "💳 Kaffaltii Itti Fufi";
+
   }
+
 
   if (paymentStatus) {
 
@@ -3382,10 +3549,11 @@ async function waitForBankApproval(bank_ref) {
 
     paymentStatus.textContent =
       document.documentElement.lang === "en"
-        ? "⏳ Approval is still pending. Please wait and refresh later."
+        ? "⏳ Approval is still pending. Please check again later."
         : "⏳ Mirkaneessi ammallee eeggachaa jira. Mee yeroo muraasa booda deebi'ii ilaali.";
 
   }
+
 
   return false;
 
@@ -3399,21 +3567,6 @@ async function waitForBankApproval(bank_ref) {
 const paymentMethodInputs =
   document.querySelectorAll(
     'input[name="payment-method"]'
-  );
-
-const mobilePaymentInfo =
-  document.getElementById(
-    "mobile-payment-info"
-  );
-
-const selectedPaymentPhone =
-  document.getElementById(
-    "selected-payment-phone"
-  );
-
-const paymentStatus =
-  document.getElementById(
-    "payment-status"
   );
 
 
@@ -3432,9 +3585,9 @@ paymentMethodInputs.forEach(
           this.value;
 
 
-        /* =========================
-           CHAPA
-        ========================= */
+        /*
+          CHAPA
+        */
 
         if (method === "chapa") {
 
@@ -3451,9 +3604,9 @@ paymentMethodInputs.forEach(
         }
 
 
-        /* =========================
-           TELEBIRR / CBE BIRR
-        ========================= */
+        /*
+          TELEBIRR / CBE BIRR
+        */
 
         if (
           method === "telebirr" ||
@@ -3465,9 +3618,16 @@ paymentMethodInputs.forEach(
             mobilePaymentInfo.style.display =
               "block";
 
+
             mobilePaymentInfo.innerHTML = `
 
-              <strong>💳 Kaffaltii ${method === "telebirr" ? "Telebirr" : "CBE Birr"}</strong>
+              <strong>
+                ${
+                  method === "telebirr"
+                    ? "📱 Telebirr"
+                    : "🏦 CBE Birr"
+                } — Kaffaltii
+              </strong>
 
               <p>
                 Mee lakkoofsa armaan gadii irratti
@@ -3501,17 +3661,22 @@ paymentMethodInputs.forEach(
 
           }
 
+
           if (receiptUpload) {
+
             receiptUpload.style.display =
               "block";
+
           }
 
         }
 
 
         if (paymentStatus) {
+
           paymentStatus.style.display =
             "none";
+
         }
 
       }
@@ -3519,6 +3684,7 @@ paymentMethodInputs.forEach(
 
   }
 );
+
 
 /* =========================
    BOOK PAYMENT
@@ -3540,8 +3706,9 @@ if (!bookButton) {
         return;
       }
 
+
       /* =========================
-         GET FORM VALUES
+         FORM VALUES
       ========================= */
 
       const nameInput =
@@ -3559,10 +3726,6 @@ if (!bookButton) {
           "book-phone"
         );
 
-      const receiptInput =
-        document.getElementById(
-          "book-receipt"
-        );
 
       const name =
         nameInput
@@ -3581,13 +3744,14 @@ if (!bookButton) {
 
 
       /* =========================
-         GET PAYMENT METHOD
+         PAYMENT METHOD
       ========================= */
 
       const selectedMethod =
         document.querySelector(
           'input[name="payment-method"]:checked'
         );
+
 
       const paymentMethod =
         selectedMethod
@@ -3596,7 +3760,7 @@ if (!bookButton) {
 
 
       /* =========================
-         VALIDATE
+         VALIDATION
       ========================= */
 
       if (
@@ -3606,17 +3770,20 @@ if (!bookButton) {
       ) {
 
         alert(
-          "Maqaa, email fi lakkoofsa bilbilaa guuti."
+          document.documentElement.lang === "en"
+            ? "Please enter your name, email and phone number."
+            : "Maqaa, email fi lakkoofsa bilbilaa guuti."
         );
 
         return;
+
       }
 
 
-      /* =========================
-         RECEIPT VALIDATION
-         TELEBIRR / CBE BIRR
-      ========================= */
+      /*
+        TELEBIRR / CBE BIRR
+        RECEIPT REQUIRED
+      */
 
       if (
         paymentMethod === "telebirr" ||
@@ -3630,16 +3797,20 @@ if (!bookButton) {
         ) {
 
           alert(
-            "Mee receipt kaffaltii kee fe'i."
+            document.documentElement.lang === "en"
+              ? "Please upload your payment receipt."
+              : "Mee receipt kaffaltii kee fe'i."
           );
 
           return;
+
         }
+
       }
 
 
       /* =========================
-         START PAYMENT
+         START
       ========================= */
 
       paymentProcessing = true;
@@ -3667,6 +3838,7 @@ if (!bookButton) {
           document.documentElement.lang === "en"
             ? "⏳ Starting payment..."
             : "⏳ Kaffaltii jalqabsiisaa jira...";
+
       }
 
 
@@ -3702,7 +3874,9 @@ if (!bookButton) {
 
                   payment_method:
                     paymentMethod
+
                 })
+
             }
           );
 
@@ -3727,11 +3901,17 @@ if (!bookButton) {
           result.checkout_url
         ) {
 
+          localStorage.setItem(
+            "bookPaymentTxRef",
+            result.tx_ref || ""
+          );
+
           window.location.replace(
             result.checkout_url
           );
 
           return;
+
         }
 
 
@@ -3765,8 +3945,9 @@ if (!bookButton) {
                 const reader =
                   new FileReader();
 
+
                 reader.onload =
-                  function () {
+                  function() {
 
                     resolve(
                       reader.result
@@ -3774,8 +3955,9 @@ if (!bookButton) {
 
                   };
 
+
                 reader.onerror =
-                  function () {
+                  function() {
 
                     reject(
                       new Error(
@@ -3785,15 +3967,17 @@ if (!bookButton) {
 
                   };
 
+
                 reader.readAsDataURL(
                   file
                 );
+
               }
             );
 
 
           /* =========================
-             SUBMIT RECEIPT
+             SEND RECEIPT
           ========================= */
 
           if (paymentStatus) {
@@ -3802,6 +3986,7 @@ if (!bookButton) {
               document.documentElement.lang === "en"
                 ? "📸 Sending receipt..."
                 : "📸 Receipt ergaa jira...";
+
           }
 
 
@@ -3837,7 +4022,9 @@ if (!bookButton) {
 
                     receipt:
                       receiptData
+
                   })
+
               }
             );
 
@@ -3861,11 +4048,12 @@ if (!bookButton) {
               receiptResult?.message ||
               "Receipt erguun hin milkoofne."
             );
+
           }
 
 
           /* =========================
-             SAVE BANK REFERENCE
+             SAVE PAYMENT REFERENCE
           ========================= */
 
           localStorage.setItem(
@@ -3874,8 +4062,14 @@ if (!bookButton) {
           );
 
 
+          localStorage.setItem(
+            "bookPaymentMethod",
+            paymentMethod
+          );
+
+
           /* =========================
-             EMAIL NOTIFICATION
+             ADMIN EMAIL
           ========================= */
 
           try {
@@ -3902,8 +4096,10 @@ if (!bookButton) {
 
                 bank_ref:
                   result.bank_ref
+
               }
             );
+
 
             console.log(
               "Admin notification sent."
@@ -3920,7 +4116,7 @@ if (!bookButton) {
 
 
           /* =========================
-             SHOW WAITING MESSAGE
+             WAITING MESSAGE
           ========================= */
 
           if (paymentStatus) {
@@ -3936,8 +4132,9 @@ if (!bookButton) {
 
             paymentStatus.textContent =
               document.documentElement.lang === "en"
-                ? "📸 Receipt received. Please wait for payment approval."
-                : "📸 Receipt nu gaheera. Mee mirkaneessa kaffaltii eegi.";
+                ? "📸 Receipt received. Waiting for admin approval..."
+                : "📸 Receipt nu gaheera. Mirkaneessa admin eeggachaa jira.";
+
           }
 
 
@@ -3948,15 +4145,17 @@ if (!bookButton) {
 
 
           /* =========================
-             WAIT FOR ADMIN APPROVAL
+             WAIT FOR ADMIN
           ========================= */
 
-          await waitForBankApproval(
-            result.bank_ref
+          await waitForManualApproval(
+            result.bank_ref,
+            paymentMethod
           );
 
 
           return;
+
         }
 
 
@@ -3991,12 +4190,14 @@ if (!bookButton) {
 
           paymentStatus.textContent =
             document.documentElement.lang === "en"
-              ? "❌ Payment could not be started."
-              : "❌ Kaffaltii jalqabsiisuun hin milkoofne.";
+              ? "❌ Payment could not be started. Please try again."
+              : "❌ Kaffaltii jalqabsiisuun hin milkoofne. Mee irra deebi'ii yaali.";
+
         }
 
 
         paymentProcessing = false;
+
 
         bookButton.disabled = false;
 
@@ -4004,38 +4205,166 @@ if (!bookButton) {
           document.documentElement.lang === "en"
             ? "💳 Continue Payment"
             : "💳 Kaffaltii Itti Fufi";
+
       }
+
     }
   );
+
 }
+
+
 /* =========================
    CHECK PAYMENT AFTER LOAD
 ========================= */
 
 window.addEventListener(
   "load",
-  async function () {
+  async function() {
 
     resetDownloadButton();
 
-   const cleanSearch =
-  window.location.search.replace(
-    /&amp;/g,
-    "&"
-  );
 
-const params =
-  new URLSearchParams(
-    cleanSearch
-  );
+    const cleanSearch =
+      window.location.search.replace(
+        /&amp;/g,
+        "&"
+      );
+
+
+    const params =
+      new URLSearchParams(
+        cleanSearch
+      );
+
 
     const payment =
       params.get("payment");
 
-    let tx_ref =
+
+    const tx_ref =
       params.get("tx_ref");
 
 
+    /* =========================
+       CHAPA SUCCESS
+    ========================= */
+
+    if (
+      payment === "success" &&
+      tx_ref
+    ) {
+
+      console.log(
+        "Checking Chapa payment:",
+        tx_ref
+      );
+
+
+      const verified =
+        await verifyBookPayment(
+          tx_ref
+        );
+
+
+      if (verified) {
+
+        window.history.replaceState(
+          {},
+          document.title,
+          window.location.pathname
+        );
+
+        return;
+
+      }
+
+
+      if (paymentStatus) {
+
+        paymentStatus.style.display =
+          "block";
+
+        paymentStatus.style.background =
+          "#ffebee";
+
+        paymentStatus.style.color =
+          "#c62828";
+
+        paymentStatus.textContent =
+          document.documentElement.lang === "en"
+            ? "❌ Payment could not be verified."
+            : "❌ Kaffaltiin kee mirkanaa'uu hin dandeenye.";
+
+      }
+
+      return;
+
+    }
+
+
+    /* =========================
+       TELEBIRR / CBE BIRR
+       SAVED PAYMENT
+    ========================= */
+
+    const savedBankRef =
+      localStorage.getItem(
+        "bookBankRef"
+      );
+
+
+    const savedPaymentMethod =
+      localStorage.getItem(
+        "bookPaymentMethod"
+      );
+
+
+    if (
+      savedBankRef &&
+      (
+        savedPaymentMethod === "telebirr" ||
+        savedPaymentMethod === "cbebirr"
+      )
+    ) {
+
+      console.log(
+        "Checking manual payment:",
+        savedBankRef
+      );
+
+
+      paymentProcessing = true;
+
+
+      if (paymentStatus) {
+
+        paymentStatus.style.display =
+          "block";
+
+        paymentStatus.style.background =
+          "#fff8e1";
+
+        paymentStatus.style.color =
+          "#8d6e00";
+
+        paymentStatus.textContent =
+          document.documentElement.lang === "en"
+            ? "⏳ Checking payment approval..."
+            : "⏳ Mirkaneessa kaffaltii ilaalaa jira...";
+
+      }
+
+
+      await waitForManualApproval(
+        savedBankRef,
+        savedPaymentMethod
+      );
+
+    }
+
+  }
+);
     /* =========================
        CHAPA SUCCESS
     ========================= */
