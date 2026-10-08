@@ -1878,7 +1878,6 @@ footer p:last-child {
   object-position: center;
 }
   </style>
-  <script src="https://js.chapa.co/v1/inline.js"></script>
 </head>
 
 <body>
@@ -3083,20 +3082,6 @@ function showPaidBook(reference, type) {
       let downloadURL = "";
 
       /*
-        CHAPA
-      */
-
-      if (type === "chapa") {
-
-        downloadURL =
-          PAYMENT_WORKER +
-          "/download-pdf?tx_ref=" +
-          encodeURIComponent(reference);
-
-      }
-
-
-      /*
         TELEBIRR / CBE BIRR
       */
 
@@ -3253,110 +3238,6 @@ function showPaidBook(reference, type) {
   };
 
 }
-
-
-/* =========================
-   VERIFY CHAPA PAYMENT
-========================= */
-
-async function verifyBookPayment(tx_ref) {
-
-  if (!tx_ref) {
-    return false;
-  }
-
-
-  for (
-    let attempt = 1;
-    attempt <= 10;
-    attempt++
-  ) {
-
-    try {
-
-      console.log(
-        "Checking Chapa payment - attempt:",
-        attempt,
-        tx_ref
-      );
-
-
-      const response =
-        await fetch(
-          PAYMENT_WORKER +
-          "/verify-payment?tx_ref=" +
-          encodeURIComponent(tx_ref)
-        );
-
-
-      const result =
-        await response.json();
-
-
-      console.log(
-        "Chapa payment verification:",
-        result
-      );
-
-
-      if (
-        result &&
-        result.success === true &&
-        result.paid === true
-      ) {
-
-        showPaidBook(
-          tx_ref,
-          "chapa"
-        );
-
-        return true;
-
-      }
-
-
-      if (attempt < 10) {
-
-        await new Promise(
-          resolve =>
-            setTimeout(
-              resolve,
-              1000
-            )
-        );
-
-      }
-
-    } catch (error) {
-
-      console.error(
-        "Chapa verification error:",
-        error
-      );
-
-
-      if (attempt < 10) {
-
-        await new Promise(
-          resolve =>
-            setTimeout(
-              resolve,
-              1000
-            )
-        );
-
-      }
-
-    }
-
-  }
-
-
-  return false;
-
-}
-
-
 /* =========================
    VERIFY MANUAL PAYMENT
    TELEBIRR / CBE BIRR
@@ -3885,31 +3766,6 @@ if (!bookButton) {
           result
         );
 
-
-        /* =========================
-           CHAPA
-        ========================= */
-
-        if (
-          paymentMethod === "chapa" &&
-          result &&
-          result.checkout_url
-        ) {
-
-          localStorage.setItem(
-            "bookPaymentTxRef",
-            result.tx_ref || ""
-          );
-
-          window.location.replace(
-            result.checkout_url
-          );
-
-          return;
-
-        }
-
-
         /* =========================
            TELEBIRR / CBE BIRR
            MANUAL RECEIPT
@@ -4239,65 +4095,7 @@ window.addEventListener(
 
     const tx_ref =
       params.get("tx_ref");
-
-
-    /* =========================
-       CHAPA SUCCESS
-    ========================= */
-
-    if (
-      payment === "success" &&
-      tx_ref
-    ) {
-
-      console.log(
-        "Checking Chapa payment:",
-        tx_ref
-      );
-
-
-      const verified =
-        await verifyBookPayment(
-          tx_ref
-        );
-
-
-      if (verified) {
-
-        window.history.replaceState(
-          {},
-          document.title,
-          window.location.pathname
-        );
-
-        return;
-
-      }
-
-
-      if (paymentStatus) {
-
-        paymentStatus.style.display =
-          "block";
-
-        paymentStatus.style.background =
-          "#ffebee";
-
-        paymentStatus.style.color =
-          "#c62828";
-
-        paymentStatus.textContent =
-          document.documentElement.lang === "en"
-            ? "❌ Payment could not be verified."
-            : "❌ Kaffaltiin kee mirkanaa'uu hin dandeenye.";
-
-      }
-
-      return;
-
-    }
-
-
+    
     /* =========================
        TELEBIRR / CBE BIRR
        SAVED PAYMENT
@@ -4730,9 +4528,6 @@ document.getElementById("book-phone").placeholder =
 
 document.getElementById("payment-method-title").textContent =
   "💳 Choose Payment Method";
-
-document.getElementById("chapa-label").textContent =
-  "💳 Chapa";
 
 document.getElementById("telebirr-label").textContent =
   "📱 Telebirr";
@@ -5299,9 +5094,6 @@ document.getElementById("book-phone").placeholder =
 
 document.getElementById("payment-method-title").textContent =
   "💳 Karaa Kaffaltii Filadhu";
-
-document.getElementById("chapa-label").textContent =
-  "💳 Chapa";
 
 document.getElementById("telebirr-label").textContent =
   "📱 Telebirr";
