@@ -3598,27 +3598,7 @@ paymentMethodInputs.forEach(
 
         const method =
           this.value;
-
-
-        /*
-          CHAPA
-        */
-
-        if (method === "chapa") {
-
-          if (mobilePaymentInfo) {
-            mobilePaymentInfo.style.display =
-              "none";
-          }
-
-          if (receiptUpload) {
-            receiptUpload.style.display =
-              "none";
-          }
-
-        }
-
-
+        
         /*
           TELEBIRR / CBE BIRR
         */
@@ -3771,7 +3751,7 @@ if (!bookButton) {
       const paymentMethod =
         selectedMethod
           ? selectedMethod.value
-          : "chapa";
+           : "";
 
 
       /* =========================
