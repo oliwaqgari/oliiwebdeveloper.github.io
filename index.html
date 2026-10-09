@@ -4181,6 +4181,7 @@ function changeLanguage() {
 
   language = language === "om" ? "en" :
              language === "en" ? "am" : "om";
+  localStorage.setItem("siteLanguage", language);
 
   if (language === "en") {
 
@@ -5634,7 +5635,15 @@ document.getElementById("learning3-item5").textContent =
   "የደንበኞችን መልዕክቶች በኢሜይል መላክና መቀበል።";
       }
     }
-   
+   const savedSiteLanguage = localStorage.getItem("siteLanguage");
+
+if (savedSiteLanguage === "en") {
+  language = "om";
+  changeLanguage();
+} else if (savedSiteLanguage === "am") {
+  language = "en";
+  changeLanguage();
+}
   function toggleLearning(id) {
 
   const section = document.getElementById(id);
