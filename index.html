@@ -2103,9 +2103,9 @@ footer p:last-child {
           <span>JavaScript</span>
         </div>
 
-        <button
+<button
   type="button"
-  class="project-learn-button"
+  class="proj        ect-learn-button"
   id="learning1-button"
   onclick="toggleLearning('learning1')">
   📖 Waan Irraa Baradhu
@@ -3493,54 +3493,62 @@ paymentMethodInputs.forEach(
           method === "cbebirr"
         ) {
 
-          if (mobilePaymentInfo) {
+         
+if (mobilePaymentInfo) {
+  mobilePaymentInfo.style.display = "block";
 
-            mobilePaymentInfo.style.display =
-              "block";
+  const paymentText = {
+    om: {
+      title: "Kaffaltii",
+      instruction: "Mee lakkoofsa armaan gadii irratti",
+      price: "Gatii:",
+      name: "Maqaa:",
+      receipt: "📸 Kaffaltii erga raawwattanii booda receipt keessan asitti fe'i."
+    },
+    en: {
+      title: "Payment",
+      instruction: "Please pay",
+      price: "Price:",
+      name: "Name:",
+      receipt: "📸 After completing the payment, upload your receipt here."
+    },
+    am: {
+      title: "ክፍያ",
+      instruction: "እባክዎ ከታች ባለው ቁጥር",
+      price: "ዋጋ:",
+      name: "ስም:",
+      receipt: "📸 ክፍያውን ከፈጸሙ በኋላ ደረሰኝዎን እዚህ ይጫኑ።"
+    }
+  };
 
+  const lang = paymentText[language] ? language : "om";
+  const t = paymentText[lang];
 
-            mobilePaymentInfo.innerHTML = `
+  mobilePaymentInfo.innerHTML = `
+    <strong>
+      ${method === "telebirr" ? "📱 Telebirr" : "🏦 CBE Birr"}
+      — ${t.title}
+    </strong>
 
-              <strong>
-                ${
-                  method === "telebirr"
-                    ? "📱 Telebirr"
-                    : "🏦 CBE Birr"
-                } — Kaffaltii
-              </strong>
+    <p>
+      ${t.instruction}
+      <strong>350 BIRR</strong>
+      ${lang === "om" ? "kaffali." : lang === "am" ? "ይክፈሉ።" : "to the number below."}
+    </p>
 
-              <p>
-                Mee lakkoofsa armaan gadii irratti
-                <strong>350 BIRR</strong> kaffali.
-              </p>
+    <p>💰 ${t.price} <strong>350 BIRR</strong></p>
 
-              <p>
-                💰 Gatii:
-                <strong>350 BIRR</strong>
-              </p>
+    <p>
+      ${method === "telebirr"
+        ? "📱 Telebirr: 0979025185"
+        : "🏦 CBE Birr: 1000394655353"}
+    </p>
 
-              <p>
-                ${
-                  method === "telebirr"
-                    ? "📱 Telebirr: 0979025185"
-                    : "🏦 CBE Birr: 1000394655353"
-                }
-              </p>
+    <p>👤 ${t.name} <strong>Oliyaad Waaqgaarii</strong></p>
 
-              <p>
-                👤 Maqaa:
-                <strong>Oliyaad Waaqgaarii</strong>
-              </p>
-
-              <p style="color:#1565c0;">
-                📸 Kaffaltii erga raawwattanii booda
-                receipt keessan asitti fe'i.
-              </p>
-
-            `;
-
-          }
-
+    <p style="color:#1565c0;">${t.receipt}</p>
+  `;
+}
 
           if (receiptUpload) {
 
@@ -4165,15 +4173,16 @@ window.addEventListener(
   
     /* LANGUAGE */
 
-    let english = false;
+   let language = "om";
 
 
-    function changeLanguage() {
+   
+function changeLanguage() {
 
-      english = !english;
+  language = language === "om" ? "en" :
+             language === "en" ? "am" : "om";
 
-
-      if (english) {
+  if (language === "en") {
 
         document.documentElement.lang = "en";
 
@@ -4248,15 +4257,15 @@ window.addEventListener(
 document.getElementById("about-title").textContent =
   "About Me";
 
-document.getElementById("about-intro").textContent =
-  "A brief introduction about me, my skills and my goals.";
+document.getElementById("about-intro").innerHTML =
+  "I am <strong>Oliyaad Waaqgaarii Tarfaa</strong>, an ICT professional and <strong>Web Developer</strong>. I am passionate about technology and website development, and I enjoy turning ideas that benefit the next generation into beautiful, fast, and user-friendly digital experiences.";
 
 document.getElementById("about-card-title").textContent =
   "👨‍💻 I am Oliyaad";
 
 document.getElementById("about-card-text").textContent =
   "I am Oliyaad, a Web Developer and technology enthusiast. I am working on building beautiful, fast and user-friendly websites.";
-
+    
 document.getElementById("skills-title").textContent =
   "💻 My Skills";
 
@@ -4288,10 +4297,10 @@ document.getElementById("education-text").textContent =
 
 
         document.getElementById(
+
           "project1-button"
         ).textContent =
           "🔗 View Project";
-
 
         document.getElementById(
           "project2-title"
@@ -4327,7 +4336,6 @@ document.getElementById("education-text").textContent =
           "project3-button"
         ).textContent =
           "📩 View Form";
-        // PROJECT LEARNING - ENGLISH
 
 // PROJECT LEARNING - ENGLISH
 
@@ -4688,7 +4696,7 @@ document.getElementById(
         ).textContent =
           "Working on building beautiful websites and modern technology.";
 
-      } else {
+     } else if (language === "om") {
 
         document.documentElement.lang = "om";
       document.getElementById("nav-pricing").textContent = "Gatii";
@@ -5251,6 +5259,375 @@ document.getElementById(
         ).textContent =
           "Website bareedaa fi teknooloojii ammayyaa ijaaruu irratti hojjechaa jira.";
 
+     
+      } else {
+
+        document.documentElement.lang = "am";
+
+        document.getElementById("language-text").textContent = "አማርኛ";
+
+        document.getElementById("nav-home").textContent = "መነሻ";
+        document.getElementById("nav-about").textContent = "ስለ እኔ";
+        document.getElementById("nav-works").textContent = "ፕሮጀክቶቼ";
+        document.getElementById("nav-services").textContent = "አገልግሎቶች";
+        document.getElementById("nav-pricing").textContent = "ዋጋ";
+        document.getElementById("nav-book").textContent = "መጽሐፌ";
+document.getElementById("nav-contact").textContent = "አግኙኝ";
+
+document.getElementById("hero-title").textContent =
+  "እኔ ኦሊያድ ነኝ፣ የድረ-ገጽ ገንቢ ነኝ።";
+
+document.getElementById("footer-title").textContent =
+  "Olii Web Developer";
+
+document.getElementById("footer-text").textContent =
+  "ውብ ድረ-ገጾችን እና ዘመናዊ ቴክኖሎጂን ለመገንባት እየሰራሁ ነው።";
+// ABOUT - AMHARIC
+document.getElementById("about-title").textContent =
+  "ስለ እኔ";
+
+document.getElementById("about-intro").innerHTML =
+  "እኔ <strong>ኦሊያድ ዋቅጋሪ ታርፋ</strong>፣ የICT ባለሙያ እና <strong>የድረ-ገጽ ገንቢ (Web Developer)</strong> ነኝ። ለቴክኖሎጂና ለድረ-ገጽ ግንባታ ትልቅ ፍላጎት አለኝ፤ ለትውልድ የሚጠቅሙ ሐሳቦችንም ወደ ውብ፣ ፈጣን እና ለመጠቀም ቀላል የዲጂታል ልምዶች መቀየር እወዳለሁ።";
+
+document.getElementById("about-card-title").textContent =
+  "👨‍💻 እኔ ኦሊያድ ነኝ";
+    
+document.getElementById("about-card-text").innerHTML =
+  "እኔ <strong>ኦሊያድ ዋቅጋሪ ታርፋ</strong> ነኝ። የድረ-ገጽ ገንቢ (Web Developer) እና ቴክኖሎጂን የምወድ ሰው ነኝ። ውብ፣ ፈጣን እና ለተጠቃሚ ምቹ የሆኑ ድረ-ገጾችን በመገንባት ላይ እሰራለሁ።";
+
+document.getElementById("skills-title").textContent =
+  "💻 ችሎታዬ";
+
+document.getElementById("skills-text").textContent =
+  "በHTML እና CSS የተሻለ እውቀት አለኝ፤ በJavaScript ያለኝን ችሎታም እያሻሻልኩ ነው። የተለያዩ የድር ቴክኖሎጂዎችን በመጠቀም አዳዲስ ፕሮጀክቶችን መስራት እወዳለሁ።";
+
+document.getElementById("goal-title").textContent =
+  "🎯 ግቤ";
+
+document.getElementById("goal-text").textContent =
+  "ግቤ የድረ-ገጽ ልማት ችሎታዬን ማሳደግ፣ ጥራት ያላቸውን ድረ-ገጾች መገንባት እና ስራዎቼን ለሰዎች በቀላሉና በሚያምር መንገድ ማሳየት ነው።";
+
+document.getElementById("education-title").textContent =
+  "📚 ትምህርቴ";
+
+document.getElementById("education-text").textContent =
+  "ሁልጊዜ አዳዲስ ነገሮችን ለመማርና ችሎታዬን ለማሻሻል እሰራለሁ። በማገኘው ልምድ ሁሉ ፕሮጀክቶቼን እያሻሻልኩ እንደ ባለሙያ እያደግሁ ነው።";
+
+// PROJECTS - AMHARIC
+document.getElementById("project1-title").textContent =
+  "የግል ድረ-ገጼ";
+
+document.getElementById("project1-text").textContent =
+  "ችሎታዬን፣ ስራዎቼን እና አገልግሎቶቼን የሚያሳይ የግል ድረ-ገጼ።";
+
+document.getElementById("project1-button").textContent =
+  "🔗 ፕሮጀክቱን ይመልከቱ";
+
+document.getElementById("project2-title").textContent =
+  "ለሁሉም መሣሪያዎች የሚስማማ የድረ-ገጽ ንድፍ";
+
+document.getElementById("project2-text").textContent =
+  "በሞባይል፣ በታብሌት እና በኮምፒውተር ላይ በትክክል የሚሰራ ድረ-ገጽ መገንባት።";
+
+document.getElementById("project2-button").textContent =
+  "🔗 ፕሮጀክቱን ይመልከቱ";
+
+document.getElementById("project3-title").textContent =
+  "የEmailJS መገናኛ ቅጽ";
+
+document.getElementById("project3-text").textContent =
+  "ከድረ-ገጽ የሚላኩ መልዕክቶችን ወደ ኢሜይል የሚያደርስ ቅጽ።";
+
+document.getElementById("project3-button").textContent =
+  "📩 ቅጹን ይመልከቱ";
+    
+// SERVICES - AMHARIC
+document.getElementById("services-title").textContent =
+  "አገልግሎቶቼ";
+
+document.getElementById("services-intro").textContent =
+  "በድረ-ገጽ እና በቴክኖሎጂ ዘርፍ የምሰጣቸው አገልግሎቶች።";
+
+document.getElementById("service1-title").textContent =
+  "የድረ-ገጽ ልማት";
+
+document.getElementById("service1-text").textContent =
+  "ዘመናዊ፣ ፈጣን እና በሞባይል ላይ በትክክል የሚሰሩ ድረ-ገጾችን መገንባት።";
+
+document.getElementById("service1-button").textContent =
+  "📩 ያግኙኝ";
+
+document.getElementById("service2-title").textContent =
+  "የድረ-ገጽ ዲዛይን";
+
+document.getElementById("service2-text").textContent =
+  "ውብ፣ ቀላል እና ማራኪ የሆኑ ድረ-ገጾችን መንደፍ።";
+
+document.getElementById("service2-button").textContent =
+  "📩 ያግኙኝ";
+
+document.getElementById("service3-title").textContent =
+  "የድረ-ገጽ ጥገና";
+
+document.getElementById("service3-text").textContent =
+  "በድረ-ገጽ ላይ አስፈላጊ የሆኑ ማሻሻያዎችን፣ እርማቶችን እና ዝማኔዎችን ማድረግ።";
+
+document.getElementById("service3-button").textContent =
+  "📩 ያግኙኝ";
+
+document.getElementById("service4-title").textContent =
+  "ቴክኖሎጂ እና AI";
+
+document.getElementById("service4-text").textContent =
+  "ቴክኖሎጂን እና AIን በመጠቀም ዲጂታል ስራዎችን ማሻሻል።";
+
+document.getElementById("service4-button").textContent =
+  "📩 ያግኙኝ";
+    
+// PRICING - AMHARIC
+document.getElementById("pricing-title").textContent =
+  "የአገልግሎት ዋጋዎች";
+
+document.getElementById("pricing-intro").textContent =
+  "ለምሰጣቸው አገልግሎቶች የሚከተሉትን ዋጋዎች ይመልከቱ።";
+
+document.getElementById("basic-title").textContent =
+  "መሠረታዊ";
+
+document.getElementById("basic-price").textContent =
+  "ከ BIRR ጀምሮ";
+
+document.getElementById("basic-description").textContent =
+  "ቀላል፣ ንጹህ እና በሞባይል ላይ በትክክል የሚሰራ፣ ለግለሰቦች ወይም ለአነስተኛ ንግዶች የሚስማማ ድረ-ገጽ።";
+
+document.getElementById("basic-feature1").textContent =
+  "✓ ቀላል የድረ-ገጽ ገጽ";
+
+document.getElementById("basic-feature2").textContent =
+  "✓ ከተለያዩ መሣሪያዎች ጋር የሚስማማ ንድፍ";
+
+document.getElementById("basic-feature3").textContent =
+  "✓ ንጹህ ዲዛይን";
+
+document.getElementById("basic-feature4").textContent =
+  "✓ የመገናኛ ቅጽ";
+
+document.getElementById("basic-button").textContent =
+  "📩 ይህንን አገልግሎት ይዘዙ";
+
+document.getElementById("standard-popular").textContent =
+  "⭐ ተመራጭ";
+
+document.getElementById("standard-title").textContent =
+  "መደበኛ";
+
+document.getElementById("standard-price").textContent =
+  "ከ BIRR ጀምሮ";
+
+document.getElementById("standard-description").textContent =
+  "ሙያዊ፣ ውብ እና በሞባይል፣ በታብሌት እና በኮምፒውተር ላይ በትክክል የሚሰራ ድረ-ገጽ።";
+
+document.getElementById("standard-feature1").textContent =
+  "✓ ብዙ የድረ-ገጽ ገጾች";
+
+document.getElementById("standard-feature2").textContent =
+  "✓ ከተለያዩ መሣሪያዎች ጋር የሚስማማ ንድፍ";
+
+document.getElementById("standard-feature3").textContent =
+  "✓ የመገናኛ ቅጽ";
+
+document.getElementById("standard-feature4").textContent =
+  "✓ የማህበራዊ ሚዲያ አገናኞች";
+
+document.getElementById("standard-button").textContent =
+  "📩 ይህንን አገልግሎት ይዘዙ";
+
+document.getElementById("premium-title").textContent =
+  "ፕሪሚየም";
+
+document.getElementById("premium-price").textContent =
+  "ከ BIRR ጀምሮ";
+
+document.getElementById("premium-description").textContent =
+  "ሙሉ፣ ሙያዊ ድረ-ገጽ ከላቁ ባህሪያት እና ተጨማሪ ቴክኖሎጂ ጋር።";
+
+document.getElementById("premium-feature1").textContent =
+  "✓ ሙሉ ድረ-ገጽ";
+
+document.getElementById("premium-feature2").textContent =
+  "✓ የላቀ ብጁ ዲዛይን";
+
+document.getElementById("premium-feature3").textContent =
+  "✓ EmailJS እና የላቁ ባህሪያት";
+
+document.getElementById("premium-feature4").textContent =
+  "✓ የክፍያ እና የቴክኖሎጂ ባህሪያት";
+
+document.getElementById("premium-button").textContent =
+  "📩 ይህንን አገልግሎት ይዘዙ";
+  
+// BOOK - AMHARIC
+document.getElementById("book-title").textContent =
+  "📚 መጽሐፌ";
+
+document.getElementById("book-intro").textContent =
+  "የጻፍኩት መጽሐፍ እና ከምርምር ሥራዎቼ አንዱ።";
+
+document.getElementById("book-title-name").textContent =
+  "IYYAAFI IYYATA";
+
+document.getElementById("book-description").textContent =
+  "በሐሳቦች፣ በምርምር እና በማኅበራዊ ጉዳዮች ላይ ያተኮረ መጽሐፍ።";
+
+document.getElementById("book-quote").textContent =
+  "“የሚያነብ ሰው የሚናገረው አያጣም።”";
+
+document.getElementById("show-book-form").textContent =
+  "📖 መጽሐፉን ይዘዙ";
+
+document.getElementById("book-form-title").textContent =
+  "📖 መጽሐፉን ይዘዙ";
+
+document.getElementById("book-price-label").textContent =
+  "የመጽሐፉ ዋጋ:";
+
+document.getElementById("book-name").placeholder =
+  "ሙሉ ስምዎ";
+
+document.getElementById("book-email").placeholder =
+  "ኢሜይልዎ";
+
+document.getElementById("book-phone-label").textContent =
+  "📱 የስልክ ቁጥርዎ";
+
+document.getElementById("book-phone").placeholder =
+  "የስልክ ቁጥርዎ";
+
+document.getElementById("payment-method-title").textContent =
+  "💳 የክፍያ ዘዴ ይምረጡ";
+
+document.getElementById("telebirr-label").textContent =
+  "📱 Telebirr";
+
+document.getElementById("cbebirr-label").textContent =
+  "🏦 CBE Birr";
+
+document.getElementById("mobile-payment-title").textContent =
+  "📱 የሞባይል ክፍያ";
+
+document.getElementById("mobile-payment-text").textContent =
+  "ክፍያውን ለመቀጠል በስልክ ቁጥርዎ ላይ የክፍያ መልዕክት ይደርስዎታል።";
+
+document.getElementById("mobile-price-label").textContent =
+  "💰 ዋጋ:";
+
+document.getElementById("payment-phone-label").textContent =
+  "📱 የእርስዎ ቁጥር:";
+
+document.getElementById("mobile-payment-instruction").textContent =
+  "እባክዎ ስልክዎን ይመልከቱና የUSSD መልዕክቱን በመከተል ክፍያውን ያረጋግጡ።";
+
+document.getElementById("receipt-title").textContent =
+  "📸 የክፍያ ደረሰኝ ይላኩ";
+
+document.getElementById("receipt-text").textContent =
+  "350 BIRR ከከፈሉ በኋላ ደረሰኝዎን እዚህ ይስቀሉ።";
+
+document.getElementById("receipt-note").textContent =
+  "ምስል ወይም PDF ብቻ። ፋይሉ ትንሽ መሆን አለበት።";
+
+document.getElementById("book-button").textContent =
+  "💳 ክፍያውን ይቀጥሉ";
+
+document.getElementById("book-download-button").textContent =
+  "📥 የመጽሐፉን PDF ያውርዱ";
+
+document.getElementById("payment-success-text").innerHTML =
+  "🎉 ክፍያው ተሳክቷል!<br>የመጽሐፍ ትዕዛዝዎ ደርሶናል።";
+    
+// CONTACT - AMHARIC
+document.getElementById("contact-title").textContent =
+  "አግኙኝ";
+
+document.getElementById("contact-intro").textContent =
+  "ስለ ሥራዬ ወይም አገልግሎቶቼ ጥያቄ ካለዎት፣ እዚህ መልዕክት ይላኩልኝ።";
+
+document.getElementById("name-input").placeholder =
+  "ሙሉ ስምዎ";
+
+document.getElementById("email-input").placeholder =
+  "ኢሜይልዎ";
+
+document.getElementById("message-input").placeholder =
+  "መልዕክትዎን እዚህ ይጻፉ";
+
+document.getElementById("send-button").textContent =
+  "📩 መልዕክት ላክ";
+  
+// PROJECT LEARNING - AMHARIC
+
+document.getElementById("learning1-button").textContent =
+  "📖 ምን ይማራሉ?";
+
+document.getElementById("learning2-button").textContent =
+  "📖 ምን ይማራሉ?";
+
+document.getElementById("learning3-button").textContent =
+  "📖 ምን ይማራሉ?";
+
+document.getElementById("learning1-title").textContent =
+  "📚 ምን ይማራሉ?";
+
+document.getElementById("learning1-item1").textContent =
+  "HTMLን በመጠቀም የድረ-ገጽ መዋቅር መገንባት።";
+
+document.getElementById("learning1-item2").textContent =
+  "CSSን በመጠቀም ድረ-ገጾችን ማስዋብና መንደፍ።";
+
+document.getElementById("learning1-item3").textContent =
+  "JavaScriptን በመጠቀም ድረ-ገጾችን ተግባቢ ማድረግ።";
+
+document.getElementById("learning1-item4").textContent =
+  "ድረ-ገጾች በሞባይል፣ በታብሌት እና በኮምፒውተር ላይ እንዲስማሙ ማድረግ።";
+
+document.getElementById("learning1-item5").textContent =
+  "GitHub Pagesን በመጠቀም ድረ-ገጾችን ማተም።";
+
+document.getElementById("learning2-title").textContent =
+  "📚 ምን ይማራሉ?";
+
+document.getElementById("learning2-item1").textContent =
+  "Responsive Design ምን ማለት እንደሆነ መረዳት።";
+
+document.getElementById("learning2-item2").textContent =
+  "ለተለያዩ የስክሪን መጠኖች CSS Media Queryን መጠቀም።";
+
+document.getElementById("learning2-item3").textContent =
+  "ድረ-ገጾች በሞባይል፣ በታብሌት እና በኮምፒውተር ላይ በትክክል እንዲታዩ ማድረግ።";
+
+document.getElementById("learning2-item4").textContent =
+  "ምስሎችንና ሌሎች ክፍሎችን ከተለያዩ የስክሪን መጠኖች ጋር ማስማማት።";
+
+document.getElementById("learning2-item5").textContent =
+  "ንጹህና ለተጠቃሚ ምቹ የሆኑ ንድፎችን መገንባት።";
+
+document.getElementById("learning3-title").textContent =
+  "📚 ምን ይማራሉ?";
+
+document.getElementById("learning3-item1").textContent =
+  "HTMLን በመጠቀም የመገናኛ ቅጽ መገንባት።";
+
+document.getElementById("learning3-item2").textContent =
+  "የግቤት፣ የኢሜይል እና የመልዕክት መስኮችን መፍጠር።";
+
+document.getElementById("learning3-item3").textContent =
+  "ቅጾችን JavaScriptን በመጠቀም ማስኬድ።";
+
+document.getElementById("learning3-item4").textContent =
+  "ድረ-ገጽን ከEmailJS ጋር ማገናኘት።";
+
+document.getElementById("learning3-item5").textContent =
+  "የደንበኞችን መልዕክቶች በኢሜይል መላክና መቀበል።";
       }
     }
    
